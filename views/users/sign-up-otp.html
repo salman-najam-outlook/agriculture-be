@@ -1,0 +1,65 @@
+<table>
+    <tbody class="mcnTextBlockOuter">
+      <tr>
+       <td valign="top" class="mcnTextBlockInner" style="padding-top:20px;">
+          <table align="left" border="0" cellpadding="0" cellspacing="0" style="max-width:100%; min-width:100%;" width="100%" class="mcnTextContentContainer">
+            <tbody>
+              <tr>
+                <td valign="top" class="mcnTextContent" style="padding: 0px 18px 9px; line-height: 125%;">
+                  <div style="text-align: left;">
+                    <span style="font-family:arial,helvetica neue,helvetica,sans-serif">
+                      <span style="font-size:20px">
+                        Hi <%= firstName %>,
+                      </span><br><br>
+                      <span style="font-size:15px">
+                        <% if (!otpOnly) { %>You're almost ready to get started. <% } %>Please use the one-time passcode below to verify your email address:
+                      </span>
+                    </span><br><br>
+
+                    <span style="font-family:arial,helvetica neue,helvetica,sans-serif">
+                      <span style="font-size:15px">
+                        <%= otp %>
+                      </span>
+                    </span><br><br>
+
+                    <span style="font-family:arial,helvetica neue,helvetica,sans-serif">
+                      <span style="font-size:15px">
+                        This verification code will expire in 30 minutes. If you are having trouble logging in with this code please contact our support.
+                      </span>
+                    </span><br><br>
+
+                    <span style="font-family:arial,helvetica neue,helvetica,sans-serif">
+                      <span style="font-size:15px">
+                        Didn't request a verification code?If this wasn't you, your account may have been compromised and you should take a few steps to make sure your account is secure. To start, reset your password now.
+                      </span>
+                    </span><br><br>
+
+
+                  </div>
+                </td>
+              </tr>
+             </tbody>
+          </table>
+        </td>
+        </tr>
+      </tbody>
+  </table>
+
+  <table border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnTextBlock" style="min-width:100%;">
+      <tbody class="mcnTextBlockOuter">
+          <tr>
+              <td valign="top" class="mcnTextBlockInner" style="padding-top:9px;">
+                  <table align="left" border="0" cellpadding="0" cellspacing="0" style="max-width:100%; min-width:100%;" width="100%" class="mcnTextContentContainer">
+                      <tbody><tr>
+
+                          <td valign="top" class="mcnTextContent" style="padding: 0px 18px 9px; line-height: 200%;">
+
+                              <div style="text-align: left;"><span style="color:#e31c23"></span><span style="font-family:arial,helvetica neue,helvetica,sans-serif"><span style="font-size:20px">Team Dimitra</span></span></div>
+
+                          </td>
+                      </tr>
+                  </tbody></table>
+              </td>
+          </tr>
+      </tbody>
+  </table>

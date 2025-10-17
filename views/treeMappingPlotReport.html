@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plot Tree Report</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link href="http://localhost:3000/css/treeMappingPlotReport.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="logo">
+            <img src="http://localhost:3000/image/Dimitra Powered by AI 2023.png" alt="Dimitra Logo">
+        </div>
+        <div class="title-banner">
+            PLOT TREE REPORT
+        </div>
+    </div>
+
+    <!-- Plot Identification -->
+    <div class="plot-identification">
+        <span class="plot-label">Plot Number: <%= data.subHeader['Plot No'] %></span>
+    </div>
+
+    <!-- Map Section -->
+    <div class="map-section">
+        <% if (data.MapImage) { %>
+            <div class="map-container">
+                <div style="width: 100%; height: 100%;">
+                    <img src="<%= data.MapImage %>" alt="Plot Map" class="map-image" style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px;">
+                </div>
+                <div class="map-pin-container">
+                    <div class="map-pin"></div>
+                    <div class="map-pin-label">
+                        <%= data.subHeader['Plot No'] || data.subHeader['Plot ID'] %>
+                    </div>
+                </div>
+            </div>
+        <% } else if (data.MapImage && data.MapImage !== 'N/A') { %>
+            <div class="map-container">
+                <div style="width: 100%; height: 100%;">
+                    <img src="<%= data.MapImage %>" alt="Plot Image" class="map-image" style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px;">
+                </div>
+                <div class="map-pin-container">
+                    <div class="map-pin"></div>
+                    <div class="map-pin-label">
+                        <%= data.subHeader['Plot No'] || data.subHeader['Plot ID'] %>
+                    </div>
+                </div>
+            </div>
+        <% } else { %>
+            <div class="map-placeholder">
+                <div class="placeholder-text">Map View</div>
+                <div class="placeholder-subtext">Satellite imagery for plot <%= data.subHeader['Plot No'] || data.subHeader['Plot ID'] %></div>
+            </div>
+        <% } %>
+    </div>
+
+    <!-- Plot Metrics Section -->
+    <div class="plot-metrics">
+        <div class="metrics-grid">
+            <div class="metric-item">
+                <div class="metric-label">Latitude</div>
+                <div class="metric-value">
+                    <%= data.subHeader['Latitude'] %>
+                </div>
+            </div>
+            <div class="metric-item">
+                <div class="metric-label">Longitude</div>
+                <div class="metric-value">
+                    <%= data.subHeader['Longitude'] %>
+                </div>
+            </div>
+            <div class="metric-item">
+                <div class="metric-label">2026</div>
+                <div class="metric-value">238 tCO2e</div>
+            </div>
+            <div class="metric-item">
+                <div class="metric-label">Plot Radius</div>
+                <div class="metric-value">
+                    <%= data.subHeader['Radius (m)'] %> m
+                </div>
+            </div>
+            <div class="metric-item">
+                <div class="metric-label">Plot Number</div>
+                <div class="metric-value">
+                    <%= data.subHeader['Plot No'] %>
+                </div>
+            </div>
+            <div class="metric-item">
+                <div class="metric-label">Slope (degree)</div>
+                <div class="metric-value">
+                    <%= data.subHeader['Slope'] || 'N/A' %>°
+                </div>
+            </div>
+            <div class="metric-item">
+                <div class="metric-label">Aspect (degree)</div>
+                <div class="metric-value">
+                    <%= data.subHeader['Aspect'] || 'N/A' %>°
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Trees Details Section -->
+    <div class="trees-section">
+        <div class="section-header">
+            <div class="section-title">Trees Details</div>
+            <div class="total-trees">Total Trees: <%= data.subHeader['Total Trees'] %>
+            </div>
+        </div>
+        <div class="trees-container">
+            <% if (data.tableData && data.tableData.length> 0) { %>
+                <% data.tableData.forEach(function(tree, index) { %>
+                    <div class="tree-card">
+                        <div class="tree-header">
+                            <%= tree['Tree Number'] %> | <%= tree['Tree Species'] %>
+                        </div>
+                        <div class="tree-details">
+                            <div class="tree-detail-item">
+                                <div class="detail-label">Species</div>
+                                <div class="detail-value">
+                                    <%= tree['Tree Species'] %>
+                                </div>
+                            </div>
+                            <div class="tree-detail-item">
+                                <div class="detail-label">Diameter at Breast Height (DBH)</div>
+                                <div class="detail-value">
+                                    <%= tree['DBH (cm)'] %> cm
+                                </div>
+                            </div>
+                            <div class="tree-detail-item">
+                                <div class="detail-label">Height</div>
+                                <div class="detail-value">
+                                    <%= tree['Height (m)'] %> m
+                                </div>
+                            </div>
+                            <div class="tree-detail-item">
+                                <div class="detail-label">Height to Crown Base (HCB)</div>
+                                <div class="detail-value">
+                                    <%= tree['Crown Base Height (m)'] %> m
+                                </div>
+                            </div>
+                            <div class="tree-detail-item">
+                                <div class="detail-label">Vigor</div>
+                                <div class="detail-value">
+                                    <%= tree['Vigor'] %>%
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <% }); %>
+                        <% } else { %>
+                            <div class="no-trees-message">
+                                <p>No tree data available for this plot.</p>
+                            </div>
+                <% } %>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <div class="footer-left">Dimitra.io</div>
+    </div>
+</body>
+
+</html>

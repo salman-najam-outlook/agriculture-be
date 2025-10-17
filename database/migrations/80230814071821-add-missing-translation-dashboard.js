@@ -1,0 +1,155 @@
+"use strict";
+
+const translations = [
+  {
+    english: "EUDR Due Diligence",
+    hindi: "ईयूडीआर उचित परिश्रम",
+    marathi: "ईयूडीआर योग्य परिश्रम",
+    spanish: "Diligencia Debida de EUDR",
+    indonesian: "Uji Tuntas EUDR",
+    portugese: "Diligência Devida EUDR",
+    nepali: "ईयूडीआर उचित परिश्रम",
+    french: "Diligence Raisonnable EUDR",
+    arabic: "العناية الواجبة لـ EUDR",
+    swahili: "Uchunguzi wa EUDR",
+    bengali: "EUDR যথাযথ পরিশ্রম",
+    oromo: "EUDR Qajeelfama Hojii",
+    somali: "Dulqaadka EUDR",
+    vietnamese: "Thẩm định EUDR",
+    amharic: "የEUDR ታማኝነት",
+    greek: "Επιμέλεια EUDR",
+    mandarin: "EUDR 尽职调查",
+    japanese: "EUDR デューデリジェンス",
+    turkish: "EUDR Durum Tespiti",
+  },
+
+  {
+    english: "Due Diligence Report",
+    hindi: "उचित परिश्रम रिपोर्ट",
+    marathi: "योग्य परिश्रम अहवाल",
+    spanish: "Informe de Diligencia Debida",
+    indonesian: "Laporan Uji Tuntas",
+    portugese: "Relatório de Diligência Devida",
+    nepali: "उचित परिश्रम प्रतिवेदन",
+    french: "Rapport de Diligence Raisonnable",
+    arabic: "تقرير العناية الواجبة",
+    swahili: "Ripoti ya Uchunguzi",
+    bengali: "যথাযথ পরিশ্রম প্রতিবেদন",
+    oromo: "Gabaasa Qajeelfama Hojii",
+    somali: "Warbixinta Dulqaadka",
+    vietnamese: "Báo cáo Thẩm định",
+    amharic: "የታማኝነት ሪፖርት",
+    greek: "Έκθεση Επιμέλειας",
+    mandarin: "尽职调查报告",
+    japanese: "デューデリジェンス レポート",
+    turkish: "Durum Tespiti Raporu",
+  },
+
+  {
+    english: "Dispute Resolution",
+    hindi: "विवाद समाधान",
+    marathi: "वाद निराकरण",
+    spanish: "Resolución de Disputas",
+    indonesian: "Penyelesaian Sengketa",
+    portugese: "Resolução de Disputas",
+    nepali: "विवाद समाधान",
+    french: "Résolution des Conflits",
+    arabic: "حل النزاعات",
+    swahili: "Utatuzi wa Migogoro",
+    bengali: "বিবাদ মীমাংসা",
+    oromo: "Hiika Wal-dhabdee",
+    somali: "Xalinta Khilaafaadka",
+    vietnamese: "Giải quyết Tranh chấp",
+    amharic: "ክርክር መፍትሄ",
+    greek: "Επίλυση Διαφορών",
+    mandarin: "争议解决",
+    japanese: "紛争解決",
+    turkish: "Uyuşmazlık Çözümü",
+  },
+
+  {
+    english: "Suppliers",
+    hindi: "आपूर्तिकर्ता",
+    marathi: "पुरवठादार",
+    spanish: "Proveedores",
+    indonesian: "Pemasok",
+    portugese: "Fornecedores",
+    nepali: "आपूर्तिकर्ताहरू",
+    french: "Fournisseurs",
+    arabic: "الموردون",
+    swahili: "Wauzaji",
+    bengali: "সরবরাহকারীরা",
+    oromo: "Dabarsitoonni",
+    somali: "Alaab-qeybiyeyaal",
+    vietnamese: "Nhà cung cấp",
+    amharic: "አቅራቢዎች",
+    greek: "Προμηθευτές",
+    mandarin: "供应商",
+    japanese: "サプライヤー",
+    turkish: "Tedarikçiler",
+  },
+
+  {
+    english: "Shipments",
+    hindi: "शिपमेंट्स",
+    marathi: "माल पाठवणे",
+    spanish: "Envíos",
+    indonesian: "Pengiriman",
+    portugese: "Remessas",
+    nepali: "ढुवानीहरू",
+    french: "Expéditions",
+    arabic: "الشحنات",
+    swahili: "Usafirishaji",
+    bengali: "প্রেরণ",
+    oromo: "Ergamoota",
+    somali: "Rarid",
+    vietnamese: "Lô hàng",
+    amharic: "መላኪያዎች",
+    greek: "Αποστολές",
+    mandarin: "货物",
+    japanese: "出荷",
+    turkish: "Sevkiyatlar",
+  },
+
+  {
+    english: "Assessment Builder",
+    hindi: "मूल्यांकन निर्माता",
+    marathi: "मूल्यांकन बिल्डर",
+    spanish: "Constructor de Evaluaciones",
+    indonesian: "Pembuat Penilaian",
+    portugese: "Construtor de Avaliação",
+    nepali: "मूल्यांकन निर्माता",
+    french: "Constructeur d'Évaluation",
+    arabic: "منشئ التقييم",
+    swahili: "Mjengaji wa Tathmini",
+    bengali: "মূল্যায়ন নির্মাতা",
+    oromo: "Ijaarsa Qorannoo",
+    somali: "Dhisaha Qiimaynta",
+    vietnamese: "Người xây dựng Đánh giá",
+    amharic: "ግምገማ አሠራር",
+    greek: "Δημιουργός Αξιολόγησης",
+    mandarin: "评估生成器",
+    japanese: "評価ビルダー",
+    turkish: "Değerlendirme Oluşturucu",
+  },
+];
+
+/** @type {import('sequelize-cli').Migration} */
+module.exports = {
+  async up(queryInterface, Sequelize) {
+    const englishTranslations = translations.map((data) => data.english);
+
+    await queryInterface.bulkDelete("global_translation_metadata", {
+      english: {
+        [Sequelize.Op.in]: englishTranslations,
+      },
+    });
+
+    await queryInterface.bulkInsert(
+      "global_translation_metadata",
+      translations
+    );
+  },
+
+  async down(queryInterface, Sequelize) {},
+};

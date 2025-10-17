@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Satellite Report PDF</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet" />
+    <link href="http://localhost:3000/css/pdfReport.css" rel="stylesheet" type="text/css" />
+    <style>
+      * {
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: 'Poppins', sans-serif;
+        font-weight: 400;
+        font-style: normal;
+        background-color: #f1f4f7;
+      }
+      .fw-medium {
+        font-weight: 500;
+      }
+      .fw-bold {
+        font-weight: 600;
+      }
+      .text-body {
+        font-size: 14px;
+        line-height: 24px;
+        margin: 0;
+        padding: 0;
+      }
+      .card {
+        background-color: #ffffff;
+        border-radius: 4px;
+        box-shadow: 0 1px 3px 0 rgba(182, 182, 182, 0.1);
+        padding: 28px;
+      }
+      .text-title {
+        font-size: 24px;
+        line-height: 30px;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+  </head>
+  <body class="text-body" style="margin: 0; padding-top: 20px">
+    <div class="pdf-header" style="display: flex; justify-content: space-between; align-items: center">
+      <div class="pdf-header-logo" style="width: 50%; padding-left: 20px">
+        <img src="http://localhost:3000/image/Dimitra Powered by AI 2023.png" />
+      </div>
+      <div class="pdf-header-title" style="width: 50%"><%= title %></div>
+    </div>
+    <div style="padding: 20px">
+      <div style="display: flex; margin-bottom: 28px">
+        <h3 class="text-body fw-bold" style="padding-right: 24px; width: 196px"><%= issueDateText %></h3>
+        <span><%= issueDate %></span>
+      </div>
+      <div style="display: flex; margin-bottom: 28px">
+        <h3 class="text-body fw-bold" style="padding-right: 24px; width: 196px"><%= areaOfInterestText %></h3>
+        <span><%= centerLatitude %>, <%= centerLongitude %></span>
+      </div>
+      <div style="display: flex; margin-bottom: 28px">
+        <h3 class="text-body fw-bold" style="padding-right: 24px; width: 196px"><%= farmAddressText %></h3>
+        <span><%= farmAddress %></span>
+      </div>
+      <div style="margin-bottom: 20px">
+        <img src="<%= mapImageSrc %>" style="width: 100%; height: auto; border-radius: 8px; overflow: hidden;" />
+      </div>
+      <div class="card" style="margin-bottom: 20px">
+        <h2 class="text-title" style="margin-bottom: 32px"><%= reportTitle %></h2>
+        <div style="display: flex; margin-bottom: 28px; justify-content: space-between">
+          <h3 class="text-body fw-bold" style="padding-right: 24px"><%= doiText %></h3>
+          <span><%= doi %></span>
+        </div>
+        <div style="display: flex; margin-bottom: 28px; justify-content: space-between">
+          <h3 class="text-body fw-bold" style="padding-right: 24px"><%= areaText %></h3>
+          <span>
+            <%= area %> <% if(areaUnit === 'ac') { %><%= unitTextAcre %><% } %> <% if(areaUnit === 'ha') { %><%=
+            unitTextHectare %><% } %>
+          </span>
+        </div>
+        <div style="display: flex; justify-content: space-between">
+          <h3 class="text-body fw-bold" style="padding-right: 24px"><%= cloudCoverageText %></h3>
+          <span><%= ingestionDate %></span>
+        </div>
+      </div>
+      <div class="card" style="margin-bottom: 20px">
+        <h2 class="text-title" style="margin-bottom: 32px"><%= scaleNote1 %></h2>
+        <img
+          src="http://localhost:3000/image/satellite-reports-color-bars/<%= reportType %>.png"
+          style="width: 100%; height: auto"
+        />
+        <p><%= scaleNote2 %></p>
+      </div>
+      <div class="card">
+        <h2 class="text-title" style="margin-bottom: 20px"><%= reportTitle %></h2>
+        <% description.forEach(function (paragraph){ %>
+        <p style="display: block; padding-bottom: 20px"><%= paragraph %></p>
+        <% }); %>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>New Demo User Signup Request</title>
+  <style>
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.6;
+      font-size: 16px;
+      color: #333;
+      max-width: 800px;
+      margin: 20px auto;
+      padding: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h2>New Demo User Signup Request</h2>
+  <p>A new user has sign up for a demo account.</p>
+  <h3>User Details:</h3>
+  <ul>
+    <li><strong>Name:</strong> <%= user.fullName %></li>
+    <% if(user.email) { %>
+      <li><strong>Email:</strong> <%= user.email %></li>
+    <% } %>
+
+    <% if(user.mobile) { %>
+      <li><strong>Mobile Number:</strong> <%= user.mobile %></li>
+    <% } %>
+
+    <li><strong>Country:</strong> <%= user.country || 'Unknown' %></li>
+    
+    <% if(message) { %>
+      <li><strong>Message:</strong> <%= message %></li>
+    <% } %>
+  </ul>
+  <h3>Instructions to Activate User Account:</h3>
+  <p>
+    Please follow up with the instruction to activate the demo user account and provide the demo and provide any additional information they may need.
+  </p>
+  <ol>
+    <li>Log in to the Dimitra platform with credentials for email: admin@dimitra.io</li>
+    <li>Go to User Management > Users</li>
+    <li>Search for the user by their email or phone number using the search field</li>
+    <li>Click on Activate Icon</li>
+    <li>Confirm account activation</li>
+  </ol>
+  <p>Best regards,<br/>The Dimitra Team</p>
+</body>
+</html>

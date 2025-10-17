@@ -1,0 +1,65 @@
+<table>
+    <tbody class="mcnTextBlockOuter">
+      <tr>
+       <td valign="top" class="mcnTextBlockInner" style="padding-top:20px;">
+          <table align="left" border="0" cellpadding="0" cellspacing="0" style="max-width:100%; min-width:100%;" width="100%" class="mcnTextContentContainer">
+            <tbody>
+              <tr>
+                <td valign="top" class="mcnTextContent" style="padding: 0px 18px 9px; line-height: 125%;">
+                  <div style="text-align: left;">
+                    <span style="font-family:arial,helvetica neue,helvetica,sans-serif">
+                      <span style="font-size:20px">
+                        أهلاً <%= firstName %>,
+                      </span><br><br>
+                      <span style="font-size:15px">
+                        <% if (!otpOnly) { %> أنت على وشك البدء. <% } %>الرجاء استخدام رمز المرور لمرة واحدة أدناه للتحقق من عنوان بريدك الإلكتروني:
+                      </span>
+                    </span><br><br>
+
+                    <span style="font-family:arial,helvetica neue,helvetica,sans-serif">
+                      <span style="font-size:15px">
+                        <%= otp %>
+                      </span>
+                    </span><br><br>
+
+                    <span style="font-family:arial,helvetica neue,helvetica,sans-serif">
+                      <span style="font-size:15px">
+                        ستنتهي صلاحية رمز التحقق هذا في غضون 30 دقيقة. إذا كنت تواجه مشكلة في تسجيل الدخول باستخدام هذا الرمز ، فيرجى الاتصال بدعمنا.
+                      </span>
+                    </span><br><br>
+
+                    <span style="font-family:arial,helvetica neue,helvetica,sans-serif">
+                      <span style="font-size:15px">
+                        ألم تطلب رمز التحقق؟ إذا لم تكن أنت ، فربما تم اختراق حسابك ويجب عليك اتخاذ بعض الخطوات للتأكد من أن حسابك آمن. للبدء ، أعد تعيين كلمة المرور الخاصة بك الآن.
+                      </span>
+                    </span><br><br>
+
+
+                  </div>
+                </td>
+              </tr>
+             </tbody>
+          </table>
+        </td>
+        </tr>
+      </tbody>
+  </table>
+
+  <table border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnTextBlock" style="min-width:100%;">
+      <tbody class="mcnTextBlockOuter">
+          <tr>
+              <td valign="top" class="mcnTextBlockInner" style="padding-top:9px;">
+                  <table align="left" border="0" cellpadding="0" cellspacing="0" style="max-width:100%; min-width:100%;" width="100%" class="mcnTextContentContainer">
+                      <tbody><tr>
+
+                          <td valign="top" class="mcnTextContent" style="padding: 0px 18px 9px; line-height: 200%;">
+
+                              <div style="text-align: left;"><span style="color:#e31c23"></span><span style="font-family:arial,helvetica neue,helvetica,sans-serif"><span style="font-size:20px">فريق ديميترا</span></span></div>
+
+                          </td>
+                      </tr>
+                  </tbody></table>
+              </td>
+          </tr>
+      </tbody>
+  </table>

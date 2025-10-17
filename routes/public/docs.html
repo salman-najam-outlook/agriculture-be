@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dimitra Public Registration API Documentation</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --success-color: #27ae60;
+            --error-color: #e74c3c;
+            --background-color: #f8f9fa;
+            --text-color: #2c3e50;
+            --border-color: #e9ecef;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--background-color);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        h2 {
+            font-size: 2rem;
+            margin: 2rem 0 1rem;
+            color: var(--primary-color);
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            margin: 1.5rem 0 1rem;
+            color: var(--secondary-color);
+        }
+
+        .endpoint {
+            background-color: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .method {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background-color: var(--secondary-color);
+            color: white;
+            border-radius: 4px;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        .code-block {
+            background-color: #f8f9fa;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            padding: 1rem;
+            margin: 1rem 0;
+            overflow-x: auto;
+        }
+
+        pre {
+            margin: 0;
+            white-space: pre-wrap;
+        }
+
+        code {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.9rem;
+        }
+
+        .field-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+
+        .field-table th,
+        .field-table td {
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            text-align: left;
+        }
+
+        .field-table th {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .field-table tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+
+        .required {
+            color: var(--error-color);
+            font-weight: bold;
+        }
+
+        .optional {
+            color: var(--success-color);
+        }
+
+        .notes {
+            background-color: #fff3cd;
+            border: 1px solid #ffeeba;
+            border-radius: 4px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+
+        .notes h4 {
+            color: #856404;
+            margin-bottom: 0.5rem;
+        }
+
+        .notes ul {
+            margin-left: 1.5rem;
+        }
+
+        .response-example {
+            margin: 1rem 0;
+        }
+
+        .response-example h4 {
+            margin-bottom: 0.5rem;
+            color: var(--primary-color);
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <h1>Dimitra Public Registration API</h1>
+            <p>Documentation for the public registration endpoint</p>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="endpoint">
+            <div class="method">POST /api/public/register</div>
+            <p>This endpoint handles the registration of new users and organizations in the Dimitra system.</p>
+        </div>
+
+        <h2>Request</h2>
+        <h3>Headers</h3>
+        <div class="code-block">
+            <pre><code>Content-Type: application/json</code></pre>
+        </div>
+
+        <h3>Request Body</h3>
+        <div class="code-block">
+            <pre><code>{
+  "firstName": "John",
+  "lastName": "Doe",
+  "phoneNumber": "+6281234567890",
+  "email": "john@example.com",
+  "country": "Indonesia",
+  "organizationName": "My Cooperative",
+  "organizationLogo": "https://your-aws-bucket.s3.amazonaws.com/logo.jpg",
+  "products": ["Coffee", "Cacao"],
+  "NoOfFarmsPlanningtoonboard": 5,
+  "securityToken": "dimitra_public_reg_2025_secure_token_123456789"
+}</code></pre>
+        </div>
+
+        <h3>Fields</h3>
+        <table class="field-table">
+            <thead>
+                <tr>
+                    <th>Field</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                    <th>Required</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>firstName</td>
+                    <td>string</td>
+                    <td>User's first name</td>
+                    <td class="optional">No</td>
+                </tr>
+                <tr>
+                    <td>lastName</td>
+                    <td>string</td>
+                    <td>User's last name</td>
+                    <td class="optional">No</td>
+                </tr>
+                <tr>
+                    <td>email</td>
+                    <td>string</td>
+                    <td>User's email address</td>
+                    <td class="required">Yes</td>
+                </tr>
+                <tr>
+                    <td>organizationName</td>
+                    <td>string</td>
+                    <td>Name of the organization</td>
+                    <td class="required">Yes</td>
+                </tr>
+                <tr>
+                    <td>products</td>
+                    <td>array</td>
+                    <td>Products interested in (Must include at least one of: "Coffee", "Cacao")</td>
+                    <td class="required">Yes</td>
+                </tr>
+                <tr>
+                    <td>securityToken</td>
+                    <td>string</td>
+                    <td>Security token for API access</td>
+                    <td class="required">Yes</td>
+                </tr>
+                <tr>
+                    <td>phoneNumber</td>
+                    <td>string</td>
+                    <td>User's phone number</td>
+                    <td class="optional">No</td>
+                </tr>
+                <tr>
+                    <td>country</td>
+                    <td>string</td>
+                    <td>User's country (defaults to "Indonesia")</td>
+                    <td class="optional">No</td>
+                </tr>
+                <tr>
+                    <td>organizationLogo</td>
+                    <td>string</td>
+                    <td>AWS S3 URL of the organization logo</td>
+                    <td class="optional">No</td>
+                </tr>
+                <tr>
+                    <td>NoOfFarmsPlanningtoonboard</td>
+                    <td>integer</td>
+                    <td>Number of farms to onboard</td>
+                    <td class="optional">No</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>Response</h2>
+        <h3>Success Response (200)</h3>
+        <div class="code-block">
+            <pre><code>{
+  "success": true,
+  "code": 200,
+  "message": "Registration successful. Your default password is: "+defaultPassword +". Please change your password after login.",
+  "data": {
+    "id": "user-123",
+    "email": "john@example.com",
+    "firstName": "John",
+    "lastName": "Doe",
+    "organization": "org-123",
+    "organizationCode": "my_cooperative",
+    "organizationLogo": "https://your-aws-bucket.s3.amazonaws.com/logo.jpg",
+    "NoOfFarmsPlanningtoonboard": 5
+  }
+}</code></pre>
+        </div>
+
+        <h3>Error Responses</h3>
+        <div class="response-example">
+            <h4>Invalid Security Token (400)</h4>
+            <div class="code-block">
+                <pre><code>{
+  "success": false,
+  "code": 400,
+  "message": "Invalid security token"
+}</code></pre>
+            </div>
+        </div>
+
+        <div class="response-example">
+            <h4>Email Already Registered (400)</h4>
+            <div class="code-block">
+                <pre><code>{
+  "success": false,
+  "code": 400,
+  "message": "Email already registered"
+}</code></pre>
+            </div>
+        </div>
+
+        <div class="response-example">
+            <h4>Parent Organization not found (400)</h4>
+            <div class="code-block">
+                <pre><code>{
+  "success": false,
+  "code": 400,
+  "message": "Parent Organization not found"
+}</code></pre>
+            </div>
+        </div>
+
+        <div class="notes">
+            <h4>Important Notes</h4>
+            <ul>
+                <li>The system automatically creates a default password for new users and Default Password is <code>Dimitra@123</code></li>
+            </ul>
+        </div>
+    </div>
+</body>
+
+</html>

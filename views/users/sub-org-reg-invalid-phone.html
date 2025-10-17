@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invalid Phone Number Notification</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #2c3e50;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f6fa;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #d9534f 0%, #c9302c 100%); /* Red gradient for error */
+            padding: 30px 20px;
+            text-align: center;
+            color: white;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: 600;
+        }
+        .content {
+            padding: 30px;
+        }
+        .section {
+            margin-bottom: 25px;
+            padding-bottom: 25px;
+            border-bottom: 1px solid #eef2f7;
+        }
+        .section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        h2 {
+            color: #d9534f; /* Red for emphasis */
+            font-size: 18px;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        p {
+            margin: 0 0 15px;
+            color: #4a5568;
+            font-size: 15px;
+        }
+        .details-box { /* Renamed from credentials for clarity */
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        .details-box p {
+            margin: 8px 0;
+            font-size: 14px;
+        }
+        .details-box p strong {
+            display: inline-block;
+            min-width: 150px; /* Adjust as needed for alignment */
+            vertical-align: top;
+        }
+        .footer {
+            background-color: #f8fafc;
+            padding: 20px;
+            text-align: center;
+            border-top: 1px solid #eef2f7;
+        }
+        .footer p {
+            margin: 0;
+            color: #64748b;
+            font-size: 14px;
+        }
+        .highlight {
+            color: #d9534f; /* Red highlight */
+            font-weight: 500;
+        }
+        .support-link {
+            color: #117442; /* Keeping original link color, adjust if needed */
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .support-link:hover {
+            text-decoration: underline;
+        }
+        @media only screen and (max-width: 600px) {
+            .container {
+                margin: 10px;
+                width: auto;
+            }
+            .content {
+                padding: 20px;
+            }
+            .header {
+                padding: 20px;
+            }
+            .header h1 {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Invalid Phone Number Detected In Sub-Org registration!</h1>
+        </div>
+
+        <div class="content">
+            <div class="section">
+
+                <strong>
+     <p>New sub organization has been created with the following invalid phone number. Sub organization has been registered, this is only to notify the invalidity of the phone number provided, please review:</p>
+                </strong>
+           
+            </div>
+
+            <div class="section">
+                <h2>Invalid Phone Number Details</h2>
+                <div class="details-box">
+                    <p><strong>Invalid Phone Number:</strong> <span class="highlight"><%= invalidPhoneNumber %></span></p>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>Associated User Information</h2>
+                <div class="details-box">
+                    <p><strong>First Name:</strong> <%= firstName %></p>
+                    <p><strong>Last Name:</strong> <%= lastName %></p>
+                    <p><strong>Attempted Phone:</strong> <%= phoneNumber %></p>
+                    <p><strong>Email:</strong> <%= email %></p>
+                    <p><strong>Country:</strong> <%= country %></p>
+                    <p><strong>Organization Name:</strong> <%= organizationName %></p>
+                    <p><strong>Organization Logo:</strong> <%= organizationLogo %></p>
+                    <p><strong>Products:</strong> <%= products %></p>
+                    <p><strong>Farms Planning to Onboard:</strong> <%= noOfFarmsPlanningToOnboard %></p>
+                </div>
+            </div>
+
+            <div class="section">
+                <p>Please investigate this issue and take appropriate action. It might indicate a data entry error or an attempt with incorrect information.</p>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>Automated Notification from<br><strong>Dimitra</strong></p>
+        </div>
+    </div>
+</body>
+</html>

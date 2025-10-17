@@ -1,0 +1,116 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml"
+    xmlns:o="urn:schemas-microsoft-com:office:office">
+
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+    <style type="text/css">
+    * {
+        margin: 0;
+        padding: 0;
+    }    
+    div {
+        font-size: 10px;
+    }   
+    table {
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+    border: none;
+    }
+
+    table tr:nth-child(even) {
+    background-color: #f2f2f2; /* Use your preferred shade of grey */
+    }
+
+    table th, table td {
+    padding: 5px 4px;
+    text-align: left;
+    color: grey;
+    line-height: 1.6;
+    
+    }
+    table td:first-child {
+    text-align: left; /* Align first column to the left */
+    padding-left: 15px;
+    }
+    table th:not(:first-child),
+    table td:not(:first-child) {
+    text-align: center; /* Align remaining columns to the center */
+    }
+    .sub-header h2 {
+        font-weight: 500;
+    }
+    </style>
+</head>
+
+
+<body>
+    <div style="padding: 20px 0;">
+        <div style="padding: 10px; float: left; width: 40%;"><img src="https://dimitra.io/wp-content/themes/dimitra/assets/imgs/logo.svg" alt="Logo" width="200"></div>
+        <div style="float: right; background-color: #217343; border-radius: 10px 0 0 10px; width: 45%; color: #f2f2f2; padding: 20px;">
+            <h2>Coffee Cherry Harvest</h2>
+            <br/>
+            <div><%- byTimeText %> (<%- byTimeTextDate %>) And <%- comparisonTimeText %> (<%- comparisonYear %>)</div>
+        </div>
+    </div>
+    <div style="clear: both"></div>
+    <div class="sub-header" style="background-color: #F1F1F1; clear: both; padding: 20px; height: 50px; margin-top: 20px;">
+        <div style="float: left; width: 45%;">
+            <h2>Projected Harvest(lb): <b><%- projectedHarvest %></b></h2><br/><br/>
+            <h2>Total Harvested To Date(lb): <b><%- totalHarvestToDate %></b></h2>
+        </div>
+        <div style="float: right; width: 45%;">
+            <h2>Harvesting Completed: <b><%- harvestCompleted %>%</b></h2><br/><br/>
+            <h2>Total Harvested: <b><%- totalHarvested %></b></h2>
+        </div>
+    </div>
+    <div style="clear: both"></div>
+    <div style="clear: both; padding: 20px;">
+        <h2><%- comparisonYear%></h2>
+    </div>
+    <div style="clear: both"></div>
+    <div style="clear: both">
+        <table cellspacing="0" cellpadding="0">
+            <thead>
+                <tr style="background-color: #3E3E3E; color:#f2f2f2">
+                    <th width="150" style="text-align: center;"><span style="color:#f2f2f2">Farms</span></th>
+                    <th colspan="<%- availableVariety.length %>"><span style="color:#f2f2f2">Quantity Per Variety</span></th>
+                    <th width="80"><span style="color:#f2f2f2">Total Collected <%- byTimeText %></span></th>
+                    <th width="80"><span style="color:#f2f2f2">Total Harvest Per Farm</span></th>
+                </tr>
+                <tr style="background-color: #555555;">
+                    <th></th>
+                    <% for(let i = 0; i < availableVariety.length; i++) { %>
+                        <th><span style="color:#f2f2f2"><%- availableVariety[i].name %></span></th>
+                    <% } %>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <% result.forEach(row => { %>
+                    <tr>
+                        <% row.forEach(item => { %>
+                            <td>
+                                <span><%- item %></span>
+                            </td>  
+                        <% }); %>
+                    </tr>
+                <% }); %>
+            </tbody>
+        </table>
+    </div>
+    <div class="footer" style="text-align: center; padding: 60px 0 0 0;">
+        <div>www.Dimitra.io</div>
+        <div style="color: grey;">©<%- year %> Dimitra.com - All right Reserved</div>
+    </div>
+</body>
+
+
+</html>

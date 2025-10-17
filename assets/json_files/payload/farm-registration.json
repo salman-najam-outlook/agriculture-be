@@ -1,0 +1,133 @@
+{
+  "APK v2.0.15": [
+    {
+      "farmName": "Siri Rice Farm",
+      "isTechnician": false,
+      "registrationNo": "SRF-001",
+      "lat": "-9.19246",
+      "log": "-75.019955",
+      "address": "10260, Puerto Inca Province\n(-9.19246, -75.019955)",
+      "area": "1.780",
+      "areaUomId": 1,
+      "parameterUomId": 1,
+      "parameter": 377.78450582716755,
+      "country": "Peru",
+      "state": "Provincia de Lima",
+      "farmingGoals": [
+        { "farmingGoalOptId": 18, "farmingGoal": "increase crop yield" },
+        { "farmingGoalOptId": 21, "farmingGoal": "Maximize income" },
+        { "farmingGoalOptId": 103, "farmingGoal": "Optimize cost" }
+      ],
+      "farmOwnershipType": "personal",
+      "certifications": [{ "id": 7920 }, { "id": 7921 }, { "id": 7922 }],
+      "productionType": "Conventional",
+      "farmGeofence": [
+        { "lat": -9.192147701166503, "log": -75.02051007002592 },
+        { "lat": -9.193228318418386, "log": -75.0203038752079 },
+        { "lat": -9.193153188321038, "log": -75.02083227038383 },
+        { "lat": -9.191989497200163, "log": -75.0210776925087 }
+      ],
+      "farmGeofenceName": "Zone 1",
+      "farmGeofenceCategory": "Farm",
+      "recordId": "67ee64bb4b45fd3f745dfca5f14fff43",
+      "segments": []
+    },
+    {
+      "farmName": "Sanji Carrot Farm",
+      "isTechnician": true,
+      "farmerFirstName": "Sanji",
+      "farmerMiddleName": "M",
+      "farmerLastName": "Jr.",
+      "farmerId": "214567",
+      "registrationNo": "SCF-0012",
+      "lat": "-9.19246",
+      "log": "-75.019955",
+      "address": "10260, Puerto Inca Province\n(-9.19246, -75.019955)",
+      "area": "2.000",
+      "areaUomId": 1,
+      "parameterUomId": 1,
+      "parameter": 424.137424902524,
+      "country": "Peru",
+      "state": "Provincia de Lima",
+      "farmingGoals": [
+        { "farmingGoalOptId": 20, "farmingGoal": "improve soil health" },
+        { "farmingGoalOptId": 21, "farmingGoal": "Maximize income" },
+        { "farmingGoalOptId": 103, "farmingGoal": "Optimize cost" }
+      ],
+      "farmOwnershipType": "community",
+      "certifications": [{ "id": 7920 }, { "id": 7921 }],
+      "productionType": "Organic",
+      "farmGeofence": [
+        { "lat": -9.193363023002334, "log": -75.02084232866764 },
+        { "lat": -9.19230954573673, "log": -75.02100024372339 },
+        { "lat": -9.192309876707146, "log": -75.01974530518055 }
+      ],
+      "farmGeofenceName": "Sanji Carrot",
+      "farmGeofenceCategory": "Farm",
+      "recordId": "e2f3b0a34ba3a05810c93fea7f887eaf",
+      "segments": []
+    }
+  ],
+
+  "APK v2.0.10-hf8": [
+    {
+      "farmName": "AR Pineapple Farm",
+      "isTechnician": false,
+      "registrationNo": "ARPF-001",
+      "lat": "-9.19246",
+      "log": "-75.019955",
+      "address": "10260, Puerto Inca Province",
+      "area": "3.555",
+      "areaUomId": 1,
+      "parameterUomId": 1,
+      "parameter": 482.10753327575105,
+      "country": "Peru",
+      "state": "Provincia de Lima",
+      "farmingGoals": [
+        { "farmingGoalOptId": 18, "farmingGoal": "increase crop yield" },
+        { "farmingGoalOptId": 20, "farmingGoal": "improve soil health" },
+        { "farmingGoalOptId": 21, "farmingGoal": "Maximize income" }
+      ],
+      "farmOwnershipType": "personal",
+      "farmGeofence": [
+        { "lat": -9.19191469781072, "log": -75.02061702311039 },
+        { "lat": -9.193077727238045, "log": -75.0204923003912 },
+        { "lat": -9.193062171661925, "log": -75.01949954777956 },
+        { "lat": -9.19188755820533, "log": -75.01959677785635 }
+      ],
+      "recordId": "fea13bcd9553d5adbc4acdea49f423",
+      "segments": []
+    },
+    {
+      "farmName": "AR Sugarcane Farm",
+      "isTechnician": true,
+      "farmerFirstName": "Aryan",
+      "farmerMiddleName": "K",
+      "farmerLastName": "Jr.",
+      "farmerId": "123456",
+      "registrationNo": "ARSF-0001",
+      "lat": "-9.19490268944606",
+      "log": "-75.02254486083984",
+      "address": "10260, Puerto Inca Province",
+      "area": "1.485",
+      "areaUomId": 1,
+      "parameterUomId": 1,
+      "parameter": 359.8244247695946,
+      "country": "Peru",
+      "state": "Provincia de Lima",
+      "farmingGoals": [
+        { "farmingGoalOptId": 20, "farmingGoal": "improve soil health" },
+        { "farmingGoalOptId": 21, "farmingGoal": "Maximize income" },
+        { "farmingGoalOptId": 103, "farmingGoal": "Optimize cost" }
+      ],
+      "farmOwnershipType": "community",
+      "farmGeofence": [
+        { "lat": -9.196724663548167, "log": -75.02472281455994 },
+        { "lat": -9.197658318213277, "log": -75.02467788755894 },
+        { "lat": -9.197311466289218, "log": -75.02363987267017 }
+      ],
+      "recordId": "d7cd844dfdfe5b9161a77e9f8b22d6",
+      "segments": []
+    }
+  ]
+}

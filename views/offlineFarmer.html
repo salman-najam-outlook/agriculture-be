@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>
+    Offline farmer list
+  </title>
+  <!-- CSS only -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
+  <style>
+    * {
+      font-family: 'Lato', sans-serif;
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+    td, th {
+      border: 1px solid #dddddd;
+      text-align: left;
+      padding: 8px;
+    }
+    tr:nth-child(even) {
+      background-color: #dddddd;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="responseDetailRows" style="padding: 16px;">
+    <div>
+      <table>
+        <tr>
+          <th>Name</th>
+          <th>Address</th>
+          <th>Buying station</th>
+          <th>Registration date</th>
+          <th>Quantity</th>
+          <th>Price per kg</th>
+        </tr>
+        <% for(var i=0; i < data.length; i++) { %>
+          <tr>
+            <td><%= data[i].name %> </td>
+            <td><%= data[i].address %></td>
+            <td><%= data[i].buyingStation %></td>
+            <td><%= data[i].registrationDate %></td>
+            <td><%= data[i].quantity %></td>
+            <td><%= data[i].pricePerKg %></td>
+          </tr>
+        <% } %>
+      </table>
+          
+    </div>
+  </div>
+</body>
+</html>

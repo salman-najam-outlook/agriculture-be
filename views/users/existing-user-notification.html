@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Akses ke Platform DDS</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #2c3e50;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f6fa;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #117442 0%, #0a4d2e 100%);
+            padding: 30px 20px;
+            text-align: center;
+            color: white;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: 600;
+        }
+        .content {
+            padding: 30px;
+        }
+        .section {
+            margin-bottom: 25px;
+            padding-bottom: 25px;
+            border-bottom: 1px solid #eef2f7;
+        }
+        .section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        h2 {
+            color: #117442;
+            font-size: 18px;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        p {
+            margin: 0 0 15px;
+            color: #4a5568;
+            font-size: 15px;
+        }
+        .options {
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        .options p {
+            margin: 8px 0;
+            font-size: 14px;
+        }
+        .button {
+            display: inline-block;
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #117442 0%, #0a4d2e 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 500;
+            margin: 10px 0;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        .button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 6px rgba(17, 116, 66, 0.2);
+        }
+        .footer {
+            background-color: #f8fafc;
+            padding: 20px;
+            text-align: center;
+            border-top: 1px solid #eef2f7;
+        }
+        .footer p {
+            margin: 0;
+            color: #64748b;
+            font-size: 14px;
+        }
+        .logo {
+            max-width: 150px;
+            margin-bottom: 15px;
+        }
+        .highlight {
+            color: #117442;
+            font-weight: 500;
+        }
+        .support-link {
+            color: #117442;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .support-link:hover {
+            text-decoration: underline;
+        }
+        .option-box {
+            background-color: #ffffff;
+            border: 2px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        .option-box h3 {
+            color: #117442;
+            margin-top: 0;
+            font-size: 16px;
+        }
+        @media only screen and (max-width: 600px) {
+            .container {
+                margin: 10px;
+                width: auto;
+            }
+            .content {
+                padding: 20px;
+            }
+            .header {
+                padding: 20px;
+            }
+            .header h1 {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Akses ke Platform DDS Menggunakan Kredensial Anda yang Ada</h1>
+        </div>
+
+        <div class="content">
+            <div class="section">
+                <p>Kepada <span class="highlight"><%= userName %></span>,</p>
+
+                <p>Sistem kami telah mendeteksi bahwa Anda sudah memiliki akun Dimitra dengan alamat email <span class="highlight"><%= email %></span>.</p>
+
+                <p>Untuk melanjutkan, Anda memiliki dua pilihan:</p>
+            </div>
+
+            <div class="section">
+                <h2>Pilihan Akses Anda</h2>
+                
+                <div class="option-box">
+                    <h3>1. Buat Akun Baru</h3>
+                    <p>Jika Anda ingin memulai dari awal, silakan mendaftar menggunakan alamat email yang berbeda dari yang digunakan sebelumnya.</p>
+                </div>
+
+                <div class="option-box">
+                    <h3>2. Gunakan Akun Anda yang Ada</h3>
+                    <p>Anda dapat terus menggunakan kredensial Anda saat ini untuk mengakses platform DDS. Jika Anda lupa kata sandi, gunakan link di bawah ini untuk memulihkan akses.</p>
+                    <a href="<%= loginUrl %>" class="button">Akses Platform DDS</a>
+                    <a href="<%= forgotPasswordUrl %>" class="button" style="background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%); margin-left: 10px;">Lupa Kata Sandi</a>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>Platform Login</h2>
+                <div class="options">
+                    <p><strong>Platform URL:</strong> <a href="<%= platformUrl %>" class="support-link"><%= platformUrl %></a></p>
+                    <p><strong>Email Terdaftar:</strong> <%= email %></p>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>Butuh Bantuan?</h2>
+                <p>Jika Anda mengalami masalah atau memerlukan dukungan, jangan ragu untuk menghubungi tim dukungan kami di <a href="mailto:<%= supportEmail %>" class="support-link"><%= supportEmail %></a>.</p>
+
+                <p>Kami siap membantu Anda mengakses platform DDS dengan lancar.</p>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>Salam,<br><strong>Tim Dimitra</strong></p>
+        </div>
+    </div>
+</body>
+</html> 

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+    <style>
+        table, th, td {
+            border:1px solid black;
+            border-collapse: collapse;
+        }
+    </style>
+
+    <body>
+        <div class="main" style="padding: 5px">
+            <h1>Dry Milling Report</h1>
+    
+            <div class="inbound-reports">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Amount</th>
+                            <th>Quantity</th>
+                            <th>Inbound Unit</th>
+                        </tr>
+                    </tr>
+                    <tbody>
+                        <% for(let i = 0; i < inboundReports.length; i++) { %>
+                            <tr>
+                                <td><%= data[i].product %></td>
+                                <td><%= data[i].amount %></td>
+                                <td><%= data[i].quantity %></td>
+                                <td><%= data[i].inboundUnitValue %></td>
+                            </tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+            
+            <hr />
+    
+            <div class="outbound-reports">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Client Name</th>
+                            <th>Order Details</th>
+                            <th>Amount</th>
+                            <th>Quantity</th>
+                            <th>Inbound Unit</th>
+                        </tr>
+                    </tr>
+                    <tbody>
+                        <% for(let i = 0; i < outboundReports.length; i++) { %>
+                            <tr>
+                                <td><%= data[i].clientName %></td>
+                                <td><%= data[i].orderDetail %></td>
+                                <td><%= data[i].amount %></td>
+                                <td><%= data[i].quantity %></td>
+                                <td><%= data[i].inboundUnitValue %></td>
+                            </tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </body>
+</html>

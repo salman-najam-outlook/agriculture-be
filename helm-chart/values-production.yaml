@@ -1,0 +1,74 @@
+deployment:
+  name: dimitra-sass-app-production
+  namespace: dimitra-sass-production
+  replicaCount: 1
+  containerName: dimitra-sass-container-production
+  image: 495454422438.dkr.ecr.us-east-1.amazonaws.com/dimitra-saas-api-prototype-ecr-prod
+  portName: sass-port
+  containerPort: 3000
+  aloglocation: "/src/activity_log_prod"
+  alogname: activity-log
+  pvcname: dimitra-app-pv-claim-production
+  
+  PersistentVolumeClaim:
+  storageClassName: gp2
+  accessMode: ReadWriteMany
+  capacity: 10GB
+
+service:
+  type: NodePort
+  port: 3000
+  nodePort: 30011
+
+hpa:
+  enabled: true
+  name: dimitra-sass-hpa-prod
+  maxReplicas: 30
+  minReplicas: 1
+  targetCPUUtilizationPercentage: 90
+
+ingress:
+  name: dimitra-sass-ingress-production
+  annotations: 
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/group.name: dimitra-prod
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-1:495454422438:certificate/60a4dd1c-fbbb-4c4b-9406-eb1134928525
+    alb.ingress.kubernetes.io/backend-protocol: HTTP
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS": 443}]'
+  hostName: sass-api-prod.dimitra.dev
+
+# config map is maintained seperately for security purpose
+configMap:
+  enabled: true
+  depname: envfile
+  name: sass-env-file
+  fileLocation: /src/.env
+  subPath: .env
+
+redis:
+  name: redis-server
+  containerName: redis-container-prod
+  image: bitnami/redis:5.0.14
+  resources:
+    limits:
+      cpu: 200m
+      memory: 400Mi
+    requests:
+      cpu: 195m
+      memory: 395Mi
+  portName: redis-port
+  containerPort: 6379
+  env:
+  - name: REDIS_DB
+    value: "1"   
+  - name: REDIS_HOST
+    value: "redis-server" 
+  - name: REDIS_PORT
+    value: "6379" 
+  - name: "ALLOW_EMPTY_PASSWORD"
+    value: "yes"   
+  
+job:
+  name: migration-hook-production
+  containerName: migration-hook-container-production

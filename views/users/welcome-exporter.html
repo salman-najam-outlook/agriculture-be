@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Selamat datang di Platform Dimitra – Mulailah Hari Ini!</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #2c3e50;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f6fa;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #117442 0%, #0a4d2e 100%);
+            padding: 30px 20px;
+            text-align: center;
+            color: white;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: 600;
+        }
+        .content {
+            padding: 30px;
+        }
+        .section {
+            margin-bottom: 25px;
+            padding-bottom: 25px;
+            border-bottom: 1px solid #eef2f7;
+        }
+        .section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        h2 {
+            color: #117442;
+            font-size: 18px;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        p {
+            margin: 0 0 15px;
+            color: #4a5568;
+            font-size: 15px;
+        }
+        .credentials {
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        .credentials p {
+            margin: 8px 0;
+            font-size: 14px;
+        }
+        .button {
+            display: inline-block;
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #117442 0%, #0a4d2e 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 500;
+            margin: 10px 0;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        .button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 6px rgba(17, 116, 66, 0.2);
+        }
+        .footer {
+            background-color: #f8fafc;
+            padding: 20px;
+            text-align: center;
+            border-top: 1px solid #eef2f7;
+        }
+        .footer p {
+            margin: 0;
+            color: #64748b;
+            font-size: 14px;
+        }
+        .logo {
+            max-width: 150px;
+            margin-bottom: 15px;
+        }
+        .highlight {
+            color: #117442;
+            font-weight: 500;
+        }
+        .support-link {
+            color: #117442;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .support-link:hover {
+            text-decoration: underline;
+        }
+        .important-note {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 6px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        .important-note p {
+            margin: 8px 0;
+            color: #856404;
+            font-size: 14px;
+        }
+        .demo-note {
+            background-color: #e3f2fd;
+            border: 1px solid #bbdefb;
+            border-radius: 6px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        .demo-note p {
+            margin: 8px 0;
+            color: #1565c0;
+            font-size: 14px;
+        }
+        @media only screen and (max-width: 600px) {
+            .container {
+                margin: 10px;
+                width: auto;
+            }
+            .content {
+                padding: 20px;
+            }
+            .header {
+                padding: 20px;
+            }
+            .header h1 {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="content">
+            <div class="section">
+                <p>Tim <span class="highlight"><%= user?.firstName %> <%= user?.lastName %></span> yang terhormat,</p>
+
+                <p>Selamat datang di Surveyor Indonesia Project Hub yang didukung oleh Dimitra. Gerbang menuju transformasi digital Perkebunan kopi/kakao  Indonesia. </p>
+
+                <p>
+                    Organisasi Anda kini memiliki akses ke berbagai alat yang mendukung pendaftaran perkebunan dan kepatuhan EUDR. Temukan kredensial login dan sumber daya utama Anda di bawah ini untuk membantu Anda memulai:
+                </p>
+                <p> 
+                    Temukan kredensial login dan sumber daya utama Anda di bawah ini untuk membantu Anda memulai:
+                </p>
+            </div>
+
+            <div class="section">
+                <h2>Detail Login Dasbor:</h2>
+                <div class="credentials">
+                    <p><strong>URL Platform:</strong> <a href="<%= platformUrl %>" class="support-link"><%= platformUrl %></a></p>
+                    <p><strong>Nama Pengguna:</strong> <%= username %></p>
+                    <p><strong>Kata Sandi Sementara:</strong> <%= password %></p>
+                </div>
+                <p>Silakan login dan ubah kata sandi Anda saat pertama kali mengakses. Klik <a href="<%= changePasswordLink %>" class="support-link">di sini</a> untuk mengubah kata sandi Anda.</p>
+            </div>
+
+            <div class="section">
+                <div class="demo-note">
+                    <p>Anda telah diberikan akun koperasi demo. Akun ini serupa dengan yang akan digunakan koperasi Anda. Anda akan menerima akses ke akun eksportir khusus dalam 3 minggu ke depan.</p>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="important-note">
+                    <p>
+                        Sekarang Anda sudah memiliki akun eksportir, saatnya anda membantu  mendaftarkan koperasi Anda. Harap beri tahu mitra koperasi Anda untuk mengunjungi <a href="https://dimitra.io/indonesia-registration/"> https://dimitra.io/indonesia-registration/ </a>  dan menyelesaikan pendaftaran sehingga koperasi anda dapat menerima kredensial.
+                    </p>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>Butuh Bantuan?</h2>
+                <p>Jika Anda memiliki pertanyaan atau memerlukan dukungan teknis, jangan ragu untuk membalas email ini atau menghubungi tim dukungan kami di bantuan@dimitra.io Atau 0816-874-259 </p>
+                
+            </div>
+            <div class="section">
+                <p> Kami berharap dapat bekerja sama dengan Anda untuk mendorong transformasi digital yang inklusif di bidang perkebunan kopi/kakao..  </p>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>Salam hangat,<br><strong>Tim Dimitra</strong></p>
+        </div>
+    </div>
+</body>
+</html>

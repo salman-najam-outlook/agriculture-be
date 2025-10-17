@@ -1,0 +1,86 @@
+:root {
+  --bs-body-font-size: 0.8125rem;
+  --bs-font-sans-serif: "Poppins", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+body{
+  margin: 1% 0;
+  font-family: var(--bs-font-sans-serif);
+  font-size: var(--bs-body-font-size);
+}
+.pdf-sub-header-bottom{
+  text-transform: capitalize;
+}
+.divider {
+  height: 2px;
+  background-color: #cacaca;
+  width: 100%;
+  margin: 20px 0; /* Add some space around the divider */
+}
+#header-container {
+  background: rgb(245, 245, 245);
+  margin-top: 10px;
+  margin-bottom: 10px;
+  padding: 10px;
+}
+.pdf-container{
+  margin: 60px;
+}
+.pdf-header{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  /* padding: 40px 0; */
+}
+.pdf-header img{
+  max-width: 180px;
+}
+.pdf-header-title{
+  width: 300px;
+  /* background-color: #115c0a; */
+  background-color: rgb(40 116 68);
+  padding: 30px;
+  color: #ffffff;
+  text-transform: uppercase;
+  font-size: 16px;
+  font-weight: bolder;
+  border-radius: 14px 0 0 14px;
+}
+.pdf-sub-header{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 2%;
+  background-color: #efefef;
+  font-size: 14px;
+  margin: 16px 0;
+}
+table{
+ margin: 0 0 !important;
+ font-size: var(--bs-body-font-size);
+}
+table tr{
+ text-align: center;
+ text-transform: capitalize;
+}
+thead tr{
+  background-color: #373535;
+  color: #ffffff;
+}
+tfoot tr{
+  background-color: rgb(40 116 68);
+  color: #ffffff;
+  padding: 200px;
+}
+.pdf-sub-header-left, .pdf-sub-header-right{
+  width: 50%;
+}
+.pdf-sub-header-top {
+  border-bottom: 2px solid rgb(209 209 209);
+  /* border-bottom: 2px solid #373535; */
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+  font-weight: 600;
+}
+.pdf-sub-header-right{
+  text-align: left;
+}

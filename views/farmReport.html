@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script lang="javascript">
+    function serverToGoogleCoordinates({latitude, longitude}) {
+        return {
+            lat: latitude,
+            lng: longitude
+        };
+    }
+
+    async function initializeMap() {
+        class DeforestationOverlay extends google.maps.OverlayView {
+            bounds_;
+            image_;
+            div_;
+
+            constructor(bounds, image, mapContainer) {
+                super();
+                this.bounds_ = bounds;
+                this.image_ = image;
+                this.div_ = null;
+            }
+            
+            onAdd() {
+                this.div_ = document.createElement("div");
+                this.div_.style.borderStyle = "none";
+                this.div_.style.borderWidth = "0px";
+                this.div_.style.position = "absolute";
+
+                const img = document.createElement("img");
+
+                img.src = this.image_;
+                img.style.width = "100%";
+                img.style.height = "100%";
+                img.style.position = "absolute";
+                this.div_.appendChild(img);
+
+                const panes = this.getPanes();
+
+                panes.overlayLayer.appendChild(this.div_);
+            }
+
+            draw() {
+                const overlayProjection = this.getProjection();
+                const sw = overlayProjection.fromLatLngToDivPixel(
+                    this.bounds_.getSouthWest()
+                );
+                const ne = overlayProjection.fromLatLngToDivPixel(
+                    this.bounds_.getNorthEast()
+                );
+
+                if (this.div_) {
+                    this.div_.style.left = sw.x + "px";
+                    this.div_.style.top = ne.y + "px";
+                    this.div_.style.width = ne.x - sw.x + "px";
+                    this.div_.style.height = sw.y - ne.y + "px";
+                }
+            }
+
+            onRemove() {
+                if (this.div_) {
+                    this.div_.parentNode.removeChild(this.div_);
+                    this.div_ = null;
+                }
+            }
+        }
+        console.log('<%- JSON.stringify(report.centerLatitude) %>', "report")
+
+        const centerCoordinates = {
+            lat: Number.parseFloat('<%- JSON.stringify(report.centerLatitude) %>'),
+            lng: Number.parseFloat('<%- JSON.stringify(report.centerLongitude) %>')
+        };
+
+        const map = new google.maps.Map(document.getElementById('map'), {
+            mapTypeId: 'satellite',
+            zoom: 15,
+            disableDefaultUI: true,
+            center: centerCoordinates,
+        });
+
+        const deforestationImageSrc = '<%- JSON.stringify(report.sateliteResponse[0].imagePath) %>'.replaceAll('"', '');
+        const reportType = '<%- JSON.stringify(report.reportType) %>'.replaceAll('"', '');
+
+        let bounds;
+        const radius = Number.parseFloat('<%- JSON.stringify(report.radius) %>') * Math.sqrt(2.0);
+
+        if (reportType === "REGISTERED_FARM" && !radius) {
+            const coordinates = JSON.parse('<%- JSON.stringify(coordinates) %>');
+
+            const polygon = new google.maps.Polygon({
+                paths: [
+                    ...coordinates.map((coordinate) => serverToGoogleCoordinates(coordinate)),
+                    serverToGoogleCoordinates(coordinates[0])
+                ],
+                strokeColor: 'transparent',
+                fillColor: 'transparent',
+                editable: false,
+                draggable: false,
+            });
+
+            const paths = polygon.getPaths();
+            bounds = new google.maps.LatLngBounds();
+            
+            paths.forEach((path) => {
+                const pathArray = path.getArray();
+
+                for (var i = 0, l = pathArray.length; i < l; i++) {
+                    bounds.extend(pathArray[i]);
+                }
+            });
+        } else {
+            const geometry = await google.maps.importLibrary("geometry");
+ 
+           
+            const center = new google.maps.LatLng(centerCoordinates);
+
+            const sw = geometry.spherical.computeOffset(center, radius, 45);
+            const ne = geometry.spherical.computeOffset(center, radius, 225);
+
+            bounds = new google.maps.LatLngBounds();
+
+            bounds.extend(sw);
+            bounds.extend(ne);
+        }
+
+        if (typeof map !== undefined) {
+            setTimeout(() => {
+                map.fitBounds(bounds, 0);
+
+                const deforestationOverlay = new DeforestationOverlay(
+                    bounds, 
+                    deforestationImageSrc, 
+                    document.getElementById("map")
+                );
+
+                deforestationOverlay.setMap(map);
+
+                google.maps.event.addListenerOnce(map, "tilesloaded", () => {
+                    setTimeout(() => {
+                        document.getElementById('map').style.visibility = 'visible';
+                    }, 20000);
+                });
+            }, 10000);
+        } else {
+            map.fitBounds(bounds, 0);
+
+            const deforestationOverlay = new DeforestationOverlay(
+                bounds, 
+                deforestationImageSrc, 
+                document.getElementById("map")
+            );
+
+            deforestationOverlay.setMap(map);
+
+            google.maps.event.addListenerOnce(map, "tilesloaded", () => {
+                setTimeout(() => {
+                    document.getElementById('map').style.visibility = 'visible';
+                }, 20000);
+            });
+        }
+    }
+
+    window.initMap = initializeMap;
+</script>
+  <title>
+    Farm Report
+  </title>
+  <!-- CSS only -->
+  <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" -->
+    <!-- integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous" /> -->
+
+  <style>
+    .body{
+      font-size: 14px;
+    }
+    table, tr, td { page-break-inside: avoid; }
+    .map-container {
+                margin-top: 25px;
+            }
+      .paddedx {
+          padding: 0 25px;
+      }
+    .pdf-header-title {
+    width: 300px;
+    background-color: rgb(40 116 68);
+    padding: 30px;
+    color: #ffffff;
+    text-transform: uppercase;
+    font-size: 18px;
+    font-weight: bolder;
+    border-radius: 14px 0 0 14px;
+}
+
+.pdf-subtitle{
+    padding: 2%;
+    margin-top: 18px;
+    text-align: center;
+    border: 1px solid #0000000D;
+    width: 100%;
+    height: auto;
+    border: 1px;
+    background-color: #f7f7f7;
+}
+
+.pdf-sub-header-title- {
+    font-family: Poppins;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 18px;
+    letter-spacing: 0.009em;
+    text-align: left;
+}
+
+.pdf-sub-header-title-value {
+    color: #3E3E3E;
+    font-family: Poppins;
+    font-weight: 600;
+    size: 14px;
+}
+
+.table-head {
+    background: #373535;
+    color: #ffffff;
+    display: table-row-group;
+
+}
+
+.deforestation-header {
+  background-color: #FFB443;
+}
+.square-box {
+  width: 25px;
+  height: 25px;
+  border: 1px solid #e2e2e2;
+  border-radius: 5px;
+}
+
+.overall-deforestation {
+  width: 100%;
+  color: #FFB443;
+  border: 2px solid #FFB443;
+  border-radius: 20px;
+  background-color:rgb(255, 180, 67, 0.1);
+  text-align: center;
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+html {
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+body {
+    font-family: "Poppins", sans-serif;
+}
+          
+  </style>
+</head>
+
+<body class="body">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
+  <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    />
+    <link href="https://fonts.cdnfonts.com/css/poppins" rel="stylesheet" />
+  <div id="responseDetailRows">
+    <div class="pdf-header" style="
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        ">
+      <div class="pdf-header-logo" style="width: 30%">
+        <img style="width: 80%;" src="data:image/png;base64, <%= imageBase64 %>" alt="No image found." />
+      </div>
+      <div class="pdf-header-title" style="width: 70%">
+        <%= translations["Farm Report"]%>
+      </div>
+    </div>
+
+    <div class="pdf-subtitle">
+        <div class="row h-100 text-muted">
+          <div class="col-4 border-right pt-3">
+            <div class="pdf-sub-header-title">
+              <%= translations["Dimitra Farm ID"]%>
+            </div> 
+            <div class="pdf-sub-header-title-value">
+              <%= data.dimitraFarmId%>
+             </div>
+          </div>
+          <div class="col-4 border-right pt-3">
+            <div class="pdf-sub-header-title">
+              <%= translations["Farm Name"]%>
+            </div>
+            <div class="pdf-sub-header-title-value">
+              <%= data.farmName%>
+            </div>
+          </div>
+          <div class="col-4 pt-3">
+            <div class=" pdf-sub-header-title">
+              <%= translations["Farm Registration ID"]%>
+            </div>
+            <div class="pdf-sub-header-title-value">
+              <%= data.id%>
+            </div>
+          </div>
+          <div class="col-4 border-right pt-3">
+            <div class="pdf-sub-header-title">
+              <%= translations["Farm Location"]%>
+            </div> 
+            <div class="pdf-sub-header-title-value">
+              <%= data.address%>
+             </div>
+          </div>
+          <div class="col-4 border-right pt-3">
+            <div class="pdf-sub-header-title">
+              <%= translations["Dimitra Farmer ID"]%>
+            </div>
+            <div class="pdf-sub-header-title-value">
+              <%= data.dimitraUserId%>
+            </div>
+          </div>
+          <div class="col-4 pt-3">
+            <div class=" pdf-sub-header-title">
+              <%= translations["Farmer Name"]%>
+            </div>
+            <div class="pdf-sub-header-title-value">
+              <%= data.farmerName%>
+            </div>
+          </div>
+          <div class="col-4 pt-3 border-right">
+            <div class=" pdf-sub-header-title">
+              <%= translations["Farmer Registration ID"]%>
+            </div>
+            <div class="pdf-sub-header-title-value">
+              <%= data.farmerId%>
+            </div>
+          </div>
+        </div>           
+    </div>
+
+    <div class="map-container paddedx">
+      <article id="map"  class="google-map" style="visibility: hidden; width:100%; height:550px; z-index: 0;"></article>
+  </div>
+
+    <% if (query.deforestation == true && data.deforestationData) { %>
+      <div class="card shadow bg-white rounded " style="width: 100%; margin-top: 112px;">
+        <div class="pb-1 card-body">
+            <p class="" style="color: #00BD73;"><strong><%= translations["Deforestation Information"]%></strong></p>
+            <div class="p-2">
+              <% if (deforestationImageBase64) { %>
+                <div class="row">
+                  <img style="width: 100%; height: 32vh; border-radius: 10px;" src="data:image/png;base64, <%= deforestationImageBase64 %>" alt="No image found." />
+                </div>
+              <% } %>
+              <div class="row deforestation-header pt-4" style="margin-top: 70px;">
+                <div class="col-6">
+                  <p><strong><%= translations["Deforestation Probability"]%></strong></p>
+                </div>
+                <div class="col-3 text-right">
+                  <p><strong><%= translations["Geofence Area"]%></strong></p>
+                </div>
+                <div class="col-3 text-right">
+                  <p><strong>% <%= translations["Geofence Area"]%></strong></p>
+                </div>
+              </div>
+              <% for(const metric of data.deforestationData.metrics) { %>
+                <div class="row pt-4">
+                  <div class="col-6">
+                    <div class="row flex-nowrap">
+                      <div class="col-8">
+                        <p><strong><%= metric.label %></strong></p>
+                      </div>
+                      <div class="col-4">
+                        <div class="square-box ml-1" style="background-color: <%= metric.colorCode %>;"></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-3 text-right">
+                    <p><strong class="text-uppercase"><%= parseFloat(metric.area.toFixed(2)) %> <%= userUnit.abbvr %></strong></p>
+                  </div>
+                  <div class="col-3 text-right">
+                    <p><strong><%= parseFloat(metric.percent.toFixed(2)) %>%</strong></p>
+                  </div>
+                </div>
+              <% } %>
+              <div class="row pt-4" style="background-color: #00BD734D;">
+                <div class="col-6">
+                  <p><strong><%= translations["Total Geofence Area"]%></strong></p>
+                </div>
+                <div class="col-3 text-right">
+                  <p><strong class="text-uppercase"><%= parseFloat(data.deforestationData.totalArea.toFixed(2)) %> <%= userUnit.abbvr %></strong></p>
+                </div>
+                <div class="col-3 text-right">
+                  <p><strong>100%</strong></p>
+                </div>
+              </div>
+              <div class="row pt-4">
+                <div class="col-8">
+                  <p><strong><%= translations["Overall Deforestation Probability"]%></strong></p>
+                  <div class="overall-deforestation">
+                    <p class="mb-0"><strong><%= translations[data.deforestationData?.overallProb] %></strong></p>
+                  </div>
+                </div>
+                <% if (status == true) { %>
+                <div class="col-4">
+                  <%= translations["QR Code and Hash"]%>
+                  <div class="row p-2">
+                    <% if (qrBase64Img) { %>
+                      <img style="width: 50%; height: 9vh;" src="data:image/png;base64, <%= qrBase64Img %>" alt="No image found." />
+                    <% } %>
+                  </div>
+                </div>
+                <% } %>
+              </div>
+          </div>
+        </div>
+      </div>
+    <% } %>
+
+    <% if (query.geographic == true) { %>
+      <div class="card shadow bg-white rounded " style="width: 100%; margin-top: 18px;">
+          <div class="pb-3 card-body">
+            <div class="row">
+              <div class="col-5 text-start"><p><strong style="color: #00BD73;"><%= translations["Geographic Location"]%></strong></p></div>
+              <div class="col-7 text-right">
+                <span class="fw-bold"><%= translations["Longitude"]%>: </span> <span class="text-muted"><%= data.log %> </span>  <span class="fw-bold"><%= translations["Latitude"]%>: </span> <span class="text-muted"><%= data.lat %>
+              </div>
+            </div>
+            <div class="row p-2">
+              <img style="width: 100%; height: 32vh; border-radius: 10px;" src="data:image/png;base64, <%= base64MapImage %>" alt="No image found." />
+            </div>
+          </div>
+      </div>
+    <% } %>
+
+    <% if (query.farmPerimeter == true) { %>
+      <div class="card shadow bg-white rounded " style="width: 100%; margin-top: 470px;">
+          <div class="pb-0 card-body">
+              <div><p><strong style="color: #00BD73;"><%= translations["Farm Perimeter"]%></strong></p></div>
+              <div class="row p-2">
+                <img style="width: 100%; height: 40vh; border-radius: 10px;" src="data:image/png;base64, <%= base64GeofenceImage %>" alt="Red dot" />
+              </div>
+          </div>
+      </div>
+    <% } %>
+
+    <% if (query.geoVertices == true) { %>
+      <div class="card shadow bg-white rounded " style="width: 100%; margin-top: 18px;">
+        <div class="pb-0 card-body">
+            <div class=""><p><strong style="color: #00BD73;"><%= translations["List of Geofence Vertices GPS Coordinates"]%></strong></p></div>
+        </div>
+        <table class="table table-striped mx-4 w-auto">
+          <thead class="table-head">
+            <tr class="text-center">
+              <th scope="col">Sr.#</th>
+              <th scope="col"><%= translations["Latitude"]%></th>
+              <th scope="col"><%= translations["Longitude"]%></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% if (data.coordinates && data.coordinates.length > 0) { %>
+              <% data.coordinates?.forEach(function(item, index) { %>
+                <tr class="text-center">
+                  <th scope="row"><%= index + 1 %></th>
+                  <td><%= item.lat %></td>
+                  <td><%= item.log %></td>
+                </tr>
+              <% }); %> 
+            <% } else { %>
+              <tr>
+                <td colspan="3" class="text-center"><%= translations["No data found"] %></td>
+              </tr>
+            <% } %>   
+          </tbody>
+        </table>
+      </div>
+    <% } %>
+
+    <% if (query.areasPerimeter == true  && base64SegmentsImage) { %>
+      <div class="card shadow bg-white rounded " style="width: 100%; margin-top: 450px;">
+          <div class="pb-0 card-body ">
+              <div><p><strong style="color: #00BD73;"><%= translations["Perimeter of area/segments"] %></strong></p></div>
+              <div class="row p-2">
+                <img style="width: 100%; height: 40vh; border-radius: 10px;" src="data:image/png;base64, <%= base64SegmentsImage %>" alt="No image found." />
+              </div>
+          </div>
+      </div>
+    <% } %>
+
+    <% if (query.existingCrop == true) { %>
+      <div class="card shadow bg-white rounded " style="width: 100%; margin-top: 18px;">
+        <div class="pb-0 card-body ">
+          <div><p><strong style="color: #00BD73;"><%= translations["Information about Existing Crops in the Farm"]%></strong></p></div>
+        </div>
+        <table class="table table-striped mx-4 w-auto">
+          <thead class="table-head text-center">
+            <tr>
+              <th scope="col"><%= translations["Crop Name"] %></th>
+              <th scope="col"><%= translations["Variety Name"] %> </th>
+              <th scope="col"><%= translations["Cultivated Area"] %></th>
+            </tr>
+          </thead>
+          <tbody class="text-center">
+            <% if (data.existingCropData && data.existingCropData.length > 0) { %>
+              <% data.existingCropData?.forEach(function(item, index) { %>
+                <tr>
+                  <td><%= item.cropName %></td>
+                  <td><%= item.varietyName %></td>
+                  <td>
+                    <% if (item.geofenceArea) { %>
+                      <%= item.geofenceArea %> Acre
+                    <% } %>
+                  </td>
+                </tr>
+              <% }); %>
+            <% } else { %>
+              <tr>
+                <td colspan="3" class="text-center"><%= translations["No data found"] %></td>
+              </tr>
+            <% } %>   
+          </tbody>
+        </table>
+      </div>
+    <% } %>
+
+    <% if (query.fertilizerApplication) { %>
+      <div class="card shadow bg-white rounded " style="width: 100%; margin-top: 18px;">
+          <div class="pb-0 card-body ">
+              <div><p><strong style="color: #00BD73;">    <%= translations["Fertilizer Application Information"]%></strong></p></div>
+          </div>
+          <table class="table table-striped mx-4 w-auto">
+            <thead class="table-head">
+              <tr>
+                <th scope="col"><%= translations["Fertilizer Name"] %> </th>
+                <th scope="col" class="text-center"><%= translations["Applied On"] %></th>
+              </tr>
+            </thead>
+            <tbody>
+              <% if (data.fertilizerApplicationData && data.fertilizerApplicationData.length > 0) { %>
+                <% data.fertilizerApplicationData?.forEach(function(item, index) { %>
+                  <tr>
+                    <td><%= item.fertilizerName %></td>
+                    <td class="text-center"><%= item.dateOfApplication %></td>
+                  </tr>
+                <% }); %>  
+              <% } else { %>
+                <tr>
+                  <td colspan="2" class="text-center"><%= translations["No data found"] %></td>
+                </tr>
+              <% } %>            
+            </tbody>
+          </table>
+      </div>
+      <% } %>
+
+    <% if (query.pestDiseaseApplication) { %>
+    <div class="card shadow bg-white rounded " style="width: 100%; margin-top: 18px;">
+        <div class="pb-0 card-body ">
+            <div><p><strong style="color: #00BD73;"> <%= translations["Information on the application of products to combat pests and diseases"]%></strong></p></div>
+        </div>
+        <table class="table table-striped mx-4 w-auto">
+            <thead class="table-head">
+              <tr>
+                <th scope="col"><%= translations["Product Name"] %></th>
+                <th scope="col" class="text-center"><%= translations["Applied On"] %></th>
+              </tr>
+            </thead>
+            <tbody>
+              <% if (data.pestAndDiseaseData && data.pestAndDiseaseData.length > 0) { %>
+                <% data.pestAndDiseaseData?.forEach(function(item, index) { %>
+                  <tr>
+                    <td><%= item.name %></td>
+                    <td class="text-center"><%= item.appliedDate %></td>
+                  </tr>
+                <% }); %> 
+              <% } else { %>
+                <tr>
+                  <td colspan="2" class="text-center"><%= translations["No data found"] %></td>
+                </tr>
+              <% } %>
+            </tbody>
+          </table>
+    </div>
+    <% } %>
+
+      <% if (query.yieldInfo) { %>
+        <div class="card shadow bg-white rounded " style="width: 100%; margin-top: 18px;">
+          <div class="pb-0 card-body ">
+              <div><p><strong style="color: #00BD73;"><%= translations["Yield Information"]%></strong></p></div>
+          </div>
+          <table class="table table-striped mx-4 w-auto text-center">
+            <thead class="table-head">
+              <tr>
+                <th scope="col"><%= translations["Crop Name"] %> </th>
+                <th scope="col"><%= translations["Variety Name"] %> </th>
+                <th scope="col"><%= translations["Cultivated Area"] %> </th>
+                <th scope="col"><%= translations["Yield(Ton)"] %> </th>
+              </tr>
+            </thead>
+            <tbody>
+              <% if (data.yieldInfoData && data.yieldInfoData.length > 0) { %>
+                <% data.yieldInfoData?.forEach(function(item, index) { %>
+                  <tr>
+                    <td><%= item.cropName %></td>
+                    <td><%= item.varietyName %></td>
+                    <td><%= item.area %> <%= item.areaUnit %></td>
+                    <td><%= item.totalYield %></td>
+                  </tr>
+                <% }); %> 
+              <% } else { %>
+                <tr>
+                  <td colspan="4" class="text-center"><%= translations["No data found"] %></td>
+                </tr>
+              <% } %>
+            </tbody>
+          </table>
+        </div>
+      <% } %>
+  </div>
+</body>
+<script src="https://maps.googleapis.com/maps/api/js?v=3&key=AIzaSyBxEppGyQ3YatmT9C8RJjXAh9HsVtpKLh4&libraries=places&loading=async&callback=initMap" async></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous" async></script>
+</html>

@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>
+    Farm Report
+  </title>
+  <!-- CSS only -->
+  <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" -->
+    <!-- integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous" /> -->
+
+  <style>
+    .body{
+      font-size: 14px;
+    }
+    table, tr, td { page-break-inside: avoid; }
+    .map-container {
+                margin-top: 25px;
+            }
+      .paddedx {
+          padding: 0 25px;
+      }
+    .pdf-header-title {
+    width: 300px;
+    background-color: rgb(40 116 68);
+    padding: 30px;
+    color: #ffffff;
+    text-transform: uppercase;
+    font-size: 18px;
+    font-weight: bolder;
+    border-radius: 14px 0 0 14px;
+}
+
+.pdf-subtitle{
+    padding: 2%;
+    margin-top: 18px;
+    text-align: center;
+    border: 1px solid #0000000D;
+    width: 100%;
+    height: auto;
+    border: 1px;
+    background-color: #f7f7f7;
+}
+
+.pdf-sub-header-title- {
+    font-family: Poppins;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 18px;
+    letter-spacing: 0.009em;
+    text-align: left;
+}
+
+.pdf-sub-header-title-value {
+    color: #3E3E3E;
+    font-family: Poppins;
+    font-weight: 600;
+    size: 14px;
+}
+
+.table-head {
+    background: #373535;
+    color: #ffffff;
+    display: table-row-group;
+
+}
+
+.deforestation-header {
+  background-color: #FFB443;
+}
+
+.high-box {
+  width: 25px;
+  height: 25px;
+  background-color: #F03737;
+  border-radius: 5px;
+}
+
+.low-box {
+  width: 25px;
+  height: 25px;
+  background-color: #FFB443;
+  border-radius: 5px;
+}
+
+.negligible-box {
+  width: 25px;
+  height: 25px;
+  background-color: #F1F4F7;
+  border-radius: 5px;
+}
+
+.overall-deforestation {
+  width: 100%;
+  height: 30%;
+  color: #FFB443;
+  border: 2px solid #FFB443;
+  border-radius: 20px;
+  background-color:rgb(255, 180, 67, 0.1);
+  text-align: center;
+  padding-top: 5px
+}
+html {
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+body {
+    font-family: "Poppins", sans-serif;
+}
+          
+  </style>
+</head>
+
+<body class="body">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
+  <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    />
+    <link href="https://fonts.cdnfonts.com/css/poppins" rel="stylesheet" />
+  <div id="responseDetailRows">
+    <div class="pdf-header" style="
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        ">
+      <div class="pdf-header-logo" style="width: 30%">
+        <img style="width: 80%;" src="data:image/png;base64, <%= imageBase64 %>" alt="No image found." />
+      </div>
+      <div class="pdf-header-title" style="width: 70%">
+        <%= translations["Farm Report"]%>
+      </div>
+    </div>
+
+    <div class="pdf-subtitle">
+        <div class="row h-100 text-muted">
+          <div class="col-4 border-right pt-3">
+            <div class="pdf-sub-header-title">
+              <%= translations["Dimitra Farm ID"]%>
+
+            </div> 
+            <div class="pdf-sub-header-title-value">
+              <%= data.dimitraFarmId%>
+             </div>
+          </div>
+          <div class="col-4 border-right pt-3">
+            <div class="pdf-sub-header-title">
+              <%= translations["Farm Name"]%>
+
+            </div>
+            <div class="pdf-sub-header-title-value">
+              <%= data.farmName%>
+            </div>
+          </div>
+          <div class="col-4 pt-3">
+            <div class=" pdf-sub-header-title">
+              <%= translations["Farm Registration ID"]%>
+
+            </div>
+            <div class="pdf-sub-header-title-value">
+              <%= data.id%>
+            </div>
+          </div>
+          <div class="col-4 border-right pt-3">
+            <div class="pdf-sub-header-title">
+              <%= translations["Farm Location"]%>
+
+            </div> 
+            <div class="pdf-sub-header-title-value">
+              <%= data.address%>
+             </div>
+          </div>
+          <div class="col-4 border-right pt-3">
+            <div class="pdf-sub-header-title">
+              <%= translations["Dimitra Farmer ID"]%>
+
+            </div>
+            <div class="pdf-sub-header-title-value">
+              <%= data.dimitraUserId%>
+            </div>
+          </div>
+          <div class="col-4 pt-3">
+            <div class=" pdf-sub-header-title">
+               <%= translations["Farmer Name"]%>
+
+            </div>
+            <div class="pdf-sub-header-title-value">
+              <%= data.farmerName%>
+            </div>
+          </div>
+          <div class="col-4 pt-3 border-right">
+            <div class=" pdf-sub-header-title">
+              <%= translations["Farmer Registration ID"]%>
+
+            </div>
+            <div class="pdf-sub-header-title-value">
+              <%= data.farmerId%>
+            </div>
+          </div>
+        </div>           
+    </div>
+
+
+    <% if (query.geographic == true) { %>
+      <div class="card shadow bg-white rounded " style="width: 100%; margin-top: 18px;">
+          <div class="pb-3 card-body">
+            <div class="row">
+              <div class="col-5 text-start"><p><strong style="color: #00BD73;"><%= translations["Geographic Location"]%>
+</strong></p></div>
+              <div class="col-7 text-right">
+                <span class="fw-bold"><%= translations["Longitude"]%>
+: </span> <span class="text-muted"><%= data.log %> </span>  <span class="fw-bold"><%= translations["Latitude"]%>
+: </span> <span class="text-muted"><%= data.lat %>
+              </div>
+            </div>
+            <div class="row p-2">
+              <img style="width: 100%; height: 32vh; border-radius: 10px;" src="data:image/png;base64, <%= base64MapImage %>" alt="No image found." />
+            </div>
+          </div>
+      </div>
+    <% } %>
+
+    <% if (query.farmPerimeter == true) { %>
+      <div class="card shadow bg-white rounded " style="width: 100%; margin-top: 670px;">
+          <div class="pb-0 card-body">
+              <div><p><strong style="color: #00BD73;"><%= translations["Farm Perimeter"]%>
+</strong></p></div>
+              <div class="row p-2">
+                <img style="width: 100%; height: 40vh; border-radius: 10px;" src="data:image/png;base64, <%= base64GeofenceImage %>" alt="Red dot" />
+              </div>
+          </div>
+      </div>
+    <% } %>
+
+    <% if (query.geoVertices == true) { %>
+      <div class="card shadow bg-white rounded " style="width: 100%; margin-top: 18px;">
+        <div class="pb-0 card-body">
+            <div class=""><p><strong style="color: #00BD73;"><%= translations["List of Geofence Vertices GPS Coordinates"]%>
+</strong></p></div>
+        </div>
+        <table class="table table-striped mx-4 w-auto">
+          <thead class="table-head">
+            <tr class="text-center">
+              <th scope="col">Sr.#</th>
+              <th scope="col"><%= translations["Latitude"]%></th>
+              <th scope="col"><%= translations["Longitude"]%></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% if (data.coordinates && data.coordinates.length > 0) { %>
+              <% data.coordinates?.forEach(function(item, index) { %>
+                <tr class="text-center">
+                  <th scope="row"><%= index + 1 %></th>
+                  <td><%= item.lat %></td>
+                  <td><%= item.log %></td>
+                </tr>
+              <% }); %> 
+            <% } else { %>
+              <tr>
+                <td colspan="3" class="text-center"><%= translations["No data found"] %></td>
+              </tr>
+            <% } %>   
+          </tbody>
+        </table>
+      </div>
+    <% } %>
+
+    <% if (query.areasPerimeter == true && base64SegmentsImage) { %>
+      <div class="card shadow bg-white rounded " style="width: 100%; margin-top: 550px;">
+          <div class="pb-0 card-body ">
+              <div><p><strong style="color: #00BD73;">Perimeter of area/segments</strong></p></div>
+              <div class="row p-2">
+                <img style="width: 100%; height: 40vh; border-radius: 10px;" src="data:image/png;base64, <%= base64SegmentsImage %>" alt="No image found." />
+              </div>
+          </div>
+      </div>
+    <% } %>
+
+    <% if (query.existingCrop == true) { %>
+      <div class="card shadow bg-white rounded " style="width: 100%; margin-top: 18px;">
+        <div class="pb-0 card-body ">
+          <div><p><strong style="color: #00BD73;"><%= translations["Information about Existing Crops in the Farm"]%></strong></p></div>
+        </div>
+        <table class="table table-striped mx-4 w-auto">
+          <thead class="table-head text-center">
+            <tr>
+              <th scope="col"><%= translations["Crop Name"] %></th>
+              <th scope="col"><%= translations["Variety Name"] %> </th>
+              <th scope="col"><%= translations["Cultivated Area"] %></th>
+            </tr>
+          </thead>
+          <tbody class="text-center">
+            <% if (data.existingCropData && data.existingCropData.length > 0) { %>
+              <% data.existingCropData?.forEach(function(item, index) { %>
+                <tr>
+                  <td><%= item.cropName %></td>
+                  <td><%= item.varietyName %></td>
+                  <td>
+                    <% if (item.geofenceArea) { %>
+                      <%= item.geofenceArea %> Acre
+                    <% } %>
+                  </td>
+                </tr>
+              <% }); %>
+            <% } else { %>
+              <tr>
+                <td colspan="3" class="text-center"><%= translations["No data found"] %></td>
+              </tr>
+            <% } %>   
+          </tbody>
+        </table>
+      </div>
+    <% } %>
+
+    <% if (query.fertilizerApplication) { %>
+      <div class="card shadow bg-white rounded " style="width: 100%; margin-top: 18px;">
+          <div class="pb-0 card-body ">
+              <div><p><strong style="color: #00BD73;"><%= translations["Fertilizer Application Information"]%></strong></p></div>
+          </div>
+          <table class="table table-striped mx-4 w-auto">
+            <thead class="table-head">
+              <tr>
+                <th scope="col"><%= translations["Fertilizer Name"] %> </th>
+                <th scope="col" class="text-center"><%= translations["Applied On"] %></th>
+              </tr>
+            </thead>
+            <tbody>
+              <% if (data.fertilizerApplicationData && data.fertilizerApplicationData.length > 0) { %>
+                <% data.fertilizerApplicationData?.forEach(function(item, index) { %>
+                  <tr>
+                    <td><%= item.fertilizerName %></td>
+                    <td class="text-center"><%= item.dateOfApplication %></td>
+                  </tr>
+                <% }); %>  
+              <% } else { %>
+                <tr>
+                  <td colspan="2" class="text-center"><%= translations["No data found"] %></td>
+                </tr>
+              <% } %>            
+            </tbody>
+          </table>
+      </div>
+      <% } %>
+
+    <% if (query.pestDiseaseApplication) { %>
+    <div class="card shadow bg-white rounded " style="width: 100%; margin-top: 18px;">
+        <div class="pb-0 card-body ">
+            <div><p><strong style="color: #00BD73;"><%= translations["Information on the application of products to combat pests and diseases"]%></strong></p></div>
+        </div>
+        <table class="table table-striped mx-4 w-auto">
+            <thead class="table-head">
+              <tr>
+                <th scope="col"><%= translations["Product Name"] %></th>
+                <th scope="col" class="text-center"><%= translations["Applied On"] %></th>
+              </tr>
+            </thead>
+            <tbody>
+              <% if (data.pestAndDiseaseData && data.pestAndDiseaseData.length > 0) { %>
+                <% data.pestAndDiseaseData?.forEach(function(item, index) { %>
+                  <tr>
+                    <td><%= item.name %></td>
+                    <td class="text-center"><%= item.appliedDate %></td>
+                  </tr>
+                <% }); %> 
+              <% } else { %>
+                <tr>
+                  <td colspan="2" class="text-center"><%= translations["No data found"] %></td>
+                </tr>
+              <% } %>
+            </tbody>
+          </table>
+    </div>
+    <% } %>
+
+      <% if (query.yieldInfo) { %>
+        <div class="card shadow bg-white rounded " style="width: 100%; margin-top: 18px;">
+          <div class="pb-0 card-body ">
+              <div><p><strong style="color: #00BD73;"><%= translations["Yield Information"]%></strong></p></div>
+          </div>
+          <table class="table table-striped mx-4 w-auto text-center">
+            <thead class="table-head">
+              <tr>
+                <th scope="col"><%= translations["Crop Name"] %> </th>
+                <th scope="col"><%= translations["Variety Name"] %> </th>
+                <th scope="col"><%= translations["Cultivated Area"] %> </th>
+                <th scope="col"><%= translations["Yield(Ton)"] %> </th>
+              </tr>
+            </thead>
+            <tbody>
+              <% if (data.yieldInfoData && data.yieldInfoData.length > 0) { %>
+                <% data.yieldInfoData?.forEach(function(item, index) { %>
+                  <tr>
+                    <td><%= item.cropName %></td>
+                    <td><%= item.varietyName %></td>
+                    <td><%= item.area %> <%= item.areaUnit %></td>
+                    <td><%= item.totalYield %></td>
+                  </tr>
+                <% }); %> 
+              <% } else { %>
+                <tr>
+                  <td colspan="4" class="text-center"><%= translations["No data found"] %></td>
+                </tr>
+              <% } %>
+            </tbody>
+          </table>
+        </div>
+      <% } %>
+  </div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous" async></script>
+</html>

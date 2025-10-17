@@ -1,0 +1,183 @@
+'use strict';
+const moduleId = 2;
+const cropRecommendations = [
+  {
+    cropTypeId: 72,
+    cropVarietyId: null,
+    moduleId,
+    moduleAttrId: 3,
+    recommendation: JSON.stringify([
+      'Hilly areas Rabi (September - October) Summer (November - December)',
+      'Punjab, Haryana, UP, Bihar, Rajasthan Kharif (June - July) Rabi (October - November)',
+      'Orissa and West Bengal Kharif (June - July) Late Kharif (August - September) - Rabi (September - October)',
+      'Maharashtra and parts of Gujarat Early Kharif (February - March) Kharif (May - June) Late Kharif (August - September) Rabi (October-November)',
+      'Andhra Pradesh, Tamil Nadu, Karnataka Early Kharif (February - April) Kharif (May - June) Rabi (September - October)"',
+    ]),
+  },
+  {
+    cropTypeId: 72,
+    cropVarietyId: null,
+    moduleId,
+    moduleAttrId: 4,
+    recommendation: JSON.stringify([
+      'Division/sets/bulbets',
+      'Seeds',
+      'Seedlins',
+    ]),
+  },
+];
+
+const scaleRecommendations = [
+  {
+    cropTypeId: 72,
+    cropVarietyId: null,
+    moduleId,
+    moduleAttrId: 5,
+    start: 8,
+    end: 10,
+    unit: 'kg',
+    type: 'Direct Seeding',
+    note: '',
+  },
+  {
+    cropTypeId: 72,
+    cropVarietyId: null,
+    moduleId,
+    moduleAttrId: 5,
+    start: 20,
+    end: 25,
+    unit: 'kg',
+    type: 'Broadcasting',
+    note: '',
+  },
+  {
+    cropTypeId: 72,
+    cropVarietyId: null,
+    moduleId,
+    moduleAttrId: 6,
+    start: 30,
+    end: null,
+    unit: 'cm',
+    type: 'Large onions/nursery',
+    note: '',
+  },
+  {
+    cropTypeId: 72,
+    cropVarietyId: null,
+    moduleId,
+    moduleAttrId: 6,
+    start: 15,
+    end: null,
+    unit: 'cm',
+    type: 'Small onions/nursery',
+    note: '',
+  },
+  {
+    cropTypeId: 72,
+    cropVarietyId: null,
+    moduleId,
+    moduleAttrId: 6,
+    start: 15,
+    end: null,
+    unit: 'cm',
+    type: 'Transplanting',
+    note: '',
+  },
+  {
+    cropTypeId: 72,
+    cropVarietyId: null,
+    moduleId,
+    moduleAttrId: 7,
+    start: 10,
+    end: null,
+    unit: 'cm',
+    type: 'Large onions',
+    note: '',
+  },
+  {
+    cropTypeId: 72,
+    cropVarietyId: null,
+    moduleId,
+    moduleAttrId: 7,
+    start: 10,
+    end: null,
+    unit: 'cm',
+    type: 'Small onions',
+    note: '',
+  },
+  {
+    cropTypeId: 72,
+    cropVarietyId: null,
+    moduleId,
+    moduleAttrId: 7,
+    start: 7.5,
+    end: null,
+    unit: 'cm',
+    type: 'Transplanting',
+    note: '',
+  },
+  {
+    cropTypeId: 72,
+    cropVarietyId: null,
+    moduleId,
+    moduleAttrId: 8,
+    start: 328510,
+    end: 414960,
+    unit: 'plants',
+    type: null,
+    note: null,
+  },
+  {
+    cropTypeId: 72,
+    cropVarietyId: null,
+    moduleId,
+    moduleAttrId: 9,
+    start: 1,
+    end: 2,
+    unit: 'cm',
+    type: 'Nursery/seeds',
+    note: null,
+  },
+  {
+    cropTypeId: 72,
+    cropVarietyId: null,
+    moduleId,
+    moduleAttrId: 9,
+    start: 2.5,
+    end: 3,
+    unit: 'cm',
+    type: 'Seedlings (transplanting)',
+    note: null,
+  },
+  {
+    cropTypeId: 72,
+    cropVarietyId: null,
+    moduleId,
+    moduleAttrId: 9,
+    start: 2.5,
+    end: 3,
+    unit: 'cm',
+    type: 'Division/sets',
+    note: null,
+  },
+];
+
+module.exports = {
+  async up(queryInterface, Sequelize) {
+    await Promise.all([
+      queryInterface.bulkInsert('CropRecommendations', cropRecommendations, {}),
+      queryInterface.bulkInsert(
+        'ScaleRecommendations',
+        scaleRecommendations,
+        {}
+      ),
+    ]);
+  },
+
+  async down(queryInterface, Sequelize) {
+    await Promise.all([
+      queryInterface.bulkDelete('CropRecommendations', { moduleId }),
+      queryInterface.bulkDelete('ScaleRecommendations', { moduleId }),
+    ]);
+  },
+};

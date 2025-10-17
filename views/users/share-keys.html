@@ -1,0 +1,94 @@
+<div class="main" style="padding: 5px">
+    <% if(lang == 'hi') { %>  
+      <p>डाउनलोड की सूची:</p>
+    <% } else if(lang == 'mv') { %>
+      <p>डाउनलोड की सूची:</p>
+    <% }  else if(lang == 'ne') { %>
+      <p>डाउनलोड कुञ्जी सूची:</p>
+    <% }  else if(lang == 'id') { %>
+      <p>Daftar Kunci Unduhan:</p>
+    <% }  else if(lang == 'pt') { %>
+      <p>Lista de Chaves de Download:</p>
+    <% }  else if(lang == 'el') { %>
+      <p>Λίστα Κλειδιών Λήψης:</p>
+    <% }  else if(lang == 'tr') { %>
+      <p>İndirme Anahtar Listesi:</p>   
+    <% }  else if(lang == 'sw') { %>
+      <p>Orodha ya Vitufe vya Kupakua:</p>
+    <% }  else if(lang == 'ar') { %>
+      <p>قائمة مفاتيح التنزيل:</p>
+    <% }  else if(lang == 'es') { %>
+      <p>Lista de Claves de Descarga:</p>
+    <% }  else { %>
+      <p>Download Key List:</p>
+    <% } %>  
+    <h4><%= csvUrl %>,</h4>
+</div>
+
+<table
+  border="0"
+  cellpadding="0"
+  cellspacing="0"
+  width="100%"
+  class="mcnTextBlock"
+  style="min-width: 100%"
+>
+  <tbody class="mcnTextBlockOuter">
+    <tr>
+      <td valign="top" class="mcnTextBlockInner" style="padding-top: 9px">
+        <table
+          align="left"
+          border="0"
+          cellpadding="0"
+          cellspacing="0"
+          style="max-width: 100%; min-width: 100%"
+          width="100%"
+          class="mcnTextContentContainer"
+        >
+          <tbody>
+            <tr>
+              <td
+                valign="top"
+                class="mcnTextContent"
+                style="padding: 0px 18px 9px; line-height: 200%"
+              >
+                <div style="text-align: left">
+                  <span style="color: #e31c23"></span
+                  ><span
+                    style="
+                      font-family: arial, helvetica neue, helvetica, sans-serif;
+                    "
+                    >
+                    <% if(lang == 'hi') { %>  
+                      <span style="font-size: 20px">टीम Dimitra</span>
+                    <% } else if(lang == 'mv') { %>
+                      <span style="font-size: 20px">टीम Dimitra</span>
+                    <% }  else if(lang == 'ne') { %>
+                      <span style="font-size: 20px">टिम Dimitra</span>
+                    <% }  else if(lang == 'id') { %>
+                      <<span style="font-size: 20px">Tim Dimitra</span>
+                    <% }  else if(lang == 'pt') { %>
+                      <span style="font-size: 20px">Equipe Dimitra</span>
+                    <% }  else if(lang == 'el') { %>
+                      <span style="font-size: 20px">Ομάδα Dimitra</span>
+                    <% }  else if(lang == 'tr') { %>
+                      <span style="font-size: 20px">Takım Dimitra</span> 
+                    <% }  else if(lang == 'sw') { %>
+                      <span style="font-size: 20px">Timu Dimitra</span>
+                    <% }  else if(lang == 'ar') { %>
+                      <span style="font-size: 20px">فريق  Dimitra</span>
+                    <% }  else if(lang == 'es') { %>
+                      <span style="font-size: 20px">Equipo Dimitra</span>
+                    <% }  else { %>
+                      <span style="font-size: 20px">Team Dimitra</span>
+                    <% } %> 
+                    </span>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </td>
+    </tr>
+  </tbody>
+</table>

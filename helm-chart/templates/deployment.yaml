@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.deployment.name }}
+  namespace: {{ .Values.deployment.namespace }}
+spec:
+  strategy:
+    type: {{ .Values.deployment.strategy.type }}
+    rollingUpdate:
+      maxSurge: {{ .Values.deployment.strategy.rollingUpdate.maxSurge }}
+      maxUnavailable: {{ .Values.deployment.strategy.rollingUpdate.maxUnavailable }}
+  {{- if not .Values.hpa.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      app: {{ .Values.deployment.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.deployment.name }}
+    spec:
+      containers:
+      - name: {{ .Values.deployment.containerName }}
+        image: {{ .Values.deployment.image }}
+        imagePullPolicy: IfNotPresent
+        volumeMounts:
+        {{- if .Values.configMap.enabled }}
+        - name: {{ .Values.configMap.depname }}
+          mountPath: {{ .Values.configMap.fileLocation }}
+          subPath: {{ .Values.configMap.subPath }}
+          readOnly: true
+        {{- end }}
+        - mountPath: {{ .Values.deployment.aloglocation }}
+          name: {{ .Values.deployment.alogname }}
+        command: ["npm"]
+        args: ["run", "start"]
+        ports:
+        - name: {{ .Values.deployment.portName }}
+          containerPort: {{ .Values.deployment.containerPort }}
+        {{- if .Values.deployment.livenessProbe.enabled }}
+        livenessProbe:
+          httpGet:
+            path: {{ .Values.deployment.livenessProbe.httpGet.path }}
+            port: {{ .Values.deployment.livenessProbe.httpGet.port }}
+            scheme: {{ .Values.deployment.livenessProbe.httpGet.scheme }}
+          initialDelaySeconds: {{ .Values.deployment.livenessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.deployment.livenessProbe.periodSeconds }}
+        {{- end }}
+
+        {{- if .Values.deployment.readinessProbe.enabled }}
+        readinessProbe:
+          httpGet:
+            path: {{ .Values.deployment.readinessProbe.httpGet.path }}
+            port: {{ .Values.deployment.readinessProbe.httpGet.port }}
+            scheme: {{ .Values.deployment.readinessProbe.httpGet.scheme }}
+          initialDelaySeconds: {{ .Values.deployment.readinessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.deployment.readinessProbe.periodSeconds }}
+        {{- end }}
+      volumes:
+      {{- if .Values.configMap.enabled }}
+      - name: {{ .Values.configMap.depname }}
+        configMap:
+          name: {{ .Values.configMap.name }}
+      {{- end }}
+      - name: {{ .Values.deployment.alogname }}
+        persistentVolumeClaim:
+          claimName: {{ .Values.deployment.pvcname }}

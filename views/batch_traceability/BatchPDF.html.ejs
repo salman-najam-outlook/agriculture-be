@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dimitra Report</title>
+    <!-- CSS only -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor"
+      crossorigin="anonymous"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="http://localhost:3000/css/pdfReport.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <style>
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 4px;
+        }
+        .header img {
+            width: 50%;
+        }
+        .report-title {
+            width: 40%;
+            background-color: darkgreen;
+            color: white;
+            text-align: right;
+            font-size: xx-large;
+            margin-right: 10px;
+            padding-right: 5px;
+        }
+        .summary {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 14px;
+        }
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .table th,
+        .table td {
+            border: 1px solid black;
+            padding: 8px;
+        }
+        .table th {
+            background-color: #f2f2f2;
+        }
+        .qr-code {
+            width: 100px;
+            height: 100px;
+        }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <img src="http://localhost:3000/image/Dimitra Powered by AI 2023.png" />
+      <div class="report-title"><%= translations['Batch Management Report'] %></div>
+    </div>
+    <div class="summary">
+      <table class="table">
+        <thead>
+          <tr>
+            <th><%= translations['User Name'] %></th>
+            <th><%= translations['Total Lots'] %></th>
+            <th><%= translations['Quantity'] %></th>
+            <th><%= translations['Date'] %></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><%= data.userName %></td>
+            <td><%= data.totalLots %></td>
+            <td><%= data.totalQuantity %></td>
+            <td><%= data.reportDate %></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <table class="table">
+      <thead>
+        <tr>
+          <th><%= translations['Lot ID'] %></th>
+          <th><%= translations['Crop Type'] %></th>
+          <th><%= translations['Selected Lot(s)'] %></th>
+          <th><%= translations['Quantity'] %></th>
+          <th><%= translations['Packing Unit'] %></th>
+          <th><%= translations['Total Price'] %></th>
+          <th><%= translations['Date'] %></th>
+          <th><%= translations['Internal QR'] %></th>
+          <!-- <th><%= translations['External QR'] %></th> -->
+        </tr>
+      </thead>
+      <tbody>
+        <% data.batches.forEach(function(batch) { %>
+        <tr>
+          <td><%= batch.lot_id %></td>
+          <td><%= batch.cropType %></td>
+          <td><%= batch.selectedLots %></td>
+          <td><%= batch.quantity %></td>
+          <td><%= batch.packagingUnit %></td>
+          <td><%= batch.totalPrice %></td>
+          <td><%= batch.date %></td>
+          <% if (batch.internalQR) { %>
+            <td><img class="qr-code" src="data:image/png;base64,<%= batch.internalQR %>" alt="<%= translations['No image found.'] %>" /></td>
+          <% } else { %>
+            <td><%= translations['No internal QR available'] %></td>
+          <% } %>
+          
+          <!-- <% if (batch.externalQR) { %>
+            <td><img class="qr-code" src="data:image/png;base64,<%= batch.externalQR %>" alt="<%= translations['No image found.'] %>" /></td>
+          <% } else { %>
+            <td><%= translations['No external QR available'] %></td>
+          <% } %> -->
+        </tr>
+        <% }); %>
+      </tbody>
+    </table>
+  </body>
+  
+</html>

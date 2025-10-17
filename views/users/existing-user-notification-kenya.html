@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Gateway to EUDR Compliance – Get Started Today!</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #2c3e50;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f6fa;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #117442 0%, #0a4d2e 100%);
+            padding: 30px 20px;
+            text-align: center;
+            color: white;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: 600;
+        }
+        .content {
+            padding: 30px;
+        }
+        .section {
+            margin-bottom: 25px;
+            padding-bottom: 25px;
+            border-bottom: 1px solid #eef2f7;
+        }
+        .section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        h2 {
+            color: #117442;
+            font-size: 18px;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        p {
+            margin: 0 0 15px;
+            color: #4a5568;
+            font-size: 15px;
+        }
+        .options {
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        .options p {
+            margin: 8px 0;
+            font-size: 14px;
+        }
+        .button {
+            display: inline-block;
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #117442 0%, #0a4d2e 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 500;
+            margin: 10px 0;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        .button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 6px rgba(17, 116, 66, 0.2);
+        }
+        .footer {
+            background-color: #f8fafc;
+            padding: 20px;
+            text-align: center;
+            border-top: 1px solid #eef2f7;
+        }
+        .footer p {
+            margin: 0;
+            color: #64748b;
+            font-size: 14px;
+        }
+        .logo {
+            max-width: 150px;
+            margin-bottom: 15px;
+        }
+        .highlight {
+            color: #117442;
+            font-weight: 500;
+        }
+        .support-link {
+            color: #117442;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .support-link:hover {
+            text-decoration: underline;
+        }
+        .option-box {
+            background-color: #ffffff;
+            border: 2px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        .option-box h3 {
+            color: #117442;
+            margin-top: 0;
+            font-size: 16px;
+        }
+        @media only screen and (max-width: 600px) {
+            .container {
+                margin: 10px;
+                width: auto;
+            }
+            .content {
+                padding: 20px;
+            }
+            .header {
+                padding: 20px;
+            }
+            .header h1 {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+    <div class="header">
+        <h1>Access the DDS Platform Using Your Existing Credentials</h1>
+    </div>
+
+    <div class="content">
+        <div class="section">
+            <p>Dear <span class="highlight"><%= userName %></span>,</p>
+
+            <p>Our system has detected that you already have a Dimitra account with the email address <span class="highlight"><%= email %></span>.</p>
+
+            <p>To proceed, you have two options:</p>
+        </div>
+
+        <div class="section">
+            <h2>Your Access Options</h2>
+            
+            <div class="option-box">
+                <h3>1. Create a New Account</h3>
+                <p>If you want to start fresh, please register using a different email address than the one previously used.</p>
+            </div>
+
+            <div class="option-box">
+                <h3>2. Use Your Existing Account</h3>
+                <p>You can continue using your current credentials to access the DDS platform. If you forgot your password, use the link below to recover your access.</p>
+                <a href="<%= loginUrl %>" class="button">Access DDS Platform</a>
+                <a href="<%= forgotPasswordUrl %>" class="button" style="background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%); margin-left: 10px;">Forgot Password</a>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Platform Login</h2>
+            <div class="options">
+                <p><strong>Platform URL:</strong> <a href="<%= platformUrl %>" class="support-link"><%= platformUrl %></a></p>
+                <p><strong>Registered Email:</strong> <%= email %></p>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Need Help?</h2>
+            <p>If you encounter any issues or require support, feel free to contact our support team at <a href="mailto:<%= supportEmail %>" class="support-link"><%= supportEmail %></a>.</p>
+
+            <p>We are ready to help you access the DDS platform smoothly.</p>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>Regards,<br><strong>The Dimitra Team</strong></p>
+    </div>
+</div>
+
+</body>
+</html> 

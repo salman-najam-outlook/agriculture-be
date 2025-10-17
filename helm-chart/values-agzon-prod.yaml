@@ -1,0 +1,71 @@
+deployment:
+  name: agzon-sass-app-prod
+  namespace: agzon-sass-prod
+  replicaCount: 1
+  containerName: agzon-sass-container-prod
+  image: 495454422438.dkr.ecr.ap-south-1.amazonaws.com/agzon-saas-api-prototype-ecr-prod
+  resources:
+  portName: sass-port
+  containerPort: 3000
+
+service:
+  type: NodePort
+  port: 3000
+  nodePort: 30001
+
+hpa:
+  enabled: true
+  name: agzon-sass-hpa-prod
+  maxReplicas: 30
+  minReplicas: 4
+  targetCPUUtilizationPercentage: 60
+
+ingress:
+  name: agzon-sass-ingress-prod
+  annotations: 
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/group.name: agzon-prod
+    alb.ingress.kubernetes.io/group.order: '1'
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ap-south-1:495454422438:certificate/a74c7b54-35ea-48e0-a9fe-29244fffa58c
+    alb.ingress.kubernetes.io/backend-protocol: HTTP
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
+    alb.ingress.kubernetes.io/ssl-policy: ELBSecurityPolicy-TLS-1-1-2017-01
+    alb.ingress.kubernetes.io/actions.ssl-redirect: '{"Type": "redirect", "RedirectConfig": { "Protocol": "HTTPS", "Port": "443", "StatusCode": "HTTP_301"}}'
+  hostName: sass-api.dimitra.network
+
+# config map is maintained seperately for security purpose
+configMap:
+  enabled: true
+  depname: envfile
+  name: sass-env-file
+  fileLocation: /src/.env
+  subPath: .env
+
+redis:
+  name: redis
+  containerName: redis-container-prod
+  image: bitnami/redis:5.0.14
+  resources:
+    limits:
+      cpu: 200m
+      memory: 400Mi
+    requests:
+      cpu: 195m
+      memory: 395Mi
+  portName: redis-port
+  containerPort: 6379
+  env:
+  - name: REDIS_DB
+    value: "1"   
+  - name: REDIS_HOST
+    value: "redis-server" 
+  - name: REDIS_PORT
+    value: "6379" 
+  - name: "ALLOW_EMPTY_PASSWORD"
+    value: "yes"   
+  
+
+job:
+  name: migration-hook-prod
+  containerName: migration-hook-container-prod

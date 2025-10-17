@@ -1,0 +1,1379 @@
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dimitra Report</title>
+  <!-- CSS only -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous" />
+  <link href="http://localhost:3000/css/farmActivityReport.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+
+  <div>
+    <div class="pdf-header" style="
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        ">
+      <div class="pdf-header-logo" style="width: 50%">
+        <img src="http://localhost:3000/image/Dimitra Powered by AI 2023.png" />
+      </div>
+      <div class="pdf-header-title" style="width: 50%">
+        <%= data.title %>
+      </div>
+    </div>
+    <div class="pdf-sub-header">
+      <div class="pdf-sub-header-section">
+        <div class="pdf-sub-header-title">
+          <%= translations["Date"]%>:
+        </div>
+        <div class="pdf-sub-header-title-value">
+          <%= data.date %>
+        </div>
+      </div>
+      <div class="pdf-sub-header-section ">
+        <div class="pdf-sub-header-title">Farms:</div>
+        <div class="pdf-sub-header-title-value">
+          <%= data.farms %>
+        </div>
+      </div>
+      
+
+    </div>
+    <div class="flex-container">
+      <% for(var i=0; i < data.info.length; i++) { %>
+        <div class="module">
+          <div class="module-header w-100">
+            <span class="module-title w-50">
+              <%= data.info[i].activity %>
+            </span>
+            <span class="module-title w-50"> <%= translations["Cost"]%>: <%= data.info[i].currency?.symbol %>
+                <%= data.info[i].totalCost %></span>
+          </div>
+
+          <div class="module-section">
+            <div class="main-section">
+              <div class="section">
+                <span class="section-key">
+                  <%= translations["Farm/Zone Name"]%>:
+                </span>
+                <span class="section-value">
+                  <%= data.info[i].farms || data.info[i].farm || data.info[i]?.cropObservation_farm?.map(item => item?.farmName).join(', ') %>
+                </span>
+              </div>
+              <div class="section-">
+                <span class="section-key">
+                  <%= translations["Date"]%>:
+                </span>
+                <span class="section-value">
+                  <%= data.info[i].createdAt %>
+                </span>
+              </div>
+            </div>
+            <% if (data.info[i].activity !=='Soil Information' && data.info[i].activity !=='Nutrient Management') { %>
+              <div class="main-section">
+                <div class="section">
+                  <span class="section-key">
+                    <%= translations["Area Planted"]%>:
+                  </span>
+                  <span class="section-value">
+                    <%= data.info[i].area || data.info[i].areaPlanted %>
+                      <%= data.info[i].areaUnit || data.info[i].areaunit || data.info[i].weedAreaUnit%>
+                  </span>
+                </div>
+                <div class="section">
+                  <span class="section-key">
+                    <%= translations["Crop Type"]%>:
+                  </span>
+                  <span class="section-value">
+                    <%= data.info[i].crop %>
+                  </span>
+                </div>
+              </div>
+              <% } %>
+                <% if (data.info[i].activity==='Land Preparation' ) { %>
+                  <div class="main-section">
+                    <div class="section">
+                      <span class="section-key">
+                        <%= translations["Soil Type"]%>:
+                      </span>
+                      <span class="section-value">
+                        <%= data.info[i].soilType %>
+                      </span>
+                    </div>
+                    <div class="section">
+                      <span class="section-key">
+                        <%= translations["Soil Preparation Activity"]%>:
+                      </span>
+                      <span class="section-value">
+                        <%= data.info[i].soilPrepActivities %>
+                      </span>
+                    </div>
+                  </div>
+                  <div class="main-section">
+                    <div class="section">
+                      <span class="section-key">
+                        <%= translations["Tools and Equipment Used in Land Preparation"]%>:
+                      </span>
+                      <span class="section-value">
+                        <%= data.info[i].equipment %>
+                      </span>
+                    </div>
+                    <div class="section">
+                      <span class="section-key">
+                        <%= translations["Number of Days"]%>:
+                      </span>
+                      <span class="section-value">
+                        <%= data.info[i].days %>
+                      </span>
+                    </div>
+                  </div>
+                  <% } %>
+
+                    <% if (data.info[i].activity==='Soil Information' ) { %>
+                      <div class="main-section">
+                        <div class="section">
+                          <span class="section-key">
+                            <%= translations["Soil Health"]%>:
+                          </span>
+                          <span class="section-value">
+                            <%= data.info[i].soilHealth %>
+                          </span>
+                        </div>
+                        <div class="section">
+                          <span class="section-key">
+                            <%= translations["Soil Type"]%>:
+                          </span>
+                          <span class="section-value">
+                            <%= data.info[i].soilType %>
+                          </span>
+                        </div>
+                      </div>
+                      <div class="main-section">
+                        <div class="section">
+                          <span class="section-key">
+                            <%= translations["pH"]%>:
+                          </span>
+                          <span class="section-value">
+                            <%= data.info[i].ph %>
+                          </span>
+                        </div>
+                      </div>
+                      <div class="main-section">
+                        <div class="section-header">
+                          <%= translations["Soil Nutrient Content"]%>:
+                        </div>
+                      </div>
+                      <div class="main-section">
+                        <div class="section">
+                          <span class="section-key">
+                            <%= translations["Nitrogen"]%>:
+                          </span>
+                          <span class="section-value">
+                            <%= data.info[i].nitrogen %>
+                              <%= data.info[i].nitrogenunit %>
+                          </span>
+                        </div>
+                        <div class="section">
+                          <span class="section-key">
+                            <%= translations["Phosphorus"]%>:
+                          </span>
+                          <span class="section-value">
+                            <%= data.info[i].phosphorus %>
+                              <%= data.info[i].phosphorusunit %>
+                          </span>
+                        </div>
+                      </div>
+                      <div class="main-section">
+                        <div class="section">
+                          <span class="section-key">
+                            <%= translations["Potassium"]%>:
+                          </span>
+                          <span class="section-value">
+                            <%= data.info[i].potassium %>
+                              <%= data.info[i].potassiumunit %>
+                          </span>
+                        </div>
+                        <div class="section">
+                          <span class="section-key">
+                            <%= translations["Sulfur"]%>:
+                          </span>
+                          <span class="section-value">
+                            <%= data.info[i].sulfur %>
+                              <%= data.info[i].sulfurunit %>
+                          </span>
+                        </div>
+                      </div>
+
+                      <% } %>
+
+
+                        <% if (data.info[i].activity==='Weeding' ) { %>
+                          <div class="main-section">
+                            <div class="section">
+                              <span class="section-key">
+                                <%= translations["Type of Weed"]%>:
+                              </span>
+                              <span class="section-value">
+                                <%= data.info[i].weedType %>
+                              </span>
+                            </div>
+                            <div class="section">
+                              <span class="section-key">
+                                <%= translations["Weeding Stage(s)"]%>:
+                              </span>
+                              <span class="section-value">
+                                <%= data.info[i].weedStage %>
+                              </span>
+                            </div>
+                          </div>
+                          <div class="main-section">
+                            <div class="section">
+                              <span class="section-key">
+                                <%= translations["Number of Days of Weeding Stage(s)"]%>:
+                              </span>
+                              <span class="section-value">
+                                <%= data.info[i].weedingDays %>
+                              </span>
+                            </div>
+                            <div class="section">
+                              <span class="section-key">
+                                <%= translations["Methods of Weeding"]%>:
+                              </span>
+                              <span class="section-value">
+                                <%= data.info[i].weedMethod %>
+                              </span>
+                            </div>
+                          </div>
+                          <div class="main-section">
+                            <div class="section">
+                              <span class="section-key">
+                                <%= translations["Cultural/Manual/Method"]%>:
+                              </span>
+                              <span class="section-value">
+                                <%= data.info[i].weedDataMethod %>
+                              </span>
+                            </div>
+                          </div>
+                          <% } %>
+
+                            <% if (data.info[i].activity==='Harvesting' ) { %>
+                              <div class="main-section">
+                                <div class="section">
+                                  <span class="section-key">
+                                    <%= translations["Start Date Of Harvesting"]%>:
+                                  </span>
+                                  <span class="section-value">
+                                    <%= data.info[i].start_date_harvesting%>
+                                  </span>
+                                </div>
+                                <div class="section">
+                                  <span class="section-key">
+                                    <%= translations["End Date Of Harvesting"]%>:
+                                  </span>
+                                  <span class="section-value">
+                                    <%= data.info[i].end_date_harvesting %>
+                                  </span>
+                                </div>
+                              </div>
+                              <div class="main-section">
+                                <div class="section">
+                                  <span class="section-key">
+                                    <%= translations["Total Number Of Days"]%>:
+                                  </span>
+                                  <span class="section-value">
+                                    <%= data.info[i].daysHarvesting%>
+                                  </span>
+                                </div>
+                              </div>
+                              <div class="main-section">
+                                <div class="section">
+                                  <span class="section-key">
+                                    <%= translations["Total Actual Yield"]%>:
+                                  </span>
+                                  <span class="section-value">
+                                    <%= data.info[i].totalFreshYield || 0 + data.info[i].totalDryYield || 0 %>
+                                      <%= data.info[i].freshYieldUnit%>
+                                  </span>
+                                </div>
+                                <div class="section">
+                                  <span class="section-key">
+                                    <%= translations["Total Planned Yield"]%>:
+                                  </span>
+                                  <span class="section-value">
+                                    <%= data.info[i].total_planned_fresh_yield || 0 +
+                                      data.info[i].total_planned_dry_yield || 0 %>
+                                      <%= data.info[i].plannedFreshYieldUnit%>
+                                  </span>
+                                </div>
+                              </div>
+                              <div class="main-section">
+                                <div class="section">
+                                  <span class="section-key">
+                                    <%= translations["Yield For HouseHold Consuption"]%>:
+                                  </span>
+                                  <span class="section-value">
+                                    <%= data.info[i].yieldForHouseholdConsumption%>
+                                  </span>
+                                </div>
+                                <div class="section">
+                                  <span class="section-key">
+                                    <%= translations["Yield For Sale"]%>:
+                                  </span>
+                                  <span class="section-value">
+                                    <%= data.info[i].yieldForSale%>
+                                      <%= data.info[i].yieldForSaleUnit%>
+                                  </span>
+                                </div>
+                              </div>
+                              <div class="main-section">
+                                <div class="section">
+                                  <span class="section-key">
+                                    <%= translations["Method Of Harvesting"]%>:
+                                  </span>
+                                  <span class="section-value">
+                                    <%= data.info[i].methodForHarvesting%>
+                                  </span>
+                                </div>
+                                <div class="section">
+                                  <span class="section-key">
+                                    <%= translations["Yield Losses"]%>:
+                                  </span>
+                                  <span class="section-value">
+                                    <%= data.info[i].yieldLosses%> %
+                                  </span>
+                                </div>
+                              </div>
+                              <div class="main-section">
+                                <div class="section w-100">
+                                  <span class="section-key">
+                                    <%= translations["Reason For Losses"]%>:
+                                  </span>
+                                  <span class="section-value">
+                                    <%= data.info[i].reasonForLoss%>
+                                  </span>
+                                </div>
+                              </div>
+                              <% } %>
+                                <% if (data.info[i].activity==='Irrigation' ) { %>
+                                  <div class="main-section">
+                                    <div class="section">
+                                      <span class="section-key">
+                                        <%= translations["Water Source"]%>:
+                                      </span>
+                                      <span class="section-value">
+                                        <%= data.info[i].irrigationWaterSource %>
+                                      </span>
+                                    </div>
+                                    <div class="section">
+                                      <span class="section-key">
+                                        <%= translations["Irrigation Water Source"]%>:
+                                      </span>
+                                      <span class="section-value">
+                                        <%= data.info[i].irrigationWaterSourceOrigin %>
+                                      </span>
+                                    </div>
+                                  </div>
+                                  <div class="main-section">
+                                    <div class="section">
+                                      <span class="section-key">
+                                        <%= translations["Irrigated Area"]%>:
+                                      </span>
+                                      <span class="section-value">
+                                        <%= data.info[i].irrigatedArea %>
+                                      </span>
+                                    </div>
+                                    <div class="section">
+                                      <span class="section-key">
+                                        <%= translations["Date of Irrigation"]%>:
+                                      </span>
+                                      <span class="section-value">
+                                        <%= data.info[i].irrigationDates %>
+                                      </span>
+                                    </div>
+                                  </div>
+                                  <div class="main-section">
+                                    <div class="section">
+                                      <span class="section-key">
+                                        <%= translations["Stage of Irrigation"]%>:
+                                      </span>
+                                      <span class="section-value">
+                                        <%= data.info[i].irrigationStage %>
+                                      </span>
+                                    </div>
+                                    <div class="section">
+                                      <span class="section-key">
+                                        <%= translations["Irrigation/Schedule"]%>:
+                                      </span>
+                                      <span class="section-value">
+                                        <%= data.info[i].irrigationSchedule %>
+                                      </span>
+                                    </div>
+                                  </div>
+                                  <div class="main-section">
+                                    <div class="section">
+                                      <span class="section-key">
+                                        <%= translations["Type of Irrigation"]%>:
+                                      </span>
+                                      <span class="section-value">
+                                        <%= data.info[i].irrigationType %>
+                                      </span>
+                                    </div>
+                                    <div class="section">
+                                      <span class="section-key">
+                                        <%= translations["Total Number of Days"]%>:
+                                      </span>
+                                      <span class="section-value">
+                                        <%= data.info[i].totalDays %>
+                                      </span>
+                                    </div>
+                                  </div>
+                                  <div class="main-section">
+                                    <div class="section">
+                                      <span class="section-key">
+                                        <%= translations["Water Volume Used"]%>:
+                                      </span>
+                                      <span class="section-value">
+                                        <%= data.info[i].waterVolumeUsed %>
+                                      </span>
+                                    </div>
+                                  </div>
+                                  <% } %>
+                                    <% if (data.info[i].activity==='Storage' ) { %>
+                                      <div class="main-section">
+                                        <div class="section">
+                                          <span class="section-key">
+                                            <%= translations["Duration of Storage"]%>:
+                                          </span>
+                                          <span class="section-value">
+                                            <%= data.info[i].durationOfStorage %> Days
+                                          </span>
+                                        </div>
+                                        <div class="section">
+                                          <span class="section-key">
+                                            <%= translations["Yield Stored"]%>:
+                                          </span>
+                                          <span class="section-value">
+                                            <%= data.info[i].yieldStored %>
+                                          </span>
+                                        </div>
+                                      </div>
+                                      <div class="main-section">
+                                        <div class="section">
+                                          <span class="section-key">
+                                            <%= translations["Storage Process Method"]%>:
+                                          </span>
+                                          <span class="section-value">
+                                            <%= data.info[i].cropStorageMethod %>
+                                          </span>
+                                        </div>
+                                        <div class="section">
+                                          <span class="section-key">
+                                            <%= translations["Storage Type"]%>:
+                                          </span>
+                                          <span class="section-value">
+                                            <%= data.info[i].cropStoragetype %>
+                                          </span>
+                                        </div>
+                                      </div>
+                                      <% } %>
+                                        <% if (data.info[i].activity==='Sowing/Planting' ) { %>
+                                          <div class="main-section">
+                                            <div class="section">
+                                              <span class="section-key">
+                                                <%= translations["Number of Days"]%>:
+                                              </span>
+                                              <span class="section-value">
+                                                <%= data.info[i].days %>
+                                              </span>
+                                            </div>
+                                            <div class="section">
+                                              <span class="section-key">
+                                                <%= translations["Type of Planting Material"]%>:
+                                              </span>
+                                              <span class="section-value">
+                                                <%= data.info[i].plantingTypes %>
+                                              </span>
+                                            </div>
+                                          </div>
+                                          <div class="main-section">
+                                            <div class="section">
+                                              <span class="section-key">
+                                                <%= translations["Planting Rate"]%>:
+                                              </span>
+                                              <span class="section-value">
+                                                <%= data.info[i].seedingRate %>
+                                                  <%= data.info[i].seedingUnit %>
+                                              </span>
+                                            </div>
+                                            <div class="section">
+                                              <span class="section-key">
+                                                <%= translations["Plant Row Spacing"]%>:
+                                              </span>
+                                              <span class="section-value">
+                                                <%= data.info[i].rowSpacing %>
+                                                  <%= data.info[i].rowSpacingUnit %>
+                                              </span>
+                                            </div>
+                                          </div>
+                                          <div class="main-section">
+                                            <div class="section">
+                                              <span class="section-key">
+                                                <%= translations["Plant In Row Spacing"]%>:
+                                              </span>
+                                              <span class="section-value">
+                                                <%= data.info[i].inRowSpacing %>
+                                                  <%= data.info[i].inRowSpacingUnit %>
+                                              </span>
+                                            </div>
+                                            <div class="section">
+                                              <span class="section-key">
+                                                <%= translations["Plant Population/Density"]%>:
+                                              </span>
+                                              <span class="section-value">
+                                                <%= data.info[i].density %>
+                                              </span>
+                                            </div>
+                                          </div>
+                                          <div class="main-section">
+                                            <div class="section">
+                                              <span class="section-key">
+                                                <%= translations["Planting depth"]%>:
+                                              </span>
+                                              <span class="section-value">
+                                                <%= data.info[i].depth %>
+                                                  <%= data.info[i].depthSpacingUnit %>
+                                              </span>
+                                            </div>
+                                          </div>
+                                          <% } %>
+                                            <% if (data.info[i].activity==='Pest Management' ) { %>
+                                              <div class="main-section">
+                                                <div class="section">
+                                                  <span class="section-key">
+                                                    <%= translations["Number of Plants Affected"]%>:
+                                                  </span>
+                                                  <span class="section-value">
+                                                    <%= data.info[i].numberOfPlantsAffected %>
+                                                  </span>
+                                                </div>
+                                                <div class="section">
+                                                  <span class="section-key">
+                                                    <%= translations["Crop Stage"]%>:
+                                                  </span>
+                                                  <span class="section-value">
+                                                    <%= data.info[i].cropstage %>
+                                                  </span>
+                                                </div>
+                                              </div>
+                                              <div class="main-section">
+                                                <div class="section">
+                                                  <span class="section-key">
+                                                    <%= translations["Type of Pest"]%>:
+                                                  </span>
+                                                  <span class="section-value">
+                                                    <%= data.info[i].pestTypes?.map(item=> item.name)?.join(', ') %>
+                                                  </span>
+                                                </div>
+                                                <div class="section">
+                                                  <span class="section-key">
+                                                    <%= translations["Pest Infestation Symptoms"]%>:
+                                                  </span>
+                                                  <span class="section-value">
+                                                    <%= data.info[i].pestManagementInfestationSymptoms?.map(item=>
+                                                      item.name)?.join(', ') %>
+                                                  </span>
+                                                </div>
+                                              </div>
+                                              <div class="main-section">
+                                                <div class="section">
+                                                  <span class="section-key">
+                                                    <%= translations["Type of Pest Control"]%>:
+                                                  </span>
+                                                  <span class="section-value">
+                                                    <%= data.info[i].controlType %>
+                                                  </span>
+                                                </div>
+                                                <div class="section">
+                                                  <span class="section-key">
+                                                    <%= translations["Other Date of Pest Control"]%>:
+                                                  </span>
+                                                  <span class="section-value">
+                                                    <%= data.info[i].otherDates %>
+                                                  </span>
+                                                </div>
+                                              </div>
+                                              <div class="main-section">
+                                                <div class="section">
+                                                  <span class="section-key">
+                                                    <%= translations["Cultural/Manual Pest Control Method"]%>:
+                                                  </span>
+                                                  <span class="section-value">
+                                                    <%= data.info[i].pestCulturalManualMethod %>
+                                                  </span>
+                                                </div>
+                                              </div>
+                                              <% if (data.info[i].pestChemicalPesticidesTypes.length) { %>
+                                                <div class="main-section">
+                                                  <div class="section-header">
+                                                    <%= translations["Chemical Pesticides(s)"]%>:
+                                                  </div>
+                                                </div>
+                                                <% for(var j=0; j < data.info[i].pestChemicalPesticidesTypes.length;
+                                                  j++) { %>
+                                                  <div class="section-inner">
+                                                    <div class="main-section">
+                                                      <div class="section">
+                                                        <span class="section-key">
+                                                          <%= translations["Chemical Name"]%>:
+                                                        </span>
+                                                        <span class="section-value">
+                                                          <%= data.info[i].pestChemicalPesticidesTypes[j]?.pesticideName %>
+                                                        </span>
+                                                      </div>
+                                                    </div>
+                                                    <div class="main-section">
+                                                      <div class="section">
+                                                        <span class="section-key">
+                                                          <%= translations["Ingredient Name"]%>:
+                                                        </span>
+                                                        <span class="section-value">
+                                                          <%=
+                                                            data.info[i].pestChemicalPesticidesTypes[j]?.mixtures?.map(item=>
+                                                            item.ingredientName).join(', ') ||
+                                                            data.info[i].pestChemicalPesticidesTypes[j].pesticideActiveIngredient
+                                                            %>
+                                                        </span>
+                                                      </div>
+                                                      <div class="section">
+                                                        <span class="section-key">
+                                                          <%= translations["Percentage"]%>:
+                                                        </span>
+                                                        <span class="section-value">
+                                                          <%=
+                                                            data.info[i].pestChemicalPesticidesTypes[j]?.mixtures?.map(item=>
+                                                            item.percentage).join('-') %>
+                                                        </span>
+                                                      </div>
+                                                    </div>
+                                                    <div class="main-section">
+                                                      <div class="section">
+                                                        <span class="section-key">
+                                                          <%= translations["Quantity"]%>:
+                                                        </span>
+                                                        <span class="section-value">
+                                                          <%=
+                                                            data.info[i].pestChemicalPesticidesTypes[j]?.mixtures?.map(item=>
+                                                            `${item?.quantity} ${item?.quantityUnit?.abbvr}`).join(', ')
+                                                            ||
+                                                            data.info[i].pestChemicalPesticidesTypes[j]?.pesticideQuantity
+                                                            %> <%=
+                                                              data.info[i].pestChemicalPesticidesTypes[j]?.pesticideQuantity
+                                                              ?
+                                                              data.info[i].pestChemicalPesticidesTypes[j]?.pesticideQuantityUnit?.abbvr
+                                                              : '' %>
+                                                        </span>
+                                                      </div>
+                                                      <div class="section">
+                                                        <span class="section-key">
+                                                          <%= translations["Cost"]%>:
+                                                        </span>
+                                                        <span class="section-value">
+                                                          <%=
+                                                            data.info[i].pestChemicalPesticidesTypes[j]?.currency?.symbol
+                                                            %>
+                                                            <%= data.info[i].pestChemicalPesticidesTypes[j]?.cost %>
+                                                        </span>
+                                                      </div>
+                                                    </div>
+                                                    <div class="main-section">
+                                                      <div class="section">
+                                                        <span class="section-key">
+                                                          <%= translations["Method of Application"]%>:
+                                                        </span>
+                                                        <span class="section-value">
+                                                          <%=
+                                                            data.info[i].pestChemicalPesticidesTypes[j]?.applicationMethod?.name
+                                                            %>
+                                                        </span>
+                                                      </div>
+                                                      <div class="section">
+                                                        <span class="section-key">
+                                                          <%= translations["Pesticides Dose/Rate"]%>:
+                                                        </span>
+                                                        <span class="section-value">
+                                                          <%=
+                                                            data.info[i].pestChemicalPesticidesTypes[j]?.pesticideDoseRate
+                                                            %>
+                                                            <%=
+                                                              data.info[i].pestChemicalPesticidesTypes[j]?.pesticideDoseRateUnit?.abbvr
+                                                              %>
+                                                        </span>
+                                                      </div>
+                                                    </div>
+                                                  </div>
+                                                  <% } %>
+                                                    <% } %>
+                                                      <% } %>
+                                                        <% if (data.info[i].activity==="Disease Management" ) { %>
+                                                          <div class="main-section">
+                                                            <div class="section">
+                                                              <span class="section-key">
+                                                                <%= translations["Date Disease Detection"]%>:
+                                                              </span>
+                                                              <span class="section-value">
+                                                                <%= data.info[i].dateOfFirstDiseaseDetection %>
+                                                              </span>
+                                                            </div>
+                                                            <div class="section">
+                                                              <span class="section-key">
+                                                                <%= translations["Crop Stage"]%>:
+                                                              </span>
+                                                              <span class="section-value">
+                                                                <%= data.info[i].cropstage %>
+                                                              </span>
+                                                            </div>
+                                                          </div>
+                                                          <div class="main-section">
+                                                            <div class="section">
+                                                              <span class="section-key">
+                                                                <%= translations["Number of Plants Affected"]%>:
+                                                              </span>
+                                                              <span class="section-value">
+                                                                <%= data.info[i].numberOfPlantsAffected %>
+                                                              </span>
+                                                            </div>
+                                                            <div class="section">
+                                                              <span class="section-key">
+                                                                <%= translations["Plant Part(s) Affected"]%>:
+                                                              </span>
+                                                              <span class="section-value">
+                                                                <%= data.info[i].plantParts %>
+                                                              </span>
+                                                            </div>
+                                                          </div>
+                                                          <div class="main-section">
+                                                            <div class="section">
+                                                              <span class="section-key">
+                                                                <%= translations["Disease Name"]%>:
+                                                              </span>
+                                                              <span class="section-value">
+                                                                <%= data.info[i].diseaseType?.map(item=>
+                                                                  item.name)?.join(', ') %>
+                                                              </span>
+                                                            </div>
+                                                            <div class="section">
+                                                              <span class="section-key">
+                                                                <%= translations["Disease Symptoms"]%>:
+                                                              </span>
+                                                              <span class="section-value">
+                                                                <%= data.info[i].diseaseSymptoms?.map(item=>
+                                                                  item.symptoms)?.join(', ') %>
+                                                              </span>
+                                                            </div>
+                                                          </div>
+                                                          <div class="main-section">
+                                                            <div class="section">
+                                                              <span class="section-key">
+                                                                <%= translations["Cultural/Manual Pest Control Method"]%>:
+                                                              </span>
+                                                              <span class="section-value">
+                                                                <%= data.info[i].diseaseCulturalManualMethod %>
+                                                              </span>
+                                                            </div>
+                                                            <div class="section">
+                                                              <span class="section-key">
+                                                                <%= translations["Disease Control Start Date"]%>:
+                                                              </span>
+                                                              <span class="section-value">
+                                                                <%= data.info[i].diseaseControlStartDate %>
+                                                              </span>
+                                                            </div>
+                                                          </div>
+                                                          <div class="main-section">
+                                                            <div class="section">
+                                                              <span class="section-key">
+                                                                <%= translations["Disease Control Duration"]%>:
+                                                              </span>
+                                                              <span class="section-value">
+                                                                <%= data.info[i].diseaseControlDuration %>
+                                                              </span>
+                                                            </div>
+                                                            <div class="section">
+                                                              <span class="section-key">
+                                                                <%= translations["Other Date(s) of Disease Control"]%>:
+                                                              </span>
+                                                              <span class="section-value">
+                                                                <%= data.info[i].dates %>
+                                                              </span>
+                                                            </div>
+                                                          </div>
+                                                          <% if (data.info[i].diseaseChemicalTypes.length) { %>
+                                                            <div class="main-section">
+                                                              <div class="section-header">
+                                                                <%= translations["Chemical Type"]%>:
+                                                              </div>
+                                                            </div>
+                                                            <% for(var j=0; j <
+                                                              data.info[i].diseaseChemicalTypes.length; j++) { %>
+                                                              <div class="section-inner">
+                                                                <div class="main-section">
+                                                                  <div class="section">
+                                                                    <span class="section-key">
+                                                                      <%= translations["Chemical Name"]%>:
+                                                                    </span>
+                                                                    <span class="section-value">
+                                                                      <%= data.info[i].diseaseChemicalTypes[j]?.title %>
+                                                                    </span>
+                                                                  </div>
+                                                                </div>
+                                                                <div class="main-section">
+                                                                  <div class="section">
+                                                                    <span class="section-key">
+                                                                      <%= translations["Ingredient Name"]%>:
+                                                                    </span>
+                                                                    <span class="section-value">
+                                                                      <%=
+                                                                        data.info[i].diseaseChemicalTypes[j]?.mixtures?.map(item=>
+                                                                        item.ingredientName).join(', ') ||
+                                                                        data.info[i].diseaseChemicalTypes[j].chemicalActiveIngredient
+                                                                        %>
+                                                                    </span>
+                                                                  </div>
+                                                                  <div class="section">
+                                                                    <span class="section-key">
+                                                                      <%= translations["Percentage"]%>:
+                                                                    </span>
+                                                                    <span class="section-value">
+                                                                      <%=
+                                                                        data.info[i].diseaseChemicalTypes[j]?.mixtures?.map(item=>
+                                                                        item.percentage).join('-') %>
+                                                                    </span>
+                                                                  </div>
+                                                                </div>
+                                                                <div class="main-section">
+                                                                  <div class="section">
+                                                                    <span class="section-key">
+                                                                      <%= translations["Quantity"]%>:
+                                                                    </span>
+                                                                    <span class="section-value">
+                                                                      <%=
+                                                                        data.info[i].diseaseChemicalTypes[j]?.mixtures?.map(item=>
+                                                                        `${item?.quantity}
+                                                                        ${item?.quantityUnit?.abbvr}`).join(', ') ||
+                                                                        data.info[i].diseaseChemicalTypes[j]?.chemicalQuantity
+                                                                        %> <%=
+                                                                          data.info[i].diseaseChemicalTypes[j]?.chemicalQuantityUnit?.abbvr
+                                                                          %>
+                                                                    </span>
+                                                                  </div>
+                                                                  <div class="section">
+                                                                    <span class="section-key">
+                                                                      <%= translations["Cost"]%>:
+                                                                    </span>
+                                                                    <span class="section-value">
+                                                                      <%=
+                                                                        data.info[i].diseaseChemicalTypes[j]?.currency?.symbol
+                                                                        %>
+                                                                        <%= data.info[i].diseaseChemicalTypes[j]?.cost
+                                                                          %>
+                                                                    </span>
+                                                                  </div>
+                                                                </div>
+                                                                <div class="main-section">
+                                                                  <div class="section">
+                                                                    <span class="section-key">
+                                                                      <%= translations["Method of Application"]%>:
+                                                                    </span>
+                                                                    <span class="section-value">
+                                                                      <%=
+                                                                        data.info[i].diseaseChemicalTypes[j]?.applicationMethod?.name
+                                                                        %>
+                                                                    </span>
+                                                                  </div>
+                                                                  <div class="section">
+                                                                    <span class="section-key">
+                                                                      <%= translations["Chemical Dose/Rate"]%>:
+
+                                                                    </span>
+                                                                    <span class="section-value">
+                                                                      <%=
+                                                                        data.info[i].diseaseChemicalTypes[j]?.chemicalDoseRate
+                                                                        %>
+                                                                        <%=
+                                                                          data.info[i].diseaseChemicalTypes[j]?.chemicalDoseRateUnit?.abbvr
+                                                                          %>
+                                                                    </span>
+                                                                  </div>
+                                                                </div>
+                                                              </div>
+                                                              <% } %>
+                                                                <% } %>
+                                                                  <% } %>
+                                                                    <% if (data.info[i].activity==="Nutrient Management") { %>
+                                                                      <div class="main-section">
+                                                                        <div class="section">
+                                                                          <span class="section-key">
+                                                                            <%= translations["Application Stage"]%>:
+                                                                          </span>
+                                                                          <span class="section-value">
+                                                                            <%= data.info[i].applicationstage %>
+                                                                          </span>
+                                                                        </div>
+                                                                        <div class="section">
+                                                                          <span class="section-key">
+                                                                            <%= translations["Days After Sowing"]%>:
+                                                                          </span>
+                                                                          <span class="section-value">
+                                                                            <%= data.info[i].daysAfterSowing %>
+                                                                          </span>
+                                                                        </div>
+                                                                      </div>
+                                                                      <div class="main-section">
+                                                                        <div class="section">
+                                                                          <span class="section-key">
+                                                                            <%= translations["Fertilizers Applied Area"]%>:
+                                                                          </span>
+                                                                          <span class="section-value">
+                                                                            <%= data.info[i].fertilizerAppliedArea %>
+                                                                              <%= data.info[i].fertilizerAppliedareaUnit
+                                                                                %>
+                                                                          </span>
+                                                                        </div>
+                                                                      </div>
+
+                                                                      <% if (data.info[i].fertilizerInputs.length) { %>
+                                                                        <div class="main-section">
+                                                                          <div class="section-header">
+                                                                            <%= translations["Fertilizers Input"]%>:
+                                                                          </div>
+                                                                        </div>
+                                                                        <% for(var j=0; j <
+                                                                          data.info[i].fertilizerInputs.length; j++) {
+                                                                          %>
+                                                                          <div class="section-inner">
+                                                                            <div class="main-section">
+                                                                              <div class="section">
+                                                                                <span class="section-key">
+                                                                                  <%= translations[" Fertilizer Name"]%>:
+                                                                                </span>
+                                                                                <span class="section-value">
+                                                                                  <%=
+                                                                                    data.info[i].fertilizerInputs[j]?.nutrientManagementFertilizerInput?.fertilizerName
+                                                                                    %>
+                                                                                </span>
+                                                                              </div>
+                                                                              <div class="section">
+                                                                                <span class="section-key">
+                                                                                  <%= translations["Type"]%>:
+
+                                                                                </span>
+                                                                                <span class="section-value">
+                                                                                  <%=
+                                                                                    data.info[i].fertilizerInputs[j]?.nutrientManagementFertilizerInput?.fertilizerType?.name
+                                                                                    %>
+                                                                                </span>
+                                                                              </div>
+                                                                            </div>
+                                                                            <div class="main-section">
+                                                                              <div class="section">
+                                                                                <span class="section-key">
+                                                                                  <%= translations["Ingredient Name"]%>:
+                                                                                </span>
+                                                                                <span class="section-value">
+                                                                                  <%=
+                                                                                    data.info[i].fertilizerInputs[j]?.nutrientManagementFertilizerInput?.mixtures?.map(item=>
+                                                                                    item.ingredientName).join(', ') ||
+                                                                                    data.info[i].fertilizerInputs[j].chemicalActiveIngredient
+                                                                                    %>
+                                                                                </span>
+                                                                              </div>
+                                                                              <div class="section">
+                                                                                <span class="section-key">
+                                                                                  <%= translations["Percentage"]%>:
+                                                                                </span>
+                                                                                <span class="section-value">
+                                                                                  <%=
+                                                                                    data.info[i].fertilizerInputs[j]?.nutrientManagementFertilizerInput?.mixtures?.map(item=>
+                                                                                    item.percentage).join('-') %>
+                                                                                </span>
+                                                                              </div>
+                                                                            </div>
+                                                                            <div class="main-section">
+                                                                              <div class="section">
+                                                                                <span class="section-key">
+                                                                                  <%= translations["Quantity"]%>:
+                                                                                </span>
+                                                                                <span class="section-value">
+                                                                                  <%=
+                                                                                    data.info[i].fertilizerInputs[j]?.nutrientManagementFertilizerInput?.mixtures?.map(item=>
+                                                                                    `${item?.quantity}
+                                                                                    ${item?.quantityUnit?.abbvr}`).join(', ')
+                                                                                    %>
+                                                                                </span>
+                                                                              </div>
+                                                                              <div class="section">
+                                                                                <span class="section-key">
+                                                                                  <%= translations["Cost"]%>:
+                                                                                </span>
+                                                                                <span class="section-value">
+                                                                                  <%=
+                                                                                    data.info[i].fertilizerInputs[j]?.nutrientManagementFertilizerInput?.currency?.symbol
+                                                                                    %>
+                                                                                    <%=
+                                                                                      data.info[i].fertilizerInputs[j]?.nutrientManagementFertilizerInput?.cost
+                                                                                      %>
+                                                                                </span>
+                                                                              </div>
+                                                                            </div>
+                                                                            <div class="main-section">
+                                                                              <div class="section">
+                                                                                <span class="section-key">
+                                                                                  <%= translations["Application Rate"]%>:
+                                                                                </span>
+                                                                                <span class="section-value">
+                                                                                  <%=
+                                                                                    data.info[i].fertilizerInputs[j]?.nutrientManagementFertilizerInput?.applicationRate
+                                                                                    %>
+                                                                                    <%=
+                                                                                      data.info[i].fertilizerInputs[j]?.nutrientManagementFertilizerInput?.applicationRateUnit?.abbvr
+                                                                                      %>
+                                                                                </span>
+                                                                              </div>
+                                                                              <div class="section">
+                                                                                <span class="section-key">
+                                                                                  <%= translations["Method of Application"]%>:
+                                                                                </span>
+                                                                                <span class="section-value">
+                                                                                  <%=
+                                                                                    data.info[i].fertilizerInputs[j]?.nutrientManagementFertilizerInput?.applicationMethod?.name
+                                                                                    %>
+                                                                                </span>
+                                                                              </div>
+                                                                            </div>
+                                                                          </div>
+                                                                          <% } %>
+                                                                            <% } %>
+                                                                              <% } %>
+                                                                              <% if (data.info[i].activity==='Crop Observation' ) { %>
+                                                                                <div class="main-section">
+                                                                                  <div class="section">
+                                                                                    <span class="section-key">
+                                                                                      <%= translations["Crop Season"]%>:
+                                                                                    </span>
+                                                                                    <span class="section-value">
+                                                                                      <%=
+                                                                                        data.info[i]?.cropObservation_cropSeason?.name
+                                                                                        %>
+                                                                                    </span>
+                                                                                  </div>
+                                                                                  <div class="section">
+                                                                                    <span class="section-key">
+                                                                                      <%= translations["Growth Stage"]%>:
+
+                                                                                    </span>
+                                                                                    <span class="section-value">
+                                                                                      <%=
+                                                                                        data.info[i]?.cropObservation_growthStage?.name
+                                                                                        %>
+                                                                                    </span>
+                                                                                  </div>
+                                                                                </div>
+                                                                                <div class="main-section">
+                                                                                  <div class="section-header">
+                                                                                    <%= translations["General Crop Condition"]%>:
+                                                                                  </div>
+                                                                                </div>
+                                                                                <div class="main-section">
+                                                                                  <div class="section">
+                                                                                    <span class="section-key">
+                                                                                      <%= translations["Germination Rate"]%>:
+                                                                                    </span>
+                                                                                    <span class="section-value">
+                                                                                      <%=
+                                                                                        data.info[i]?.germinationRate
+                                                                                        %>
+                                                                                    </span>
+                                                                                  </div>
+                                                                                  <div class="section">
+                                                                                    <span class="section-key">
+                                                                                      <%= translations["Leaf Colour/Appearance"]%>:
+                                                                                    </span>
+                                                                                    <span class="section-value">
+                                                                                      <%=
+                                                                                        data.info[i]?.leafColor
+                                                                                        %>
+                                                                                    </span>
+                                                                                  </div>
+                                                                                </div>
+                                                                                <div class="main-section">
+                                                                                  <div class="section">
+                                                                                    <span class="section-key">
+                                                                                      <%= translations["Leaf Size"]%>:
+                                                                                    </span>
+                                                                                    <span class="section-value">
+                                                                                      <%=
+                                                                                        data.info[i]?.cropObservation_leafSize?.name
+                                                                                        %>
+                                                                                    </span>
+                                                                                  </div>
+                                                                                  <div class="section">
+                                                                                    <span class="section-key">
+                                                                                      <%= translations["Stem Colour"]%>:
+
+                                                                                    </span>
+                                                                                    <span class="section-value">
+                                                                                      <%=
+                                                                                        data.info[i]?.stemColor
+                                                                                        %>
+                                                                                    </span>
+                                                                                  </div>
+                                                                                </div>
+                                                                                <div class="main-section">
+                                                                                  <div class="section">
+                                                                                    <span class="section-key">
+                                                                                      <%= translations["Stem Thickness"]%>:
+                                                                                    </span>
+                                                                                    <span class="section-value">
+                                                                                      <%=
+                                                                                        data.info[i]?.stemThickness
+                                                                                        %>
+                                                                                    </span>
+                                                                                  </div>
+                                                                                  <div class="section">
+                                                                                    <span class="section-key">
+                                                                                      <%= translations["Plant Height"]%>:
+
+                                                                                    </span>
+                                                                                    <span class="section-value">
+                                                                                      <%=
+                                                                                        data.info[i]?.plantHeight
+                                                                                        %>
+                                                                                    </span>
+                                                                                  </div>
+                                                                                </div>
+                                                                                <div class="main-section">
+                                                                                  <div class="section">
+                                                                                    <span class="section-key">
+                                                                                      <%= translations["Tiller Number"]%>:
+                                                                                    </span>
+                                                                                    <span class="section-value">
+                                                                                      <%=
+                                                                                        data.info[i]?.tillerNumber
+                                                                                        %>
+                                                                                    </span>
+                                                                                  </div>
+                                                                                  <div class="section">
+                                                                                    <span class="section-key">
+                                                                                      <%= translations["Appearance of Flowers"]%>:
+                                                                                    </span>
+                                                                                    <span class="section-value">
+                                                                                      <%=
+                                                                                        data.info[i]?.appreanceOfFlower
+                                                                                        %>
+                                                                                    </span>
+                                                                                  </div>
+                                                                                </div>
+                                                                                <div class="main-section">
+                                                                                  <div class="section">
+                                                                                    <span class="section-key">
+                                                                                      <%= translations["Joint Type"]%>:
+                                                                                    </span>
+                                                                                    <span class="section-value">
+                                                                                      <%=
+                                                                                        data.info[i]?.cropObservation_jointType?.name
+                                                                                        %>
+                                                                                    </span>
+                                                                                  </div>
+                                                                              
+                                                                                </div>
+                                                                                <div class="main-section">
+                                                                                  <div class="section-header">
+                                                                                    <%= translations["Nutrient Deficiencies"]%>:
+                                                                                  </div>
+                                                                                </div>
+                                                                                <div class="main-section">
+                                                                                  <div class="section">
+                                                                                    <span class="section-key">
+                                                                                      <%= translations["Nitrogen Deficiency"]%>:
+                                                                                    </span>
+                                                                                    <span class="section-value">
+                                                                                      <%=
+                                                                                        data.info[i]?.cropObservation_deficiency?.filter(item => item.element === 'nitrogen').map(item => item.name)?.join(', ')
+                                                                                        %>
+                                                                                    </span>
+                                                                                  </div>
+                                                                                  <div class="section">
+                                                                                    <span class="section-key">
+                                                                                      <%= translations["Nitrogen Toxicity"]%>:
+                                                                                    </span>
+                                                                                    <span class="section-value">
+                                                                                      <%=
+                                                                                      data.info[i]?.cropObservation_toxicity?.filter(item => item.element === 'nitrogen').map(item => item.name)?.join(', ')
+                                                                                        %>
+                                                                                    </span>
+                                                                                  </div>
+                                                                                </div>
+                                                                                <div class="main-section">
+                                                                                  <div class="section">
+                                                                                    <span class="section-key">
+                                                                                      <%= translations["Phosphorus Deficiency"]%>:
+                                                                                    </span>
+                                                                                    <span class="section-value">
+                                                                                      <%=
+                                                                                      data.info[i]?.cropObservation_deficiency?.filter(item => item.element === 'phosphorus').map(item => item.name)?.join(', ')
+                                                                                        %>
+                                                                                    </span>
+                                                                                  </div>
+                                                                                  <div class="section">
+                                                                                    <span class="section-key">
+                                                                                      <%= translations["Phosphorus Toxicity"]%>:
+
+                                                                                    </span>
+                                                                                    <span class="section-value">
+                                                                                      <%=
+                                                                                      data.info[i]?.cropObservation_toxicity?.filter(item => item.element === 'phosphorus').map(item => item.name)?.join(', ')
+                                                                                        %>
+                                                                                    </span>
+                                                                                  </div>
+                                                                                </div>
+                                                                                <div class="main-section">
+                                                                                  <div class="section">
+                                                                                    <span class="section-key">
+                                                                                      <%= translations["Potassium Deficiency"]%>:
+                                                                                    </span>
+                                                                                    <span class="section-value">
+                                                                                      <%=
+                                                                                      data.info[i]?.cropObservation_deficiency?.filter(item => item.element === 'potassium').map(item => item.name)?.join(', ')
+                                                                                        %>
+                                                                                    </span>
+                                                                                  </div>
+                                                                                 
+                                                                                </div>
+                                                                                <div class="main-section">
+                                                                                  <div class="section-header">
+                                                                                    <%= translations["Pests and Diseases"]%>:
+                                                                                  </div>
+                                                                                </div>
+                                                                                <div class="main-section">
+                                                                                  <div class="section">
+                                                                                    <span class="section-key">
+                                                                                      <%= translations["Pest Infestations"]%>:
+                                                                                    </span>
+                                                                                    <span class="section-value">
+                                                                                      <%=
+                                                                                        data.info[i]?.cropObservation_pestInfestation?.map(item => item.name)?.join(', ')
+                                                                                        %>
+                                                                                    </span>
+                                                                                  </div>
+                                                                                  <div class="section">
+                                                                                    <span class="section-key">
+                                                                                      <%= translations["Viral Diseases"]%>:
+                                                                                    </span>
+                                                                                    <span class="section-value">
+                                                                                      <%=
+                                                                                      data.info[i]?.cropObservation_diseases?.filter(item => item.organism === 'virus').map(item => item.name)?.join(', ')
+                                                                                        %>
+                                                                                    </span>
+                                                                                  </div>
+                                                                                </div>
+                                                                                <div class="main-section">
+                                                                                  <div class="section">
+                                                                                    <span class="section-key">
+                                                                                      <%= translations["Bacterial Diseases"]%>:
+                                                                                    </span>
+                                                                                    <span class="section-value">
+                                                                                      <%=
+                                                                                      data.info[i]?.cropObservation_diseases?.filter(item => item.organism === 'bacteria').map(item => item.name)?.join(', ')
+                                                                                        %>
+                                                                                    </span>
+                                                                                  </div>
+                                                                                  <div class="section">
+                                                                                    <span class="section-key">
+                                                                                      <%= translations["Fungal Diseases"]%>:
+                                                                                    </span>
+                                                                                    <span class="section-value">
+                                                                                      <%=
+                                                                                      data.info[i]?.cropObservation_diseases?.filter(item => item.organism === 'fungi').map(item => item.name)?.join(', ')
+                                                                                        %>
+                                                                                    </span>
+                                                                                  </div>
+                                                                                </div>
+                                                                                <% } %>
+
+
+                                                                                
+
+                                                                                <!-- Application Cost -->
+                                                                                <% if (data.info[i].cost) { %>
+                                                                                  <div class="main-section">
+                                                                                    <div class="section-header">
+                                                                                      <%= translations["Application Cost"]%>:
+                                                                                    </div>
+                                                                                  </div>
+                                                                                  <div class="main-section">
+                                                                                    <div class="section">
+                                                                                      <span class="section-key">
+                                                                                        <%= translations["Total Number of Workers"]%>::
+                                                                                      </span>
+                                                                                      <span class="section-value">
+                                                                                        <%=
+                                                                                          data.info[i].cost.totalNumberOfWorkers
+                                                                                          %>
+                                                                                      </span>
+                                                                                    </div>
+                                                                                    <div class="section">
+                                                                                      <span class="section-key">
+                                                                                        <%= translations["Total Number of Hours"]%>:
+                                                                                      </span>
+                                                                                      <span class="section-value">
+                                                                                        <%=
+                                                                                          data.info[i].cost.totalNumberOfHours
+                                                                                          %>
+                                                                                      </span>
+                                                                                    </div>
+                                                                                  </div>
+                                                                                  <div class="main-section">
+                                                                                    <div class="section">
+                                                                                      <span class="section-key">
+                                                                                        <%= translations["Total Cost"]%>::
+                                                                                      </span>
+                                                                                      <span class="section-value">
+                                                                                        <%=
+                                                                                          data.info[i].cost.currency.symbol
+                                                                                          %>
+                                                                                          <%=
+                                                                                            data.info[i].cost.totalCost
+                                                                                            %>
+                                                                                      </span>
+                                                                                    </div>
+                                                                                  </div>
+                                                                                  <% } %>
+
+          </div>
+        </div>
+        <% } %>
+        <div class="section-total w-100">
+          <span class="section-total-title">
+            <%= translations["Total Cost"]%>:
+          </span>
+          <span>
+            <%= data.currency?.symbol %> <%= data.cost %>
+          </span>
+          
+        </div>
+    </div>
+
+    <div class="flex-center" style="margin:10px 0">
+      <strong style="color: #3E3E3E; font-size: 7.72x; line-height: 11.95px;">www.Dimitra.io</strong>
+      <strong style="color:#787878; font-size: 8px; line-height: 12.9px;">© 2023 Dimitra.com - <%= translations["All Rights Reserved"]%>.
+      </strong>
+    </div>
+  </div>
+</body>
+
+</html>

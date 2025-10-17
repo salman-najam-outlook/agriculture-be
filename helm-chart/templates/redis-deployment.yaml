@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.redis.name }}
+  namespace: {{ .Values.deployment.namespace }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Values.redis.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.redis.name }}
+    spec:
+      containers:
+      - name: {{ .Values.redis.containerName }}
+        image: {{ .Values.redis.image }}
+        imagePullPolicy: IfNotPresent
+        resources:
+            {{- toYaml .Values.redis.resources | nindent 12 }}
+        ports:
+        - name: {{ .Values.redis.portName }}
+          containerPort: {{ .Values.redis.containerPort }}
+        env:
+            {{- toYaml .Values.redis.env | nindent 12 }}
+      restartPolicy: Always
+  
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.redis.name }}
+  namespace: {{ .Values.deployment.namespace }}
+spec:
+  ports:
+  - name: {{ .Values.redis.portName }}
+    port: {{ .Values.redis.containerPort }}
+    protocol: TCP
+    targetPort: {{ .Values.redis.containerPort }}
+  selector:
+    app: {{ .Values.redis.name }}

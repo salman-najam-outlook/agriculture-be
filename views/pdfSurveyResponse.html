@@ -1,0 +1,290 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dimitra Report</title>
+    <!-- CSS only -->
+    <!-- <link
+      href="http://localhost:3000/css/pdfReport.css"
+      rel="stylesheet"
+      type="text/css"
+    /> -->
+    <style>
+      .pdf-header {
+        font-size: 14px;
+        display: none;
+      }
+      .map-container {
+        margin-top: 25px;
+      }
+      .paddedx {
+        padding: 0 25px;
+      }
+      .pdf-header-title {
+        width: 300px;
+        background-color: rgb(40 116 68);
+        padding: 30px;
+        color: #ffffff;
+        text-transform: uppercase;
+        font-size: 18px;
+        font-weight: bolder;
+        border-radius: 14px 0 0 14px;
+      }
+
+      .pdf-subtitle {
+        padding: 2%;
+        margin-top: 18px;
+        border: 1px solid #0000000d;
+        width: 100%;
+        height: auto;
+        border: 1px;
+      }
+      .pdf-subtitle-2 {
+        padding: 2px 30px;
+        border: 1px solid #0000000d;
+        width: 100%;
+        height: auto;
+        border: 1px;
+      }
+
+      .question-header {
+        padding: 8px 30px;
+        width: 100%;
+        height: auto;
+        background: #f7f7f7;
+      }
+
+      .custom-checkbox {
+        display: flex;
+        align-items: center;
+        margin: 10px 60px 0px 0px;
+        white-space: nowrap; 
+      }
+
+      .small-box {
+        width: 25px; /* Adjust width as needed */
+        height: 25px; /* Adjust height as needed */
+        background-color: #f0f0f0; /* Background color */
+        border: 1px solid #ccc; /* Border */
+        border-radius: 4px;
+        margin-right: 8px;
+      }
+
+      .pdf-header-question {
+        padding: 8px 30px;
+        margin-top: 18px;
+        width: 100%;
+        height: auto;
+        background: #373535;
+        color: white;
+        font-weight: bold;
+      }
+
+      .custom-control-input {
+        width: 1.25em; /* Increase width */
+        height: 1.25em; /* Increase height */
+        font-size: 1.25em; /* Increase font size */
+        padding: 0.25em; /* Adjust padding */
+      }
+
+      .checkbox-flex{
+        display: flex;
+        justify-content: space-between;
+        width: 60%;
+      }
+
+      .pdf-sub-header-title- {
+        font-family: Poppins;
+        font-size: 12px;
+        font-weight: 400;
+        line-height: 18px;
+        letter-spacing: 0.009em;
+        text-align: left;
+      }
+
+      .pdf-sub-header-title-value {
+        color: #3e3e3e;
+        font-family: Poppins;
+        font-weight: 600;
+        size: 14px;
+      }
+
+      .table-head {
+        display: table-row-group;
+      }
+
+      .deforestation-header {
+        background-color: #ffb443;
+      }
+
+      .high-box {
+        width: 25px;
+        height: 25px;
+        background-color: #f03737;
+        border-radius: 5px;
+      }
+
+      .low-box {
+        width: 25px;
+        height: 25px;
+        background-color: #ffb443;
+        border-radius: 5px;
+      }
+
+      .negligible-box {
+        width: 25px;
+        height: 25px;
+        background-color: #f1f4f7;
+        border-radius: 5px;
+      }
+
+      .overall-deforestation {
+        width: 100%;
+        height: 30%;
+        color: #ffb443;
+        border: 2px solid #ffb443;
+        border-radius: 20px;
+        background-color: rgb(255, 180, 67, 0.1);
+        text-align: center;
+        padding-top: 5px;
+      }
+      html {
+        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact;
+      }
+      body {
+        font-family: "Poppins", sans-serif;
+      }
+      .pdf-subtitle .ellipsis {
+        white-space: nowrap; 
+        width: 50px; 
+        overflow: hidden;
+        text-overflow: ellipsis; 
+      }
+      .pdf-subtitle-2 .ellipsis {
+        white-space: nowrap; 
+        overflow: hidden;
+        text-overflow: ellipsis; 
+      }
+    </style>
+  </head>
+  <body>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
+    <link
+        rel="stylesheet"
+        href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      />
+    <link href="https://fonts.cdnfonts.com/css/poppins" rel="stylesheet" />
+    <div>
+      <div
+        class="pdf-header"
+        style="
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        "
+      >
+        <div class="pdf-header-logo" style="width: 50%">
+          <img src="http://localhost:3000/image/Dimitra Powered by AI 2023.png" />
+        </div>
+        <div class="pdf-header-title" style="width: 50%"><%= data.title %></div>
+      </div>
+      <div class="pdf-subtitle" style="background-color: #f7f7f7;">
+        <table style="width: 100%; border: none; border-collapse: collapse;">
+          <thead style="border-bottom: 1px solid #ddd;">
+            <tr>
+              <th style="text-align: left; width: 33.33%; padding: 8px;">Survey Name</th>
+              <th style="text-align: center; width: 33.33%; padding: 8px;">Questions</th>
+              <th style="text-align: right; width: 33.33%; padding: 8px;">Responses</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="text-align: left; padding: 8px;"> <%= data.subHeader.surveyTitle %> </td>
+              <td style="text-align: center; padding: 8px;"> <%= data.subHeader.questions %> </td>
+              <td style="text-align: right; padding: 8px;"> <%= data.subHeader.responses %> </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="pdf-subtitle-2" style="width: 100%; margin-top: 18px;">
+        <% for (const q of data.tableData) { %>
+          <table class="table table-striped">
+            <thead class="table-head">
+              <tr class="text-left">
+                <th scope="col"><%= q.question %></th>
+                <th scope="col" class="text-center" style="width: 20%;"><%= Object.keys(q.surveyQuestionsResponse).length %> <div><small>Responses</small></div></th>
+                <th scope="col" style="width: 10%; text-align: right;">Score</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% if (q.surveyQuestionsResponse && Object.keys(q.surveyQuestionsResponse).length > 0) { %>
+                <% for (const r in q.surveyQuestionsResponse) { %>
+                  <tr class="text-left">
+                    <% if (q.questionType === 'radio') { %>
+                      <td scope="row"><%= q.questionOptions.filter((f) => f.id === q.surveyQuestionsResponse[r][0].optionId)[0].text %></td>
+                    <% } else if (q.questionType === 'checkbox') { %>
+                      <!-- <td scope="row"><%= q.questionOptions.filter((op) => q.surveyQuestionsResponse[r].optionId = op.id).map((t) => t.text).join(", ") %></td> -->
+                      <td scope="row"><%= q.surveyQuestionsResponse[r].map((p) => { return q.questionOptions.filter((option) => p.optionId === option.id )[0] }).map(t => t?.text).join(', ') %></td>
+                    <% } else { %>
+                      <% if (q.questionType === 'dynamicFarmer' && q.surveyQuestionsResponse[r][0].farm) { %>
+                        <td scope="row"><%= q.surveyQuestionsResponse[r].map((t) => t.farm.fullName).join(', ') %></td>
+                      <% } %> 
+                      <% if (q.questionType === 'dynamicGeoFence' && q.surveyQuestionsResponse[r][0].geofence) { %>
+                        <td scope="row"><%= q.surveyQuestionsResponse[r].map((t) => t.geofence.geofenceName).join(', ') %></td>
+                      <% } %> 
+                      <% if (q.questionType === 'dynamicCrop' && q.surveyQuestionsResponse[r][0].crop) { %>
+                        <td scope="row"><%= q.surveyQuestionsResponse[r].map((t) => t.crop.name).join(', ') %></td>
+                      <% } %> 
+                      <% if (q.questionType === 'dynamicEquipment' && q.surveyQuestionsResponse[r][0].equipment) { %>
+                        <td scope="row"><%= q.surveyQuestionsResponse[r].map((t) => t.equipment.name).join(', ') %></td>
+                      <% } else { %>
+                        <td scope="row"> <%= q.surveyQuestionsResponse[r].map((t) => t.text) %> </td>
+                      <% } %> 
+                    <% } %> 
+                    <td class="text-center"><%= q.surveyQuestionsResponse[r][0].user.fullName %> </td>
+                    <td style="text-align: right;"><%= q.scores || 0 %></td>
+                  </tr>
+
+                    <% q.questionOptions?.forEach(function(n, nestedIndex) { %>
+                      <% if(q.surveyQuestionsResponse[r].some((t) => t.optionId === n.id) && n.nestedQuestionId) { %>
+                        <tr class="text-left">
+                          <td colspan="3"><div style="padding-left: 20px;"><b>If <%= n.text %>, then <%= n.nestedQuestions.question %></b></div></td>
+                        </tr>
+                        <% for (const i in n.nestedQuestions.surveyQuestionsResponse) { %>
+                          <% if( q.surveyQuestionsResponse[r][0].surveyUserResponseEntityId === i) { %>
+                              <% if (n.questionType === 'dynamicFarmer' && n.nestedQuestions.surveyQuestionsResponse[i][0].farm) { %>
+                                <td scope="row"><div style="padding-left: 40px;"><%= n.nestedQuestions.surveyQuestionsResponse[i].map((t) => t.farm.fullName).join(', ') %></div></td>
+                              <% } %> 
+                              <% if (n.questionType === 'dynamicGeoFence' && n.nestedQuestions.surveyQuestionsResponse[i][0].geofence) { %>
+                                <td scope="row"><div style="padding-left: 40px;"><%= n.nestedQuestions.surveyQuestionsResponse[i].map((t) => t.geofence.geofenceName).join(', ') %></div></td>
+                              <% } %> 
+                              <% if (n.questionType === 'dynamicCrop' && n.nestedQuestions.surveyQuestionsResponse[i][0].crop) { %>
+                                <td scope="row"><div style="padding-left: 40px;"><%= n.nestedQuestions.surveyQuestionsResponse[i].map((t) => t.crop.name).join(', ') %></div></td>
+                              <% } %> 
+                              <% if (n.questionType === 'dynamicEquipment' && n.nestedQuestions.surveyQuestionsResponse[i][0].equipment) { %>
+                                <td scope="row"><div style="padding-left: 40px;"><%= n.nestedQuestions.surveyQuestionsResponse[i].map((t) => t.equipment.name).join(', ') %></div></td>
+                              <% } else { %>
+                                <td scope="row"><div style="padding-left: 40px;"><%= n.nestedQuestions.surveyQuestionsResponse[i].map((t) => t.text) %>
+                                </div></td>
+                              <% } %> 
+                          <% } %>
+                        <% }; %>
+                      <% } %>
+                    <% }); %>
+
+                <% }; %> 
+              <% } else { %>
+                <tr>
+                  <td colspan="3" class="text-center"><i>No response</i></td>
+                </tr>
+              <% } %>   
+            </tbody>
+          </table>
+        <% } %>
+      </div>
+    </div>
+  </body>
+</html>

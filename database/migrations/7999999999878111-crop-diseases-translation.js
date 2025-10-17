@@ -1,0 +1,1002 @@
+'use strict';
+const path = require("path");
+let jsonData = [
+  {
+    "english": "Necrotic spots",
+    "hindi": "नेक्रोटिक धब्बे",
+    "marathi": "नेक्रोटिक स्पॉट्स",
+    "nepali": "Necricिक दाग",
+    "spanish": "Manchas necróticas"
+  },
+  {
+    "english": "Mottling leaves",
+    "hindi": "मटमैला पत्ते",
+    "marathi": "पाने पाने",
+    "nepali": "मोटलिंग पातहरू",
+    "spanish": "hojas moteadas"
+  },
+  {
+    "english": "Growth distortion/plant stunting",
+    "hindi": "विकास विरूपण/संयंत्र स्टंटिंग",
+    "marathi": "वाढ विकृती/वनस्पती स्टंटिंग",
+    "nepali": "विकास विकृति विकृति / बिरूवा स्टन्ट गर्दै",
+    "spanish": "Distorsión del crecimiento/atrofia de la planta"
+  },
+  {
+    "english": "Ring pattern on the leaves",
+    "hindi": "पत्तियों पर रिंग पैटर्न",
+    "marathi": "पानांवर रिंग नमुना",
+    "nepali": "पातहरूमा रिंग ढाँचा",
+    "spanish": "patrón de anillo en las hojas"
+  },
+  {
+    "english": "Mosaic leaf pattern",
+    "hindi": "मोज़ेक पत्ती पैटर्न",
+    "marathi": "मोज़ेक लीफ पॅटर्न",
+    "nepali": "मोसाइक पात ढाँचा",
+    "spanish": "Patrón de hoja de mosaico"
+  },
+  {
+    "english": "Crinkled leaves",
+    "hindi": "पेशाब करना",
+    "marathi": "कुरकुरीत पाने",
+    "nepali": "चित्रित पातहरू",
+    "spanish": "hojas arrugadas"
+  },
+  {
+    "english": "Bumps on plant leaves",
+    "hindi": "पौधे के पत्तों पर धक्कों",
+    "marathi": "वनस्पतींच्या पानांवर दणका",
+    "nepali": "बोट पातहरूमा बम्पहरू",
+    "spanish": "Golpes en las hojas de las plantas"
+  },
+  {
+    "english": "Leaf spot with yellow halo",
+    "hindi": "पीले रंगो के साथ पत्ती का स्थान",
+    "marathi": "पिवळ्या हॅलोसह लीफ स्पॉट",
+    "nepali": "पहेलो हेलोको साथ पात स्पट",
+    "spanish": "Mancha foliar con halo amarillo"
+  },
+  {
+    "english": "Fruit spotting",
+    "hindi": "फलों का स्थान",
+    "marathi": "फळ स्पॉटिंग",
+    "nepali": "फल स्प्याटिंग",
+    "spanish": "manchado de frutas"
+  },
+  {
+    "english": "Cankers",
+    "hindi": "नासूर",
+    "marathi": "कॅनकर्स",
+    "nepali": "क्यानरहरू",
+    "spanish": "Cancros"
+  },
+  {
+    "english": "Crown galls/overgrowths",
+    "hindi": "क्राउन गैल्स/अतिवृद्धि",
+    "marathi": "मुकुट गॉल/अतिवृद्ध",
+    "nepali": "मुकुट ग्यालहरू / ओभरग्रोथहरू",
+    "spanish": "Agallas de la corona/crecimientos excesivos"
+  },
+  {
+    "english": "Soft rotting of roots",
+    "hindi": "जड़ों की नरम सड़ांध",
+    "marathi": "मुळे मऊ सडणे",
+    "nepali": "जराको नरम सड्ने",
+    "spanish": "Podredumbre blanda de las raíces."
+  },
+  {
+    "english": "Wilting",
+    "hindi": "कारण कमजोर पड़ गया",
+    "marathi": "विल्टिंग",
+    "nepali": "विली",
+    "spanish": "Marchitez"
+  },
+  {
+    "english": "Specks and blight on plants",
+    "hindi": "पौधों पर धब्बे और धब्बा",
+    "marathi": "वनस्पतींवर चष्मा आणि ब्लाइट",
+    "nepali": "बोटबिरुवा र बोटबिरुवाहरु मा दाग",
+    "spanish": "Manchas y tizón en las plantas."
+  },
+  {
+    "english": "White powdery substance on plant",
+    "hindi": "पौधे पर सफेद पाउडर पदार्थ",
+    "marathi": "वनस्पती वर पांढरा पावडर पदार्थ",
+    "nepali": "व्हाइटको सेतो पाउडर पदार्थ बिरूवामा",
+    "spanish": "Sustancia en polvo blanco en la planta"
+  },
+  {
+    "english": "Leaf rusting",
+    "hindi": "पत्ती",
+    "marathi": "लीफ गंजणे",
+    "nepali": "पात रस्टिंग",
+    "spanish": "oxidación de la hoja"
+  },
+  {
+    "english": "White mold",
+    "hindi": "श्वेत मोल्ड",
+    "marathi": "पांढरा साचा",
+    "nepali": "सेतो मोल्ड",
+    "spanish": "Moho blanco"
+  },
+  {
+    "english": "Stem rust",
+    "hindi": "तना",
+    "marathi": "स्टेम गंज",
+    "nepali": "डाँठ खिया",
+    "spanish": "roya del tallo"
+  },
+  {
+    "english": "Leaf rot",
+    "hindi": "पत्ती",
+    "marathi": "लीफ रॉट",
+    "nepali": "पात सड्न",
+    "spanish": "podredumbre de la hoja"
+  },
+  {
+    "english": "Chlorosis",
+    "hindi": "क्लोरज़",
+    "marathi": "क्लोरोसिस",
+    "nepali": "क्लोरोसिस",
+    "spanish": "Clorosis"
+  },
+  {
+    "english": "Leaf spotting",
+    "hindi": "पत्ती",
+    "marathi": "लीफ स्पॉटिंग",
+    "nepali": "पात स्प्याभिंग",
+    "spanish": "manchado de hojas"
+  },
+  {
+    "english": "Seedling damping off",
+    "hindi": "अंकुर से भिगोना",
+    "marathi": "बीपासून नुकतेच तयार झालेले रोप",
+    "nepali": "बिउ बीज गर्दै",
+    "spanish": "Amortiguación de plántulas"
+  },
+  {
+    "english": "Foorkey viral disease",
+    "hindi": "वायरल रोग",
+    "marathi": "फोर्की व्हायरल रोग",
+    "nepali": "फोरमको भाइरल रोग",
+    "spanish": "Enfermedad viral de Foorkey"
+  },
+  {
+    "english": "Chirkey viral disease",
+    "hindi": "वायरल रोग",
+    "marathi": "चिरकी व्हायरल रोग",
+    "nepali": "चिरमा भाईल रोग",
+    "spanish": "Enfermedad viral de Chirkey"
+  },
+  {
+    "english": "African cassava mosaic disease\\r\\n",
+    "hindi": "अफ्रीकी कसावा मोज़ेक रोग \\ r \\ n",
+    "marathi": "आफ्रिकन कसावा मोझॅक रोग \\ r \\ n",
+    "nepali": "अफ्रिकी क्यासासावाभा मोजिको रोग \\ r \\ n",
+    "spanish": "Enfermedad del mosaico africano de la yuca\\r\\n"
+  },
+  {
+    "english": "Anthracnose",
+    "hindi": "anthracnose",
+    "marathi": "अँथ्रॅक्नोज",
+    "nepali": "एन्थरसोज",
+    "spanish": "antracnosis"
+  },
+  {
+    "english": "Bacterial blight",
+    "hindi": "जीवाणु ब्लाइट",
+    "marathi": "बॅक्टेरियाचा ब्लाइट",
+    "nepali": "ब्याक्टेरिया ब्लाइट",
+    "spanish": "Tizón bacteriano"
+  },
+  {
+    "english": "Cassava brown streak disease",
+    "hindi": "कसावा ब्राउन स्ट्रीक रोग",
+    "marathi": "कासवा तपकिरी रंगाचा स्टॅक रोग",
+    "nepali": "Cassava खैरो स्ट्रेक रोग",
+    "spanish": "Enfermedad de la raya marrón de la yuca"
+  },
+  {
+    "english": "Late blight",
+    "hindi": "आलू और टमाटर के पौधों में होने वाली एक बीमारी",
+    "marathi": "उशीरा ब्लाइट",
+    "nepali": "ढिलो भाँनाव",
+    "spanish": "tizón tardío"
+  },
+  {
+    "english": "Early blight",
+    "hindi": "जल्दी ब्लाइट",
+    "marathi": "लवकर ब्लाइट",
+    "nepali": "प्रारम्भिक पहेलि",
+    "spanish": "tizón temprano"
+  },
+  {
+    "english": "Brown rot",
+    "hindi": "भूरे रंग का सड़ांध",
+    "marathi": "तपकिरी सड",
+    "nepali": "खैरो सड",
+    "spanish": "podredumbre parda"
+  },
+  {
+    "english": "Black scurf",
+    "hindi": "काली स्कर्फ",
+    "marathi": "ब्लॅक स्कर्फ",
+    "nepali": "कालो scurf",
+    "spanish": "caspa negra"
+  },
+  {
+    "english": "Viral diseases",
+    "hindi": "वायरल रोग",
+    "marathi": "व्हायरल रोग",
+    "nepali": "भाइरल रोगहरु",
+    "spanish": "enfermedades virales"
+  },
+  {
+    "english": "Damping off",
+    "hindi": "गिरा देना",
+    "marathi": "ओलसर",
+    "nepali": "ओसिडिंग बन्द",
+    "spanish": "Amortiguación"
+  },
+  {
+    "english": "Downy mildew",
+    "hindi": "कोमल फफूंदी",
+    "marathi": "डाऊनि बुरशी",
+    "nepali": "डाउनयरी फफूदी",
+    "spanish": "mildiú velloso"
+  },
+  {
+    "english": "Leaf spot",
+    "hindi": "पत्ती",
+    "marathi": "लीफ स्पॉट",
+    "nepali": "पात घटनाहरू",
+    "spanish": "mancha de la hoja"
+  },
+  {
+    "english": "Stalk rot",
+    "hindi": "डंठल सड़ांध",
+    "marathi": "देठ सड",
+    "nepali": "डाँठ सड्न",
+    "spanish": "podredumbre del tallo"
+  },
+  {
+    "english": "Bacterial leaf spot",
+    "hindi": "बैक्टीरियल लीफ स्पॉट",
+    "marathi": "बॅक्टेरियाच्या पानांचे ठिकाण",
+    "nepali": "ब्याक्टेरिया पात घटनाहरू",
+    "spanish": "Mancha foliar bacteriana"
+  },
+  {
+    "english": "Leaf or neck blast",
+    "hindi": "पत्ती या गर्दन का विस्फोट",
+    "marathi": "पान किंवा मान स्फोट",
+    "nepali": "पात वा घाँटी ब्लास्ट",
+    "spanish": "Explosión de hoja o cuello"
+  },
+  {
+    "english": "Bacterial leaf blight",
+    "hindi": "जीवाणु पत्ती ब्लाइट",
+    "marathi": "बॅक्टेरियाच्या पानांचा ब्लाइट",
+    "nepali": "ब्याक्टेरिया पात ब्लाइट",
+    "spanish": "Tizón bacteriano de la hoja"
+  },
+  {
+    "english": "Rice tungro virus",
+    "hindi": "राइस टंग्रो वायरस",
+    "marathi": "तांदूळ ट्यूनग्रो व्हायरस",
+    "nepali": "चामल टुंग्रो भाइरस",
+    "spanish": "Virus del tungro del arroz"
+  },
+  {
+    "english": "Soybean Rust",
+    "hindi": "सोयाबीन रस्ट",
+    "marathi": "सोयाबीन गंज",
+    "nepali": "सोयाबीन रस्ट",
+    "spanish": "Roya de soja"
+  },
+  {
+    "english": "Soybean Mosaic",
+    "hindi": "सोयाबीन मोज़ेक",
+    "marathi": "सोयाबीन मोझॅक",
+    "nepali": "सोयाबीन मोआइक",
+    "spanish": "Mosaico de soja"
+  },
+  {
+    "english": "Yellow leaf disease",
+    "hindi": "पीले पत्तों की बीमारी",
+    "marathi": "पिवळ्या पानांचा रोग",
+    "nepali": "पहेंलो पात रोग",
+    "spanish": "enfermedad de la hoja amarilla"
+  },
+  {
+    "english": "Smut",
+    "hindi": "मैल",
+    "marathi": "स्मट",
+    "nepali": "स्माल",
+    "spanish": "Tizón"
+  },
+  {
+    "english": "Rust",
+    "hindi": "जंग",
+    "marathi": "गंज",
+    "nepali": "खिया",
+    "spanish": "Óxido"
+  },
+  {
+    "english": "Red rot",
+    "hindi": "लाल सड़ांध",
+    "marathi": "लाल सड",
+    "nepali": "रातो सड्न",
+    "spanish": "podredumbre roja"
+  },
+  {
+    "english": "Ratoon stunting",
+    "hindi": "रोटून स्टंटिंग",
+    "marathi": "रॅटून स्टंटिंग",
+    "nepali": "रन स्टन्ट",
+    "spanish": "retraso en el crecimiento de los ratones"
+  },
+  {
+    "english": "Wilt",
+    "hindi": "विल्ट",
+    "marathi": "विल्ट",
+    "nepali": "शिथिल हुनु",
+    "spanish": "Marchitar"
+  },
+  {
+    "english": "Sett rot",
+    "hindi": "सड़ांध",
+    "marathi": "सेट रॉट",
+    "nepali": "बेलुका बेलुली",
+    "spanish": "Pudrición de sedimentos"
+  },
+  {
+    "english": "Grassy shoot disease",
+    "hindi": "घास की शूटिंग रोग",
+    "marathi": "गवताळ शूट रोग",
+    "nepali": "घाँसे शूट रोग",
+    "spanish": "Enfermedad de los brotes herbáceos"
+  },
+  {
+    "english": "Tea Armillaria root rot",
+    "hindi": "चाय आर्मिलारिया जड़ सड़ांध",
+    "marathi": "चहा आर्मिलारिया रूट रॉट",
+    "nepali": "चिया हातयार जरा सड्न",
+    "spanish": "Podredumbre de la raíz del té Armillaria"
+  },
+  {
+    "english": "Tea Wood rot",
+    "hindi": "चाय की लकड़ी की सड़ांध",
+    "marathi": "चहा लाकूड सड",
+    "nepali": "चिया काठ सड्न",
+    "spanish": "Podredumbre de la madera del té"
+  },
+  {
+    "english": "Tea Branch and collar canker",
+    "hindi": "चाय शाखा और कॉलर कैनकर",
+    "marathi": "चहा शाखा आणि कॉलर कॅंकर",
+    "nepali": "चिया शाखा र कलर क्यानर",
+    "spanish": "Chancro en rama y cuello de té"
+  },
+  {
+    "english": "Tea Brown and Grey Blight",
+    "hindi": "चाय भूरी और ग्रे ब्लाइट",
+    "marathi": "चहा तपकिरी आणि राखाडी ब्लाइट",
+    "nepali": "चिया खैरो र खैरो ब्लाइट",
+    "spanish": "Tizón marrón y gris del té"
+  },
+  {
+    "english": "Yellow or stripe rust",
+    "hindi": "पीला या पट्टी जंग",
+    "marathi": "पिवळा किंवा पट्टा गंज",
+    "nepali": "पहेंलो वा स्ट्रिप रस्ट",
+    "spanish": "Roya amarilla o lineal"
+  },
+  {
+    "english": "Loose Smut",
+    "hindi": "ढीला धब्बा",
+    "marathi": "सैल स्मट",
+    "nepali": "छाडा धुता",
+    "spanish": "obscenidad suelta"
+  },
+  {
+    "english": "Bacterial stalk rot",
+    "hindi": "जीवाणु डंठल सड़ांध",
+    "marathi": "बॅक्टेरियाच्या देठ रॉट",
+    "nepali": "ब्याक्टेरिया स्टार सड्न",
+    "spanish": "Podredumbre bacteriana del tallo"
+  },
+  {
+    "english": "Maydis leaf blight",
+    "hindi": "मेदिस लीफ ब्लाइट",
+    "marathi": "मेडिस लीफला ब्लाइट",
+    "nepali": "मेडिस पात ब्लाइट",
+    "spanish": "Tizón de la hoja de Maydis"
+  },
+  {
+    "english": "Banded leaf and sheath blight",
+    "hindi": "बैंडेड लीफ और म्यान ब्लाइट",
+    "marathi": "बॅंडेड लीफ आणि म्यान ब्लाइट",
+    "nepali": "ब्यान्ड गरिएको पात र म्याथ ब्लाइट",
+    "spanish": "Tizón bandeado de la hoja y la vaina"
+  },
+  {
+    "english": "See DD here",
+    "hindi": "यहां देखें डीडी",
+    "marathi": "येथे डीडी पहा",
+    "nepali": "यहाँ DD हेर्नुहोस्",
+    "spanish": "Ver DD aquí"
+  },
+  {
+    "english": "Blight",
+    "hindi": "नुक़सान",
+    "marathi": "ब्लाइट",
+    "nepali": "वेदर्णालक",
+    "spanish": "Plaga"
+  },
+  {
+    "english": "Anthracnose",
+    "hindi": "anthracnose",
+    "marathi": "अँथ्रॅक्नोज",
+    "nepali": "एन्थरसोज",
+    "spanish": "antracnosis"
+  },
+  {
+    "english": "African cassava mosaic disease\\n",
+    "hindi": "अफ्रीकी कसावा मोज़ेक रोग \\ n",
+    "marathi": "आफ्रिकन कसावा मोझॅक रोग \\ n",
+    "nepali": "अफ्रिकी क्यासासावाभा मोसायुक्त रोग • n",
+    "spanish": "Enfermedad del mosaico africano de la yuca\\n"
+  },
+  {
+    "english": "Bacterial blight",
+    "hindi": "जीवाणु ब्लाइट",
+    "marathi": "बॅक्टेरियाचा ब्लाइट",
+    "nepali": "ब्याक्टेरिया ब्लाइट",
+    "spanish": "Tizón bacteriano"
+  },
+  {
+    "english": "Ergot",
+    "hindi": "अरगट",
+    "marathi": "एर्गॉट",
+    "nepali": "एर्ग्टे",
+    "spanish": "Cornezuelo"
+  },
+  {
+    "english": "Helminthosporium Leaf Spot",
+    "hindi": "हेल्मिन्थोस्पोरियम लीफ स्पॉट",
+    "marathi": "हेल्मिंथोस्पोरियम लीफ स्पॉट",
+    "nepali": "हेलमिथोस्पोरियम पातको घटना",
+    "spanish": "Mancha foliar por Helminthosporium"
+  },
+  {
+    "english": "Purple eye spot",
+    "hindi": "पर्पल आई स्पॉट",
+    "marathi": "जांभळा डोळ्याचे ठिकाण",
+    "nepali": "बैजनी आँखा स्पट",
+    "spanish": "mancha ocular morada"
+  },
+  {
+    "english": "Basal Rot",
+    "hindi": "बेसल सड़ांध",
+    "marathi": "बेसल रॉट",
+    "nepali": "बेसल सड",
+    "spanish": "Podredumbre basal"
+  },
+  {
+    "english": "Leaf Blight (Blast)",
+    "hindi": "लीफ ब्लाइट (विस्फोट)",
+    "marathi": "लीफ ब्लाइट (स्फोट)",
+    "nepali": "पात ब्लाइट (ब्लास्ट)",
+    "spanish": "Tizón de la hoja (explosión)"
+  },
+  {
+    "english": "Damping Off: Pythium aphanidermatum P. debaryanum and P. ultimum",
+    "hindi": "डंपिंग ऑफ: पायथियम अपानिडर्मेटम पी। डेबेरनम और पी। अल्टिमम",
+    "marathi": "ओलसर बंद: पायथियम han फनिडर्मॅटम पी. डेबेरियानम आणि पी. अल्टिमम",
+    "nepali": "Dyching बन्द: pythiumphammatum p. डेबिशरायम र पी। अक्सत",
+    "spanish": "Damping Off: Pythium aphanidermatum P. debaryanum y P. ultimum"
+  },
+  {
+    "english": "Bunchy top virus",
+    "hindi": "बंची टॉप वायरस",
+    "marathi": "गुच्छे शीर्ष व्हायरस",
+    "nepali": "बुच्ची शीर्ष भाइरस",
+    "spanish": "Virus de la parte superior del montón"
+  },
+  {
+    "english": "Mosaic virus",
+    "hindi": "मोज़ेक वायरस",
+    "marathi": "मोज़ेक विषाणू",
+    "nepali": "मोजेकका भाइरस",
+    "spanish": "virus mosaico"
+  },
+  {
+    "english": "Panama wilt disease",
+    "hindi": "पनामा विल्ट रोग",
+    "marathi": "पनामा विल्ट रोग",
+    "nepali": "पनामा झींगा रोग",
+    "spanish": "enfermedad del marchitamiento de Panamá"
+  },
+  {
+    "english": "Panama Wilt",
+    "hindi": "पनामा विल्ट",
+    "marathi": "पनामा विल्ट",
+    "nepali": "पनामा विल्ट",
+    "spanish": "Marchitez de Panamá"
+  },
+  {
+    "english": "Bunchy Top",
+    "hindi": "बंची टॉप",
+    "marathi": "गुच्छ शीर्ष",
+    "nepali": "बन्चन शीर्ष",
+    "spanish": "Parte superior agrupada"
+  },
+  {
+    "english": "Brown stripe downy mildew",
+    "hindi": "भूरे रंग की धारी",
+    "marathi": "तपकिरी पट्टी डाऊनि बुरशी",
+    "nepali": "खैरो पट्टि तल्लो फफूरी",
+    "spanish": "Mildiú velloso de rayas marrones"
+  },
+  {
+    "english": "Sheath rot",
+    "hindi": "म्यान की सड़ांध",
+    "marathi": "म्यान सड",
+    "nepali": "उनी नाइन गर्मि",
+    "spanish": "podredumbre de la vaina"
+  },
+  {
+    "english": "Soybean brown stem rot",
+    "hindi": "सोयाबीन ब्राउन स्टेम सड़ांध",
+    "marathi": "सोयाबीन ब्राउन स्टेम रॉट",
+    "nepali": "सोयाबीन ब्राउन स्टेम सड्न",
+    "spanish": "Podredumbre parda del tallo de la soja"
+  },
+  {
+    "english": "Olive knot",
+    "hindi": "जैतून की गाँठ",
+    "marathi": "ऑलिव्ह गाठ",
+    "nepali": "जैतुन गाँठ",
+    "spanish": "Nudo de oliva"
+  },
+  {
+    "english": "Olive leaf spot",
+    "hindi": "ओलिव लीफ स्पॉट",
+    "marathi": "ऑलिव्ह लीफ स्पॉट",
+    "nepali": "जैतून पातको घटना",
+    "spanish": "mancha de la hoja de olivo"
+  },
+  {
+    "english": "White rot",
+    "hindi": "सफेद सड़ांध",
+    "marathi": "पांढरा रॉट",
+    "nepali": "सेतो सड्न",
+    "spanish": "podredumbre blanca"
+  },
+  {
+    "english": "Iris Yellow Spot",
+    "hindi": "आइरिस येलो स्पॉट",
+    "marathi": "आयरिस यलो स्पॉट",
+    "nepali": "आइरिस पहेलो ठाउँ",
+    "spanish": "Iris Mancha Amarilla"
+  },
+  {
+    "english": "Black Pod Rot",
+    "hindi": "काली फली सड़ांध",
+    "marathi": "ब्लॅक पॉड रॉट",
+    "nepali": "कालो पोड सड्न",
+    "spanish": "Pudrición de la vaina negra"
+  },
+  {
+    "english": "Stem canker",
+    "hindi": "स्टेम कैंकर",
+    "marathi": "स्टेम कॅकर",
+    "nepali": "स्टेम क्यानर",
+    "spanish": "Cancro del tallo"
+  },
+  {
+    "english": "Vascular Streak Dieback",
+    "hindi": "संवहनी स्ट्रीक डाइबैक",
+    "marathi": "संवहनी स्ट्रीक डायबॅक",
+    "nepali": "Vasclicular स्ट्रीक पेसाब्याक",
+    "spanish": "Muerte regresiva de estrías vasculares"
+  },
+  {
+    "english": "Safflower Sclerotinia stem rot",
+    "hindi": "कुस्फ्लॉवर स्क्लेरोटिनिया स्टेम रोट",
+    "marathi": "केशर स्क्लेरोटिनिया स्टेम रॉट",
+    "nepali": "सलाफ्लार स्क्यालेटिनिनिया स्टेम सड्न",
+    "spanish": "Pudrición del tallo por Sclerotinia de cártamo"
+  },
+  {
+    "english": "Safflower Cercospora leaf spot",
+    "hindi": "कुस्फ्लॉवर सेरोस्पोरा लीफ स्पॉट",
+    "marathi": "सेफ्लॉवर कारकोस्पोरा लीफ स्पॉट",
+    "nepali": "सलाफ्लार cercospora पात घटना",
+    "spanish": "Mancha foliar Cercospora de cártamo"
+  },
+  {
+    "english": "Safflower Powdery mildew",
+    "hindi": "कुस्फ्लॉवर पाउडर फफूंदी",
+    "marathi": "केशर पावडर बुरशी",
+    "nepali": "सलाफ्लार पाउडर फफूरी",
+    "spanish": "Oídio del cártamo"
+  },
+  {
+    "english": "Safflower Alternaria leaf blight",
+    "hindi": "कुस्फ्लॉवर अल्टरनेरिया लीफ ब्लाइट",
+    "marathi": "केशर अल्टरनेरिया लीफ ब्लाइट",
+    "nepali": "सलाफ्लार इन्फर्रियाको पखेटा ब्लाइट",
+    "spanish": "Tizón de la hoja por Alternaria del cártamo"
+  },
+  {
+    "english": "Safflower Powdery mildew disease",
+    "hindi": "कुस्फ्लॉवर पाउडर फफूंदी रोग",
+    "marathi": "केशरी पावडर बुरशी",
+    "nepali": "सलाफ्लार पाउडर फफूरी रोग",
+    "spanish": "Enfermedad del oídio del cártamo"
+  },
+  {
+    "english": "Cotton Black arm/ Angular leaf spot\\n",
+    "hindi": "कॉटन ब्लैक आर्म/ एंगुलर लीफ स्पॉट \\ n",
+    "marathi": "सूती काळा हात/ कोनीय पानांचे ठिकाण \\ n",
+    "nepali": "कपास कालो हात / कोणीय पात स्पट \\ n",
+    "spanish": "Brazo negro algodón/ Mancha foliar angular\\n"
+  },
+  {
+    "english": "Cotton Fusarium wilt",
+    "hindi": "कपास फ्यूज़ेरियम विल्ट",
+    "marathi": "कापूस फ्यूझेरियम विल्ट",
+    "nepali": "कपास fusarium विटल",
+    "spanish": "Marchitez del algodón por Fusarium"
+  },
+  {
+    "english": "Cotton Alterneria leaf spot",
+    "hindi": "कपास अल्टरनेरिया लीफ स्पॉट",
+    "marathi": "सूती अल्टरनेरियाची पानांची जागा",
+    "nepali": "कपास भिक्टर पातको घटना",
+    "spanish": "Mancha foliar de Alterneria del algodón"
+  },
+  {
+    "english": "Cotton Anthracnose \\n",
+    "hindi": "कपास एन्थ्रेकनोज \\ n",
+    "marathi": "कापूस अँथ्रॅक्नोज \\ n",
+    "nepali": "कपास aretrunnose \\ n",
+    "spanish": "Algodón antracnosis \\n"
+  },
+  {
+    "english": "Coffee Leaf rust",
+    "hindi": "कॉफी लीफ रस्ट",
+    "marathi": "कॉफी लीफ रस्ट",
+    "nepali": "कफी पात रस्ट",
+    "spanish": "Roya de la hoja de café"
+  },
+  {
+    "english": "Coffee Berry blotch\\n",
+    "hindi": "कॉफी बेरी धब्बा \\ n",
+    "marathi": "कॉफी बेरी ब्लॉच \\ n",
+    "nepali": "कफी Berry Blotch \\ n",
+    "spanish": "Mancha de bayas de café\\n"
+  },
+  {
+    "english": "Coffee cercospora leaf spot\\n",
+    "hindi": "कॉफी सेरोस्पोरा लीफ स्पॉट \\ n",
+    "marathi": "कॉफी सीरोस्पोरा लीफ स्पॉट \\ n",
+    "nepali": "कफी Cercospopoa पात पाती \\ n",
+    "spanish": "Mancha foliar cercospora del café\\n"
+  },
+  {
+    "english": "Coffee Anthracnose",
+    "hindi": "कॉफी एन्थ्रेक्नोज",
+    "marathi": "कॉफी अँथ्रॅक्नोज",
+    "nepali": "कफी एथरारानिज",
+    "spanish": "Antracnosis del Café"
+  },
+  {
+    "english": "Tomato Blossom End Rot disease\\n",
+    "hindi": "टमाटर ब्लॉसम एंड रोट रोग \\ n",
+    "marathi": "टोमॅटो ब्लॉसम एंड रॉट रोग \\ n",
+    "nepali": "टमाटर ब्लूफेम सार्नुहोस् गुट रोग \\ n",
+    "spanish": "Enfermedad de la pudrición final de la flor del tomate\\n"
+  },
+  {
+    "english": "Tomato leaf curl virus (ToLCV).\\n",
+    "hindi": "टमाटर लीफ कर्ल वायरस (TOLCV)। \\ n",
+    "marathi": "टोमॅटो लीफ कर्ल व्हायरस (टोलकव्ही). \\ N",
+    "nepali": "टमाटर पात कर्लरस भाइरस (TOLCV)। \\ N",
+    "spanish": "Virus del enrollamiento de la hoja del tomate (ToLCV).\\n"
+  },
+  {
+    "english": "Tomato Early blight\\n",
+    "hindi": "टमाटर अर्ली ब्लाइट \\ n",
+    "marathi": "टोमॅटो लवकर ब्लाइट \\ n",
+    "nepali": "टमाटर प्रारम्भिक ब्लाइट \\ n",
+    "spanish": "Tizón temprano del tomate\\n"
+  },
+  {
+    "english": "Tomato Late blight. \\n",
+    "hindi": "टमाटर देर से ब्लाइट। \\एन",
+    "marathi": "टोमॅटो उशीरा ब्लाइट. \\ n",
+    "nepali": "टमाटर ढिलो ब्लाइट। । n",
+    "spanish": "Tizón tardío del tomate. \\norte"
+  },
+  {
+    "english": "Phyllody",
+    "hindi": "फाइलोडी",
+    "marathi": "फिलॉडी",
+    "nepali": "फारम",
+    "spanish": "filodia"
+  },
+  {
+    "english": "Bacterial blight",
+    "hindi": "जीवाणु ब्लाइट",
+    "marathi": "बॅक्टेरियाचा ब्लाइट",
+    "nepali": "ब्याक्टेरिया ब्लाइट",
+    "spanish": "Tizón bacteriano"
+  },
+  {
+    "english": "Cercospora leaf spot / White spot",
+    "hindi": "Cercospora लीफ स्पॉट / व्हाइट स्पॉट",
+    "marathi": "Cercospora लीफ स्पॉट / व्हाइट स्पॉट",
+    "nepali": "Cercospora पात स्पट / सेतो स्पट",
+    "spanish": "Mancha foliar por Cercospora / Mancha blanca"
+  },
+  {
+    "english": "Damping off / Root Rot",
+    "hindi": "भिगोना बंद / जड़ सड़ांध",
+    "marathi": "ओलसर / रूट रॉट",
+    "nepali": "ओसिडिंग अफ / जरा सड्न",
+    "spanish": "Damping off / Podredumbre de la raíz"
+  },
+  {
+    "english": "Aphanomyces Root Rot (Aphanomyces euteiches)",
+    "hindi": "Aphanomyces रूट रोट (Aphanomyces euteiches)",
+    "marathi": "अ‍ॅफानोमायसेस रूट रॉट (han फनोमायसेस युटिचेस)",
+    "nepali": "Aponhomys जरा सड्न (Apanoomyes eateices)",
+    "spanish": "Pudrición de la raíz por Aphanomyces (Aphanomyces euteiches)"
+  },
+  {
+    "english": "Mycoleptodiscus Crown and Root Rot",
+    "hindi": "Mycoleptodiscus मुकुट और रूट सड़ांध",
+    "marathi": "मायकोलेप्टोडिस्कस क्राउन आणि रूट रॉट",
+    "nepali": "Mycoleptociscusasusase क्राउन र जरा सड्न",
+    "spanish": "Pudrición de la corona y de la raíz por Mycoleptodiscus"
+  },
+  {
+    "english": "Phytophthora Damping Off and Root Rot",
+    "hindi": "फाइटोफथोरा डंपिंग ऑफ और रूट रोट",
+    "marathi": "फायटोफथोरा ओलसर आणि रूट रॉट",
+    "nepali": "फाइटोफथोरा ओम्सिंग बन्द र जरा सड्न",
+    "spanish": "Phytophthora Damping Off y Root Rot"
+  },
+  {
+    "english": "Pythium",
+    "hindi": "पाइथियम",
+    "marathi": "पायथियम",
+    "nepali": "पिशियम",
+    "spanish": "pitio"
+  },
+  {
+    "english": "Leaf drop",
+    "hindi": "पत्ती",
+    "marathi": "लीफ ड्रॉप",
+    "nepali": "पात ड्रप",
+    "spanish": "caída de hoja"
+  },
+  {
+    "english": "Powdery mildew",
+    "hindi": "पाउडर रूपी फफूंद",
+    "marathi": "पावडर बुरशी",
+    "nepali": "पाउडररी फफूरी",
+    "spanish": "moho polvoriento"
+  },
+  {
+    "english": "Die Back",
+    "hindi": "वापस आ जाना",
+    "marathi": "परत मरणार",
+    "nepali": "फिर्ता मर्नु",
+    "spanish": "Secarse"
+  },
+  {
+    "english": "Gemini virus",
+    "hindi": "मिथुन वायरस",
+    "marathi": "मिथुन व्हायरस",
+    "nepali": "मिथुन भाइरस",
+    "spanish": "virus géminis"
+  },
+  {
+    "english": "Phytophthora",
+    "hindi": "फाइटोफथोरा",
+    "marathi": "फायटोफथोरा",
+    "nepali": "Phttophthhora",
+    "spanish": "Phytophthora"
+  },
+  {
+    "english": "Citrus Canker",
+    "hindi": "सिट्रस कैंकर",
+    "marathi": "लिंबूवर्गीय कॅंकर",
+    "nepali": "सिट्रस क्यानर",
+    "spanish": "Cancro de los cítricos"
+  },
+  {
+    "english": "Lemon Scab",
+    "hindi": "नींबू की पपड़ी",
+    "marathi": "लिंबू खरुज",
+    "nepali": "कागजको स्खाबी",
+    "spanish": "costra de limón"
+  },
+  {
+    "english": "Gummosis",
+    "hindi": "गुम्मोसिस",
+    "marathi": "गमोसिस",
+    "nepali": "गमम्म",
+    "spanish": "gomosis"
+  },
+  {
+    "english": "Powdery mildew",
+    "hindi": "पाउडर रूपी फफूंद",
+    "marathi": "पावडर बुरशी",
+    "nepali": "पाउडररी फफूरी",
+    "spanish": "moho polvoriento"
+  },
+  {
+    "english": "Alternaria leaf spot",
+    "hindi": "अल्टरनेरिया लीफ स्पॉट",
+    "marathi": "अल्टरनेरिया लीफ स्पॉट",
+    "nepali": "IMARARAIA LEAFTESTES",
+    "spanish": "Mancha foliar por Alternaria"
+  },
+  {
+    "english": "Bacterial brown spot",
+    "hindi": "बैक्टीरियल ब्राउन स्पॉट",
+    "marathi": "बॅक्टेरियाचा तपकिरी जागा",
+    "nepali": "ब्याक्टेरिया ब्राउन स्पट",
+    "spanish": "Mancha marrón bacteriana"
+  },
+  {
+    "english": "Bean rust",
+    "hindi": "बीन रस्ट",
+    "marathi": "बीन गंज",
+    "nepali": "बीन रस्ट",
+    "spanish": "Roya de frijol"
+  },
+  {
+    "english": "White mold \\n",
+    "hindi": "सफेद मोल्ड \\ n",
+    "marathi": "पांढरा साचा \\ n",
+    "nepali": "सेतो मोल्ड \\ n",
+    "spanish": "Moho blanco \\n"
+  },
+  {
+    "english": "Thread blight",
+    "hindi": "थ्रेड ब्लाइट",
+    "marathi": "थ्रेड ब्लाइट",
+    "nepali": "थ्रेड ब्लाइग्राफे",
+    "spanish": "Tizón del hilo"
+  },
+  {
+    "english": "Fruit rot\\r",
+    "hindi": "फल सड़ांध \\ r",
+    "marathi": "फळ सड \\ आर",
+    "nepali": "फल सडेर \\ r",
+    "spanish": "podredumbre de la fruta\\r"
+  },
+  {
+    "english": "Leaf spot and shot hole",
+    "hindi": "लीफ स्पॉट और शॉट होल",
+    "marathi": "लीफ स्पॉट आणि शॉट होल",
+    "nepali": "पात स्पट र शट प्वाल",
+    "spanish": "Mancha foliar y agujero de bala"
+  },
+  {
+    "english": "Cercospora leaf spot",
+    "hindi": "सेरकोसपोरा लीफ स्पॉट",
+    "marathi": "Cercospora लीफ स्पॉट",
+    "nepali": "Cercospora पात घटना",
+    "spanish": "Mancha foliar por cercospora"
+  },
+  {
+    "english": "Dry Root Rot and Leaf Blight",
+    "hindi": "सूखी जड़ सड़ांध और पत्ती ब्लाइट",
+    "marathi": "कोरडे रूट रॉट आणि लीफला ब्लाइट",
+    "nepali": "सुख्खा जरा सड्न र पात ब्लाइट",
+    "spanish": "Pudrición seca de la raíz y tizón de la hoja"
+  },
+  {
+    "english": "Leaf Crinkle",
+    "hindi": "पत्ती",
+    "marathi": "लीफ क्रिंकल",
+    "nepali": "पात क्रींकली",
+    "spanish": "hoja arrugada"
+  },
+  {
+    "english": "Anthracnose and Red Rot",
+    "hindi": "एन्थ्रेकनोज और लाल सड़ांध",
+    "marathi": "अँथ्रॅक्नोज आणि रेड रॉट",
+    "nepali": "Athrrunnoos र रातो सड्न",
+    "spanish": "Antracnosis y Podredumbre Roja"
+  },
+  {
+    "english": "Sorghum grain mould",
+    "hindi": "सोरघम अनाज मोल्ड",
+    "marathi": "ज्वारी धान्य साचा",
+    "nepali": "Asghum अन्न मोल्ड",
+    "spanish": "moho del grano de sorgo"
+  },
+  {
+    "english": "Covered Kernel Smut",
+    "hindi": "कवर कर्नेल स्मट",
+    "marathi": "कव्हर केलेले कर्नल स्मट",
+    "nepali": "कर्नेल कर्नेल स्मिट",
+    "spanish": "Carbón de semilla cubierto"
+  },
+  {
+    "english": "Sorghum downy mildew",
+    "hindi": "सोरघम डाउनी फफूंदी",
+    "marathi": "ज्वारी डाऊनि बुरशी",
+    "nepali": "Sorgum डाउनली फफूरी",
+    "spanish": "Mildiú velloso del sorgo"
+  },
+  {
+    "english": "Alternaria blight",
+    "hindi": "अल्टरनेरिया ब्लाइट",
+    "marathi": "अल्टरनेरिया ब्लाइट",
+    "nepali": "जैवरिया ब्लेट",
+    "spanish": "Tizón de Alternaria"
+  },
+  {
+    "english": "Leaf rust",
+    "hindi": "पत्ती",
+    "marathi": "लीफ गंज",
+    "nepali": "पात खिया",
+    "spanish": "roya de la hoja"
+  },
+  {
+    "english": "Septoria leaf spot",
+    "hindi": "सेप्टोरिया लीफ स्पॉट",
+    "marathi": "सेप्टोरिया लीफ स्पॉट",
+    "nepali": "सेप्टोरिया पातको दाग",
+    "spanish": "Mancha foliar por Septoria"
+  },
+  {
+    "english": "Frosty Pod",
+    "hindi": "फ्रॉस्टी पॉड",
+    "marathi": "फ्रॉस्टी पॉड",
+    "nepali": "शीतशाख पोड",
+    "spanish": "Vaina helada"
+  }
+]
+const {readFileSync} = require("fs")
+const xlsx = require("xlsx")
+const moment = require("moment")
+
+module.exports = {
+  up: async (queryInterface, Sequelize) => {
+    try {
+      console.log(jsonData, "jsonData")
+
+      let langaugeObjects = jsonData.map(el => {
+        el.createdAt= moment.utc().format("YYYY-MM-DD HH:mm:ss")
+        el.updatedAt= moment.utc().format("YYYY-MM-DD HH:mm:ss")
+
+        return el
+      })
+
+      await queryInterface.bulkInsert(
+        "global_translation_metadata",
+        langaugeObjects,
+        {},
+        {}
+      );
+    } catch (error) {
+      console.log(error)
+    }
+
+
+  },
+  down: async (queryInterface, Sequelize) => {
+
+  },
+};

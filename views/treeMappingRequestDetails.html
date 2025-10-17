@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plot Tree Request Details</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link href="http://localhost:3000/css/treeMappingRequestDetails.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+    <!-- Header --> 
+    <div class="header">
+        <div class="logo">
+            <img src="http://localhost:3000/image/Dimitra Powered by AI 2023.png" alt="Dimitra Logo">
+        </div>
+        <div class="title-banner">
+            PLOT TREE REQUEST DETAILS
+        </div>
+    </div>
+
+    <!-- Plot Tree Mapping Request Detail Section -->
+    <div class="section">
+        <div class="section-header">
+            Plot Tree Mapping Request Detail
+        </div>
+        <div class="section-content">
+            <div class="info-grid">
+                <div class="info-item">
+                    <div class="info-label">Request ID</div>
+                    <div class="info-value"><%= data.requestId %></div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Start Date</div>
+                    <div class="info-value"><%= data.startDate %></div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Due Date</div>
+                    <div class="info-value"><%= data.dueDate %></div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Status</div>
+                    <div class="info-value"><%= data.status %></div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Plot Radius</div>
+                    <div class="info-value"><%= data.plotRadius %> m</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Farm Location Address</div>
+                    <div class="info-value"><%= data.farmAddress %></div>
+                </div>
+            </div>
+            <% if (data.description) { %>
+            <div class="info-item" style="margin-top: 15px;">
+                <div class="info-label">Description</div>
+                <div class="info-value"><%= data.description %></div>
+            </div>
+            <% } %>
+        </div>
+    </div>
+
+    <!-- Plot Details Section -->
+    <div class="section">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div class="section-header">
+                Plot Details
+            </div>
+            <div class="total-plots">Total Plots: <%= data.plots.length %></div>
+        </div>
+        <div class="section-content">
+            <div class="plots-grid">
+                <% data.plots.forEach(function(plot) { %>
+                <div class="plot-card">
+                    <div class="plot-data">
+                        <div class="plot-data-item">
+                            <div class="data-label">Plot Number</div>
+                            <div class="data-value"><%= plot.plotNumber %></div>
+                        </div>
+                        <div class="plot-data-item">
+                            <div class="data-label">Longitude</div>
+                            <div class="data-value"><%= plot.longitude %></div>
+                        </div>
+                        <div class="plot-data-item">
+                            <div class="data-label">Latitude</div>
+                            <div class="data-value"><%= plot.latitude %></div>
+                        </div>
+                        <div class="plot-data-item">
+                            <div class="data-label">Number of Trees</div>
+                            <div class="data-value"><%= plot.numberOfTrees %></div>
+                        </div>
+                    </div>
+                </div>
+                <% }); %>
+            </div>
+        </div>
+    </div>
+
+    <!-- Assignee Section -->
+    <div class="section">
+        <div class="section-header">
+            Assignee
+        </div>
+        <div class="section-content">
+            <div class="info-grid">
+                <div class="info-item">
+                    <div class="info-label">Name</div>
+                    <div class="info-value"><%= data.assignee.name %></div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Assignee ID</div>
+                    <div class="info-value"><%= data.assignee.id %></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Farm Information Section -->
+    <div class="section">
+        <div class="section-header">
+            Farm Information
+        </div>
+        <div class="section-content">
+            <div class="info-grid">
+                <div class="info-item">
+                    <div class="info-label">Farm Name</div>
+                    <div class="info-value"><%= data.farm.name %></div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Farm Registration ID</div>
+                    <div class="info-value"><%= data.farm.registrationId %></div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Dimitra Farm ID</div>
+                    <div class="info-value"><%= data.farm.dimitraId %></div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Crop Growing Practices</div>
+                    <div class="info-value"><%= data.farm.cropPractices %></div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Status</div>
+                    <div class="info-value"><%= data.farm.status %></div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Farm Location Address</div>
+                    <div class="info-value"><%= data.farm.address %></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <div class="footer-left">Dimitra.io</div>
+    </div>
+</body>
+</html> 

@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ESG Protocol Report</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #eaeaea;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+        
+        .report-page {
+            width: 210mm;
+            min-height: 297mm;
+            background-color: #fff;
+            margin: 0 auto 30px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            display: flex;
+            align-items: center;
+            padding: 20px 30px 20px 30px;
+        }
+        
+        .logo {
+            width: 140px;
+            height: auto;
+        }
+        
+        .report-title-container {
+            flex-grow: 1;
+            margin-left: 30%;
+        }
+        
+        .report-title {
+            background-color: #2e7d42;
+            color: white;
+            padding: 12px 20px;
+            font-size: 16px;
+            font-weight: 600;
+            text-align: center;
+            border-radius: 4px;
+            letter-spacing: 0.5px;
+        }
+        
+        .content {
+            padding: 0 30px 30px;
+        }
+        
+        /* Protocol information */
+        .protocol-section {
+            margin-bottom: 20px;
+        }
+        
+        .protocol-label {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .protocol-description {
+            font-size: 13px;
+            line-height: 1.5;
+            margin: 10px 0 20px;
+            color: #444;
+        }
+        
+        .standard-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+        }
+        
+        .standard-logo {
+            width: 24px;
+            height: 24px;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+        
+        .status-pill {
+            background-color: #e2f5e7;
+            color: #2e7d42;
+            padding: 6px 20px;
+            border-radius: 30px;
+            font-weight: 500;
+            font-size: 13px;
+            border: 1px solid #c0e6c9;
+        }
+        
+        /* Company info */
+        .company-container {
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .company-info {
+            flex: 2;
+        }
+        
+        .company-title {
+            font-weight: 700;
+            font-size: 16px;
+            margin-bottom: 18px;
+            color: #333;
+        }
+        
+        .company-details-row {
+            display: flex;
+            margin-bottom: 10px;
+        }
+        
+        .company-details-label {
+            width: 180px;
+            font-weight: 500;
+        }
+        
+        .progress-card {
+            flex: 1;
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-left: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            max-width: 210px;
+        }
+        
+        .progress-card-title {
+            font-weight: 600;
+            font-size: 15px;
+            margin-bottom: 15px;
+            text-align: center;
+            color: #444;
+        }
+        
+        .circle-progress-container {
+            position: relative;
+            width: 160px;
+            height: 160px;
+        }
+        
+        .circle-progress-bg {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 2px solid #eee;
+            position: absolute;
+        }
+        
+        .circle-progress-fill {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            position: absolute;
+            clip: rect(0px, 160px, 160px, 80px);
+        }
+        
+        .circle-progress-fill.over50 {
+            clip: rect(auto, auto, auto, auto);
+        }
+        
+        .circle-progress-fill.over50 .fill {
+            clip: rect(0px, 80px, 160px, 0px);
+            background-color: #2e7d42;
+        }
+        
+        .fill {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            position: absolute;
+            clip: rect(0px, 80px, 160px, 0px);
+            background-color: #2e7d42;
+            transform: rotate(234deg); /* 65% = 234 degrees */
+        }
+        
+        .circle-progress-value {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 32px;
+            font-weight: 700;
+            color: #333;
+        }
+        
+        /* Progress circles */
+        .progress-container {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .main-progress {
+            flex: 1;
+            background-color: #f5f5f5;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .main-progress-title {
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #555;
+        }
+        
+        .circle-progress {
+            width: 160px;
+            height: 160px;
+            margin: 0 auto;
+            position: relative;
+        }
+        
+        .progress-svg {
+            width: 100%;
+            height: 100%;
+            transform: rotate(-90deg);
+        }
+        
+        .progress-circle-bg {
+            fill: none;
+            stroke: #e0e0e0;
+            stroke-width: 8;
+        }
+        
+        .progress-circle-fill {
+            fill: none;
+            stroke-width: 8;
+            stroke-linecap: round;
+        }
+        
+        .environmental-fill { stroke: #FFB443; }
+        .social-fill { stroke: #00BD73; }
+        .governance-fill { stroke: #F03737; }
+        
+        .progress-value {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 28px;
+            font-weight: 700;
+        }
+        
+        .environmental-value { color: #1E1E1E; }
+        .social-value { color: #1E1E1E; }
+        .governance-value { color: #1E1E1E; }
+        
+        /* Progress categories */
+        .progress-categories {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .progress-category {
+            flex: 1;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .progress-category.environmental {
+            background-color: #e8f5e9;
+        }
+        
+        .progress-category.social {
+            background-color: #e3f2fd;
+        }
+        
+        .progress-category.governance {
+            background-color: #fff3e0;
+        }
+        
+        .category-title {
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #555;
+        }
+        
+        /* Chart section */
+        .chart-section {
+            margin: 20px 0;
+            page-break-inside: avoid;
+        }
+        
+        .chart-title {
+            font-weight: 600;
+            font-size: 15px;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        
+        .chart-legend {
+            display: flex;
+            justify-content: flex-end;
+            gap: 20px;
+            margin-bottom: 10px;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            font-size: 13px;
+        }
+        
+        .legend-color {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 6px;
+        }
+        
+        .legend-environmental { background-color: #4caf50; }
+        .legend-social { background-color: #2196f3; }
+        .legend-governance { background-color: #ff9800; }
+        
+        .chart-container {
+            position: relative;
+            height: auto;
+            background-color: #fff;
+            border-radius: 8px;
+            border: 1px solid #eee;
+            padding: 20px;
+            box-sizing: border-box;
+            margin-bottom: 20px;
+        }
+
+        .chart-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+        }
+
+        @media print {
+            .chart-section {
+                break-inside: avoid;
+            }
+            
+            .chart-container {
+                break-inside: avoid;
+                page-break-inside: avoid;
+            }
+        }
+        
+        /* Key Issues & Goals */
+        .key-issues-section {
+            margin-top: 30px;
+        }
+        
+        .section-title {
+            display: flex;
+            align-items: center;
+            font-weight: 600;
+            font-size: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .green-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #4caf50;
+            border-radius: 50%;
+            margin-left: 8px;
+        }
+        
+        .category-card {
+            margin-bottom: 25px;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .category-card.environmental {
+            background-color: #f4fbf5;
+        }
+        
+        .category-card.social {
+            background-color: #f0f8ff;
+        }
+        
+        .category-progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background-color: #f0f0f0;
+        }
+        
+        .category-title {
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .progress-bar-container {
+            display: flex;
+            align-items: center;
+        }
+        
+        .progress-bar {
+            width: 150px;
+            height: 8px;
+            background-color: #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-right: 10px;
+        }
+        
+        .progress-bar-fill {
+            height: 100%;
+        }
+        
+        .progress-bar-fill.environmental {
+            background-color: #4caf50;
+        }
+        
+        .progress-bar-fill.social {
+            background-color: #2196f3;
+        }
+        
+        .progress-bar-fill-success {
+            background-color: #2e7d42; /* green */
+        }
+        .progress-bar-fill-warning {
+            background-color: #ff9800; /* orange */
+        }
+        .progress-bar-fill-error {
+            background-color: #f44336; /* red */
+        }
+        
+        /* Tables */
+        .issues-table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #f9f9f9;
+        }
+        
+        .issues-table th {
+            background-color: #e0e0e0;
+            color: #333;
+            font-weight: 600;
+            padding: 10px 15px;
+            text-align: left;
+        }
+        
+        .issues-table td {
+            padding: 10px 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .goals-table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #fff;
+            margin-bottom: 20px;
+        }
+        
+        .goals-table th {
+            background-color: #f0f0f0;
+            color: #333;
+            font-weight: 600;
+            padding: 10px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .goals-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+            font-size: 13px;
+        }
+        
+        .table-progress-bar {
+            width: 80px;
+            height: 8px;
+            background-color: #e0e0e0;
+            border-radius: 4px;
+            display: inline-block;
+            margin-right: 6px;
+            vertical-align: middle;
+            overflow: hidden;
+        }
+        
+        .table-progress-fill {
+            height: 100%;
+            background-color: #ffc107;
+        }
+        
+        .table-progress-fill-success { background-color: #2e7d42; }
+        .table-progress-fill-warning { background-color: #ff9800; }
+        .table-progress-fill-error { background-color: #f44336; }
+        
+        .avatar {
+            position: absolute;
+            bottom: 60px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 2px solid #fff;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        
+        /* Footer */
+        .footer {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 30px;
+            border-top: 1px solid #eee;
+            color: #666;
+            font-size: 13px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="report-page">
+        <div class="header">
+            <img src="data:image/svg+xml;base64,<%= logoBase64 %>" alt="Dimitra Logo" class="logo">
+            <div class="report-title-container">
+                <div class="report-title">ESG SUSTAINABILITY GUIDE REPORT</div>
+            </div>
+        </div>
+        
+        <div class="content">
+            <div class="protocol-section">
+                <div class="protocol-label">Sustainability Guide:</div>
+                <div><%= protocol.title %></div>
+                
+                <div class="protocol-label" style="margin-top: 15px;">Description:</div>
+                <div class="protocol-description">
+                    <%= protocol.description %>
+                </div>
+                
+                <div class="standard-row">
+                    <div>
+                        <span class="protocol-label">Sustainability Guide Standard:</span>
+                        <% if (protocol.esgStandard) { %>
+                            <img src="<%= sealBase64 %>" class="standard-logo" alt="European Standard">
+                        <% } %>
+                        <%= protocol.esgStandard?.title || 'N/A' %>
+                    </div>
+                    <div>
+                        <span class="protocol-label">Status:</span>
+                        <span class="status-pill"><%= protocol.isActive ? 'Active' : 'Inactive' %></span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="company-container">
+                <div class="company-info">
+                    <div class="company-title"><%= protocol.title %></div>
+                    <div class="company-details-row">
+                        <div class="company-details-label">Farmers:</div>
+                        <div><%= protocol.farmersCount || 0 %></div>
+                    </div>
+                    <div class="company-details-row">
+                        <div class="company-details-label">Farms:</div>
+                        <div><%= protocol.farmsCount || 0 %></div>
+                    </div>
+                    <div class="company-details-row">
+                        <div class="company-details-label">Total Goals:</div>
+                        <div><%= protocol.totalEsgGoals || 0 %></div>
+                    </div>
+                    <div class="company-details-row">
+                        <div class="company-details-label">Evidence Uploaded:</div>
+                        <div><%= protocol.evidenceUploaded || 0 %> files</div>
+                    </div>
+                    <div class="company-details-row">
+                        <div class="company-details-label">Start Date:</div>
+                        <div><%= protocol.formattedStartDate %></div>
+                    </div>
+                    <div class="company-details-row">
+                        <div class="company-details-label">Deadline:</div>
+                        <div><%= protocol.formattedDeadlineDate %></div>
+                    </div>
+                </div>
+                
+                <div class="progress-card">
+                    <h3>ESRS Sustainability Guide Progress</h3>
+                    <div class="circle-progress">
+                        <svg class="progress-svg">
+                            <circle class="progress-circle-bg" cx="80" cy="80" r="70"></circle>
+                            <circle class="progress-circle-fill environmental-fill" 
+                                    cx="80" cy="80" r="70" 
+                                    stroke-dasharray="<%= circleDashArrays.Overall %>"
+                                    stroke-dashoffset="<%= circleOffsets.Overall %>"></circle>
+                        </svg>
+                        <div class="progress-value environmental-value"><%= protocolScore.Overall || 0 %>%</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="progress-categories">
+                <div class="progress-category environmental">
+                    <div class="category-title">Environmental Progress</div>
+                    <div class="circle-progress" style="width: 120px; height: 120px; margin: 0 auto;">
+                        <svg class="progress-svg">
+                            <circle class="progress-circle-bg" cx="60" cy="60" r="50"></circle>
+                            <circle class="progress-circle-fill environmental-fill" 
+                                    cx="60" cy="60" r="50" 
+                                    stroke-dasharray="<%= circleDashArrays.Environmental %>"
+                                    stroke-dashoffset="<%= circleOffsets.Environmental %>"></circle>
+                        </svg>
+                        <div class="progress-value environmental-value" style="font-size: 22px;"><%= protocolScore.Environmental || 0 %>%</div>
+                    </div>
+                </div>
+                <div class="progress-category social">
+                    <div class="category-title">Social Progress</div>
+                    <div class="circle-progress" style="width: 120px; height: 120px; margin: 0 auto;">
+                        <svg class="progress-svg">
+                            <circle class="progress-circle-bg" cx="60" cy="60" r="50"></circle>
+                            <circle class="progress-circle-fill social-fill" 
+                                    cx="60" cy="60" r="50" 
+                                    stroke-dasharray="<%= circleDashArrays.Social %>"
+                                    stroke-dashoffset="<%= circleOffsets.Social %>"></circle>
+                        </svg>
+                        <div class="progress-value social-value" style="font-size: 22px;"><%= protocolScore.Social || 0 %>%</div>
+                    </div>
+                </div>
+                <div class="progress-category governance">
+                    <div class="category-title">Governance Progress</div>
+                    <div class="circle-progress" style="width: 120px; height: 120px; margin: 0 auto;">
+                        <svg class="progress-svg">
+                            <circle class="progress-circle-bg" cx="60" cy="60" r="50"></circle>
+                            <circle class="progress-circle-fill governance-fill" 
+                                    cx="60" cy="60" r="50" 
+                                    stroke-dasharray="<%= circleDashArrays.Governance %>"
+                                    stroke-dashoffset="<%= circleOffsets.Governance %>"></circle>
+                        </svg>
+                        <div class="progress-value governance-value" style="font-size: 22px;"><%= protocolScore.Governance || 0 %>%</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="chart-section">
+                <div class="chart-container">
+                    <img src="data:image/png;base64,<%= chartImageBase64 %>" alt="ESG Progress Chart" style="width: 100%; height: 100%; object-fit: contain; display: block;">
+                </div>
+            </div>
+
+            <div class="key-issues-section">
+                <div class="section-title">
+                    Key Topics & Goals <span class="green-dot"></span>
+                </div>
+                <% protocol.esgIssues.forEach(function(issue) { %>
+                    <div class="category-card <%= issue.type ? issue.type.toLowerCase() : '' %>">
+                        <div class="category-progress-header">
+                            <div class="category-title"><%= issue.type %></div>
+                            <div class="progress-bar-container">
+                                <div class="progress-bar">
+                                    <div class="progress-bar-fill 
+                                        <%= (protocolScore[issue.type] || 0) >= 75 ? 'progress-bar-fill-success' : 
+                                            (protocolScore[issue.type] || 0) >= 50 ? 'progress-bar-fill-warning' : 
+                                            'progress-bar-fill-error' %>" 
+                                        style="width: <%= protocolScore[issue.type] || 0 %>%;"></div>
+                                </div>
+                                <span><%= protocolScore[issue.type] || 0 %>%</span>
+                            </div>
+                        </div>
+                        <table class="issues-table">
+                            <thead>
+                                <tr>
+                                    <th>Topics</th>
+                                    <th style="width: 150px;">Progress</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><%= issue.title %></td>
+                                    <td>
+                                        <div class="table-progress-bar">
+                                            <div class="table-progress-fill 
+                                                <%= (issue.progress || 0) >= 75 ? ' table-progress-fill-success' : 
+                                                    (issue.progress || 0) >= 50 ? ' table-progress-fill-warning' : 
+                                                        ' table-progress-fill-error' %>" style="width: <%= issue.progress || 0 %>%;"></div>
+                                        </div>
+                                        <%= issue.progress || 0 %>%
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <% if (issue.esgGoals && issue.esgGoals.length) { %>
+                            <table class="goals-table">
+                                <thead>
+                                    <tr>
+                                        <th>Goals</th>
+                                        <th style="width: 120px;">Target Year</th>
+                                        <th style="width: 120px;">Progress</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% issue.esgGoals.forEach(function(goal) { %>
+                                        <tr>
+                                            <td><%= goal.title %></td>
+                                            <td align="center"><%= goal.targetYears || '' %></td>
+                                            <td>
+                                                <div class="table-progress-bar">
+                                                    <div class="table-progress-fill
+                                                        <%= (goal.progress || 0) >= 75 ? ' table-progress-fill-success' : 
+                                                            (goal.progress || 0) >= 50 ? ' table-progress-fill-warning' : 
+                                                        ' table-progress-fill-error' %>" style="width: <%= goal.progress || 0 %>%;"></div>
+                                                </div>
+                                                <%= goal.progress || 0 %>%
+                                            </td>
+                                        </tr>
+                                    <% }) %>
+                                </tbody>
+                            </table>
+                        <% } %>
+                    </div>
+                <% }) %>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,133 @@
+module.exports = {
+    spanishTranslation: {
+
+        // Land and Soil Preparation
+        "Área (m2)": "Area (m2)",
+        "Tipo/método de vivero": "Nursery type/method",
+        "Material de siembra y tasa de siembra por ha (kg/ha)": "Planting material and planting rate per ha (kg/ha)",
+        "Tratamiento de material de siembra": "Planting material treatment",
+        "Fecha de siembra/plantación": "Date of sowing / planting",
+        "Método de siembra/plantación": "Sowing / planting method",
+        "Insumos orgánicos (kg/ha)": "Organic inputs (kg/ha)",
+        "Manejo de fertilizantes (kg)": "Fertilizer management (kg)",
+        "Riego (total en mm)": "Irrigation (total in mm)",
+        "Deshierbe": "Weeding",
+        "Fecha de Trasplante (Días después de la Siembra)": "Date of transplanting (Days after Sowing)",
+        "Ventana de preparación del terreno": "Land preparation window",
+        "Actividades de preparación del suelo/tierra": "Soil/Land preparation activities",
+        
+        // Sowing 
+        "Sistema de cultivo (cultivo intercalado/rotación de cultivos)": "Cropping system (intercropping/crop rotation)",
+        "Requerimientos climáticos de un cultivo": "Climatic requirements of a crop",
+        "Ventanas de plantación/siembra": "Planting/Sowing windows",
+        "material de siembra": "Planting material",
+        "Tasa de siembra por hectárea": "Planting rate per hectare",
+        "Tratamiento de material de siembra": "Planting material treatment",
+        "Método de siembra/plantación": "Sowing / Planting method",
+        "Distancia entre hileras de plantas ( cultivo de campo: cm , Cultivo de árboles: m )": "Plant row spacing (field crop: cm, Tree crop: m)",
+        "Distancia entre plantas en hilera ( cultivo de campo: cm , Cultivo de árboles: m )": "In-row plant spacing  (field crop: cm, Tree crop: m)",
+        "Densidad de población de plantas por ha": "Plant population density per ha",
+        "Profundidad de siembra (cm)": "Planting depth (cm)",
+        "Tamaño del hoyo de plantación (largo x ancho x profundidad) (m) (cultivo de árboles solamente)": "Planting pit size (length x breadth x depth) (m)\n(Tree crop only)",
+
+        // Soil Management
+        "Tipo de suelo": "Soil type",
+        "Estado de salud del suelo": "Soil health status",
+        "pH (número)": "pH (number)",
+        "Carbono orgánico del suelo (%)": "Soil Organic Carbon (%)",
+        "Nitrógeno (kg/ha)": "Nitrogen (kg/ha)",
+        "Fósforo (kg/ha)": "Phosphorus (kg/ha)",
+        "Potasio (kg/ha)": "Potassium (kg/ha)",
+        "Otros nutrientes (ppm)": "Other nutrients (ppm)",
+        "Insumos orgánicos ( Cultivos extensivos: ton/ha , Cultivos arbóreos: kg/árbol )": "Organic inputs (Field crops: tonnes/ha, Tree crops: kg/tree)",
+        "Tasa de fertilizante nitrogenado ( Cultivos extensivos: kg N/ha , Cultivos arbóreos: g N/árbol/año)": "Nitrogen fertilizer rate (Field crops: kg N/ha, Tree crops: g N/tree/year)",
+        "Tasa de fertilizante de fósforo ( Cultivos de campo: kg P2O5/ha , Cultivos arbóreos: g P2O5/árbol/año )": "Phosphorus fertilizer rate (Field crops: kg P2O5/ha, Tree crops: g P2O5/tree/year)",
+        "Tasa de fertilizante de potasio ( Cultivos extensivos: kg K2O/ha , Cultivos arbóreos: kg K2O/árbol/año )": "Potassium fertilizer rate (Field crops: kg K2O/ha, Tree crops: kg K2O/tree/year)",
+        "otros nutrientes tasa de fertilizante ( Cultivos extensivos: kg/ha , Cultivos arbóreos: kg nutrientes/árbol/año )": "other nutrients fertilizer rate (Field crops: kg/ha, Tree crops: kg nutrients/tree/year)",
+
+        // Irrigation
+        "Calendario/frecuencia de riego": "Irrigation schedule/frequency",
+        "Tipo de riego": "Type of irrigation",
+        "Fecha y etapa de riego (puede ser >1)": "Date and stage of irrigation  (can be >1)",
+        "Cantidad de agua utilizada para riego (mm)": "Quantity of water used for irrigation (mm)",
+
+        // Weeding
+        "Fecha de aclareo y método (solo cultivo extensivo)": "Date of thinning and method (field crop only)",
+        "Fecha de rellenado y método (solo cultivo extensivo)": "Date of gapfilling and method (field crop only)",
+        "Fecha de deshierbe (> 1)": "Date of weeding (> 1)",
+        "Etapas de deshierbe (>1)": "Weeding stages (>1)",
+        "Cultural/ Mecánica/ Manual/ Biológica": "Cultural/ Mechanical/ Manual/ Biological",
+        "Herbicida utilizado": "Herbicide used",
+        "Dosis/tasa de herbicida (litros/kg por ha)": "Herbicide dose/rate (litres/kg per ha)",
+        "Método de aplicación de herbicida": "Herbicide application method",
+
+        // Harvesting
+        "Método de recolección": "Harvesting method",
+        "Pérdida de rendimiento (%)": "Yield loss (%)",
+        "Motivo de la pérdida de rendimiento": "Reason for yield loss",
+        
+
+        // Storage
+        "Número de días después de la cosecha": "Number of days after harvesting",
+        "Proceso/método de almacenamiento": "Storage process/method",
+        "Tipo de almacenamiento": "Type of storage",
+        "Temperatura de almacenamiento (celsius)": "Temperature for storage (celsius)",
+
+        // Special Operation
+        "Reguladores de crecimiento": "Growth regulators",
+        "replanteo": "Staking",
+        "Desfloración temprana": "Early Deblossoming",
+        "Formación y poda": "Training And Pruning",
+        "apuntalando": "Propping",
+        "puesta a tierra": "Earthing up",
+        "Capacitación": "Training",
+        "Poda": "Pruning",
+        "Poda de tocones o de cuello:": "Stumping or Collar pruning:",
+        "Retoque / Poda de cuello:": "Stumping / Collar pruning:",
+
+        // Pest
+        "tolva de mango ( Idioscopus clypealis )": "Mango Hopper (Idioscopus clypealis)",
+        "Chinche harinosa del mango ( Drosicha mangiferae )": "Mango Mealy Bug (Drosicha mangiferae)",
+        "Corteza de mango comiendo oruga ( Indarbela quadrinotata)": "Mango Bark Eating Caterpillar (Indarbela quadrinotata)",
+        "Mosca de la fruta del mango: Bactrocera dorsalis": "Mango fruit fly: Bactrocera dorsalis ",
+        "Inflorescencia Midge: Erosomyia mangiferae": "Inflorescence Midge: Erosomyia mangiferae",
+        "Barrenador del tallo del mango: Batocera rufomaculata": "Mango stem borer: Batocera rufomaculata",
+        "Gorgojo de la semilla del mango: Sternochaetus mangiferae,": "Mango seed weevil: Sternochaetus mangiferae,",
+        "Hoja de Mango Webber: Orthaga exvinacea": "Mango Leaf Webber: Orthaga exvinacea",
+        "Brote de mango agalla psila: Apsylla cistellata": "Mango shoot gall psylla: Apsylla cistellata",
+        "pulgón lanudo": "Wooly Aphid",
+        "Barrenador de entrenudos": "Internode Borer",
+        "Cochinilla": "Mealybug",
+        "Barrenador temprano": "Early shoot borer",
+        "mosca del tallo": "Stem fly",
+        "barrenador de la vaina": "Pod borer",
+        "mosca blanca": "White fly",
+        "gusano cogollero": "Armyworm",
+        "oruga peluda": "Hairy caterpillar",
+        "Barrenador del café": "Coffee berry borer",
+        "Barrenador blanco del tallo del café": "Coffee White stem borer",
+        "Barrenador de café Shot": "Coffee Shot hole borer",
+        "Barrenador rojo del café": "Coffee Red borer",
+
+        // Disease
+        "Oídio: Oidio mangifera": "Powdery Mildew: Oidium mangifera",
+        "Antracnosis: Colletotrichum gloeosporioides": "Anthracnose: Colletotrichum gloeosporioides ",
+        "Malformación del mango: Fusarium moliliforme": "Mango malformation: Fusarium moliliforme ",
+        "Cancro bacteriano: Xanthomonas campestris": "Bacterial Canker: Xanthomonas campestris",
+        "Muerte regresiva del mango: Lasiodiplodia theobromae": "Mango Dieback: Lasiodiplodia theobromae",
+        "Tizón de Phoma: Phoma glomerata": "Phoma Blight: Phoma glomerata",
+        "Mango Negro Punta": "Mango Black Tip",
+        "enfermedad de la hoja amarilla": "Yellow leaf disease",
+        "podredumbre roja": "Red rot",
+        "Pudrición de sedimentos": "Sett rot",
+        "Tizón": "Smut",
+        "Roya de soja": "Soybean Rust",
+        "Mosaico de soja": "Soybean Mosaic",
+        "Tizón bacteriano": "Bacterial blight",
+        "Podredumbre parda del tallo de la soja": "Soybean brown stem rot",
+        "Roya de la hoja de café": "Coffee Leaf rust",
+        "Mancha de bayas de café": "Coffee  Berry blotch",
+        "Mancha foliar cercospora del café": "Coffee cercospora leaf spot",
+        "Antracnosis del Café": "Coffee Anthracnose",
+    }
+}

@@ -1,0 +1,988 @@
+'use strict';
+const path = require("path");
+let jsonData = [
+  {
+    "english": "Holes on leaves/fruits/grain",
+    "hindi": "पत्तियों/फलों/अनाज पर छेद",
+    "marathi": "पाने/फळे/धान्य वर छिद्र",
+    "nepali": "पातहरू / फलहरू / अन्नमा प्वालहरू",
+    "spanish": "Agujeros en hojas/frutas/grano"
+  },
+  {
+    "english": "Rolled and curled leaves",
+    "hindi": "लुढ़क और कर्ल किए गए पत्ते",
+    "marathi": "गुंडाळलेली आणि कुरळे पाने",
+    "nepali": "रोल र घुमाउरो पातहरू",
+    "spanish": "Hojas enrolladas y rizadas"
+  },
+  {
+    "english": "Dead shoots",
+    "hindi": "मृत शूटिंग",
+    "marathi": "मृत शूट",
+    "nepali": "मृत धारमा",
+    "spanish": "Brotes muertos"
+  },
+  {
+    "english": "Stunted/poor growth",
+    "hindi": "स्टंटेड/खराब वृद्धि",
+    "marathi": "स्टंट्ड/खराब वाढ",
+    "nepali": "आश्चर्यजनक / गरीब वृद्धि",
+    "spanish": "Crecimiento atrofiado/pobre"
+  },
+  {
+    "english": "Distorted plants/leaves",
+    "hindi": "विकृत पौधे/पत्तियां",
+    "marathi": "विकृत झाडे/पाने",
+    "nepali": "विकृत प्लान्ट / पातहरू",
+    "spanish": "Plantas/hojas distorsionadas"
+  },
+  {
+    "english": "Plant wilting",
+    "hindi": "संयंत्र",
+    "marathi": "प्लांट विल्टिंग",
+    "nepali": "बिरूवा झिंगा",
+    "spanish": "Malaba de planta"
+  },
+  {
+    "english": "Irregular and chewed leaves/stems",
+    "hindi": "अनियमित और चबाया हुआ पत्ते/तने",
+    "marathi": "अनियमित आणि चघळलेली पाने/देठ",
+    "nepali": "अनियमित र चबाई पातहरू / डाँठहरू",
+    "spanish": "Hojas/tallos irregulares y masticados"
+  },
+  {
+    "english": "Dying of the new leaves",
+    "hindi": "नई पत्तियों से मरना",
+    "marathi": "नवीन पाने मरत आहेत",
+    "nepali": "नयाँ पातहरूको मर्ने",
+    "spanish": "Muriendo de las nuevas hojas"
+  },
+  {
+    "english": "Presence of larvae",
+    "hindi": "लार्वा की उपस्थिति",
+    "marathi": "अळ्याची उपस्थिती",
+    "nepali": "लार्भाको उपस्थिति",
+    "spanish": "Presencia de larvas"
+  },
+  {
+    "english": "Presence of droppings",
+    "hindi": "बूंदों की उपस्थिति",
+    "marathi": "विष्ठेची उपस्थिती",
+    "nepali": "ड्रप अपको उपस्थिति",
+    "spanish": "Presencia de excrementos"
+  },
+  {
+    "english": "Weak stems",
+    "hindi": "कमजोर उपजी",
+    "marathi": "कमकुवत देठ",
+    "nepali": "कमजोरका डाँठहरू",
+    "spanish": "Tallos débiles"
+  },
+  {
+    "english": "Presence of webs",
+    "hindi": "जाले की उपस्थिति",
+    "marathi": "वेबची उपस्थिती",
+    "nepali": "वेबहरूको उपस्थिति",
+    "spanish": "Presencia de redes"
+  },
+  {
+    "english": "Weak roots",
+    "hindi": "कमजोर जड़ें",
+    "marathi": "कमकुवत मुळे",
+    "nepali": "कमजोर जरा",
+    "spanish": "Raíces débiles"
+  },
+  {
+    "english": "Shoot and capsule borer",
+    "hindi": "शूट और कैप्सूल बोरर",
+    "marathi": "शूट आणि कॅप्सूल बोरर",
+    "nepali": "शुट र क्याप्सुल बोरर",
+    "spanish": "Borador de disparos y cápsula"
+  },
+  {
+    "english": "Aphids",
+    "hindi": "एफिड्स",
+    "marathi": "Ph फिडस्",
+    "nepali": "Aphids",
+    "spanish": "Pulgón"
+  },
+  {
+    "english": "Shoot fly",
+    "hindi": "गोली चलाना",
+    "marathi": "शूट फ्लाय",
+    "nepali": "उड्नु",
+    "spanish": "Volar"
+  },
+  {
+    "english": "Cassava Green Mite (Mononychellus tanajoa)\\r\\n",
+    "hindi": "कसावा ग्रीन माइट (मोनोनीचेलस तनाजोआ) \\ r \\ n",
+    "marathi": "कासावा ग्रीन माइट (मोनोनीचेलस तानाजो)",
+    "nepali": "Cassa हरियो MITE (MARINCHELELUS Tanajoa) \\ r \\ n",
+    "spanish": "Cassava Green Mite (Mononychellus tanajoa) \\ r \\ n"
+  },
+  {
+    "english": "Cassava mealy bug",
+    "hindi": "कसावा मेली बग",
+    "marathi": "कासावा मेली बग",
+    "nepali": "Casaava इटाली बग",
+    "spanish": "Insecto de yesava"
+  },
+  {
+    "english": "Whitefly (Aleurodicus dispersus)\\r\\n",
+    "hindi": "व्हाइटफ्लाई (एलेरोडिकस डिस्पर्सस) \\ r \\ n",
+    "marathi": "व्हाइटफ्लाय (अलेरोडिकस डिस्पेअर्सस) \\ r \\ n",
+    "nepali": "सेतोफ्लै (एलेडडिकस आउटपरस्टस) \\ r \\ n",
+    "spanish": "Whitefly (Aleurodicus dispersus) \\ r \\ n"
+  },
+  {
+    "english": "variegated cricket (Zonocerus variegatus)",
+    "hindi": "variegated क्रिकेट (Zonocerus variegatus)",
+    "marathi": "व्हेरिगेटेड क्रिकेट (झोनोसेरस व्हेरिएगॅटस)",
+    "nepali": "विविध क्रिकेट (Zonocerus veriegatus)",
+    "spanish": "Cricket abigarrado (Zonocerus variegatus)"
+  },
+  {
+    "english": "Nematodes",
+    "hindi": "नेमाटोड",
+    "marathi": "नेमाटोड्स",
+    "nepali": "नेमाटोडहरू",
+    "spanish": "Nematodos"
+  },
+  {
+    "english": "Cut worms",
+    "hindi": "कीड़े को काटें",
+    "marathi": "जंत कट करा",
+    "nepali": "गँड्यौला काट",
+    "spanish": "Gusanos cortar"
+  },
+  {
+    "english": "Quinoa moth",
+    "hindi": "क्विनोआ मोथ",
+    "marathi": "क्विनोआ मॉथ",
+    "nepali": "क्विनोमा पतंग",
+    "spanish": "Polilla de quinua"
+  },
+  {
+    "english": "Leaf miner files",
+    "hindi": "लीफ माइनर फाइलें",
+    "marathi": "लीफ खाण कामगार फायली",
+    "nepali": "पात खानी फाइलहरू",
+    "spanish": "Archivos mineros de hoja"
+  },
+  {
+    "english": "Rice Stem borer",
+    "hindi": "चावल स्टेम बोरर",
+    "marathi": "तांदूळ स्टेम बोरर",
+    "nepali": "चामल स्टेम बोरर",
+    "spanish": "Barrenador de tallo de arroz"
+  },
+  {
+    "english": "Rice Hispa",
+    "hindi": "चावल हिस्पा",
+    "marathi": "तांदूळ हिस्पा",
+    "nepali": "चामल हेरोपा",
+    "spanish": "Arroz hispa"
+  },
+  {
+    "english": "Safflower aphid",
+    "hindi": "कुस्फ्लॉवर एफिड",
+    "marathi": "केशर ph फिड",
+    "nepali": "सलाफिभर एफिड",
+    "spanish": "Áfido de cártamo"
+  },
+  {
+    "english": "Safflower Gram pod borer/ Capsule borer: Helicoverpa armigera",
+    "hindi": "कुस्फ्लॉवर ग्राम पॉड बोरर/ कैप्सूल बोरर: हेलीकॉवरपा आर्मिगेरा",
+    "marathi": "केशर",
+    "nepali": "सलाफ्लार ग्रावा पोयर बोर्नर / क्याप्सुलर बोरर: हेलीओस्पेनपाको आर्मगेरेरा",
+    "spanish": "ASFAFORADOR GRAM POD Borer/ Cápsula Borer: Helicoverpa Armigera"
+  },
+  {
+    "english": "Safflower caterpillar: Perigaea capensis",
+    "hindi": "सैफलावर कैटरपिलर: पेरिगा कैपेंसिस",
+    "marathi": "केशर सुरवंट: पेरिगिया कॅपेन्सिस",
+    "nepali": "सलाफ्लार क्याटरपिलर: Perigaeea केपेन्स",
+    "spanish": "Caterpilar de cártamo: Perigaea capensis"
+  },
+  {
+    "english": "safflower bud flyCapsule fly/: Acanthiophilus helianthi",
+    "hindi": "कुस्फ्लॉवर बड फ्लाईकैप्सस फ्लाई/: एसेंथियोफिलस हेलियनथी",
+    "marathi": "केफ्लॉवर बड फ्लाइकॅप्सूल फ्लाय/: ananthiophilus helianthii",
+    "nepali": "सलाफ्लाभर कलीवित फ्लीक्स्केप्स फ्लाई /: Acanthiophilus हेलसिनस",
+    "spanish": "Camiseta de cajas de cáramo Flycapsule/: Acanthiophilus Helianthi"
+  },
+  {
+    "english": "Stem fly",
+    "hindi": "स्टेम फ्लाई",
+    "marathi": "स्टेम फ्लाय",
+    "nepali": "डाँठ उड",
+    "spanish": "Mosca"
+  },
+  {
+    "english": "Pod borer",
+    "hindi": "पॉड बोरर",
+    "marathi": "पॉड बोरर",
+    "nepali": "पोड बोरर",
+    "spanish": "Perforador"
+  },
+  {
+    "english": "White fly",
+    "hindi": "सफेद मक्खी",
+    "marathi": "पांढरा माशी",
+    "nepali": "सेतो उड",
+    "spanish": "Mosca blanca"
+  },
+  {
+    "english": "Pyrilla",
+    "hindi": "पाइराला",
+    "marathi": "पायरिल्ला",
+    "nepali": "पाइला",
+    "spanish": "Pirilla"
+  },
+  {
+    "english": "Wooly Aphid",
+    "hindi": "ऊनी",
+    "marathi": "वूली ph फिड",
+    "nepali": "ऊनी एफिड",
+    "spanish": "Pulgón lanudo"
+  },
+  {
+    "english": "Borer",
+    "hindi": "बरमा",
+    "marathi": "बोरर",
+    "nepali": "Bra",
+    "spanish": "Taladrador"
+  },
+  {
+    "english": "White grub",
+    "hindi": "सफेद ग्रब",
+    "marathi": "पांढरा ग्रब",
+    "nepali": "सेतो ग्रब",
+    "spanish": "Comida blanca"
+  },
+  {
+    "english": "Early shoot borer",
+    "hindi": "अर्ली शूट बोरर",
+    "marathi": "लवकर शूट बोरर",
+    "nepali": "प्रारम्भिक शून्य बोरर",
+    "spanish": "Barrenador de brotes temprano"
+  },
+  {
+    "english": "Termites",
+    "hindi": "दीमक",
+    "marathi": "Valvi",
+    "nepali": "दीमकहरू",
+    "spanish": "Termitas"
+  },
+  {
+    "english": "Whiteflies",
+    "hindi": "व्हाइटफ्लिस",
+    "marathi": "व्हाइटफ्लायज",
+    "nepali": "सेतोफ्लाइज",
+    "spanish": "Moscas blancas"
+  },
+  {
+    "english": "Mealybug",
+    "hindi": "आटे का बग",
+    "marathi": "मेलीबग",
+    "nepali": "Meallebug",
+    "spanish": "Cochinilla"
+  },
+  {
+    "english": "Grasshopper",
+    "hindi": "टिड्डी",
+    "marathi": "ग्रासॉपर",
+    "nepali": "फट्याड़ग्रो",
+    "spanish": "Saltamontes"
+  },
+  {
+    "english": "Tea mites and spider mites",
+    "hindi": "चाय के कण और मकड़ी के कण",
+    "marathi": "चहा माइट्स आणि कोळी माइट्स",
+    "nepali": "चिया मिट्स र माकुरो-माइट्स",
+    "spanish": "Té ácaros y ácaros"
+  },
+  {
+    "english": "Tea Cutworms",
+    "hindi": "चाय के कटवर्म",
+    "marathi": "चहा कटवर्म्स",
+    "nepali": "चिया ट्याबवर्स",
+    "spanish": "Lombrices de té"
+  },
+  {
+    "english": "Tea Crickets",
+    "hindi": "चाय क्रिकेट्स",
+    "marathi": "चहा क्रिकेट्स",
+    "nepali": "चिया क्रिकेट",
+    "spanish": "Grillos de té"
+  },
+  {
+    "english": "Tea mosquito bug",
+    "hindi": "चाय मच्छर बग",
+    "marathi": "चहा डास बग",
+    "nepali": "चिप लामखुट्टे बग बग",
+    "spanish": "Insecto de mosquito de té"
+  },
+  {
+    "english": "Tea Aphids",
+    "hindi": "चाय के कामों का",
+    "marathi": "चहा ids फिडस्",
+    "nepali": "चिया एफिडड्स",
+    "spanish": "Aphids de té"
+  },
+  {
+    "english": "Tea Termites",
+    "hindi": "चाय दीमक",
+    "marathi": "चहा दीमक",
+    "nepali": "चिया टर्मिट्स",
+    "spanish": "Termitas de té"
+  },
+  {
+    "english": "Tea Black tea thrips",
+    "hindi": "चाय काली चाय थ्रिप्स",
+    "marathi": "चहा ब्लॅक टी थ्रिप्स",
+    "nepali": "चिया कालो चिया चलिस",
+    "spanish": "Thrips de té negro de té"
+  },
+  {
+    "english": "Tea Scales",
+    "hindi": "चाय के तराजू",
+    "marathi": "चहा स्केल",
+    "nepali": "चियाको तराजु",
+    "spanish": "Escala de té"
+  },
+  {
+    "english": "Tea Nematodes",
+    "hindi": "चाय नेमाटोड्स",
+    "marathi": "चहा नेमाटोड्स",
+    "nepali": "चिया नेमाटोडहरू",
+    "spanish": "Nematodos de té"
+  },
+  {
+    "english": "Pink stem Borer",
+    "hindi": "गुलाबी स्टेम बोरर",
+    "marathi": "गुलाबी स्टेम बोरर",
+    "nepali": "गुलाबी स्टीम बोरर",
+    "spanish": "Barrenador de tallo rosa"
+  },
+  {
+    "english": "See DD here",
+    "hindi": "यहां देखें डीडी",
+    "marathi": "येथे डीडी पहा",
+    "nepali": "यहाँ DD हेर्नुहोस्",
+    "spanish": "Ver DD aquí"
+  },
+  {
+    "english": "Coffee berry borer (Hypothenemus hampei)",
+    "hindi": "कॉफी बेरी बोरर (हाइपोथेनेमस हैम्पी)",
+    "marathi": "कॉफी बेरी बोरर (हायपोथेनेमस हॅम्पेई)",
+    "nepali": "कफी बेरी बोरर (हाइपोटोनेमिनेमस हससी)",
+    "spanish": "Taladro blanco del café (Xylotrechus quadripes)"
+  },
+  {
+    "english": "Coffee White stem borer (Xylotrechus quadripes)",
+    "hindi": "कॉफी व्हाइट स्टेम बोरर (Xylotrechus Quadripes)",
+    "marathi": "कॉफी व्हाइट स्टेम बोरर (झिलोट्रॅकस क्वाड्रिप्स)",
+    "nepali": "कफि सेतो स्टीएम बोरर (XLETROTRERChus Qureprips)",
+    "spanish": "Barrenador blanco del tallo del café (Xylotrechus Quadripes)"
+  },
+  {
+    "english": "Coffee Shot hole borer: Xylosandrus compactus\\r\\n",
+    "hindi": "कॉफी शॉट होल बोरर: xylosandrus comactus \\ r \\ n",
+    "marathi": "कॉफी शॉट होल बोरर: xylosandrus कॉम्पॅक्टस \\ r \\ n",
+    "nepali": "कफि शट होली बोरर: Xlyosanderus Scractus \\ r \\ n",
+    "spanish": "Borer de agujero de tiro de café: Xylosandrus compactus \\ r \\ n"
+  },
+  {
+    "english": "Coffee Red borer: Zeuzera cof­feae (Cossidae: Lepidop­tera)",
+    "hindi": "कॉफी रेड बोरर: ज़ुजेरा कॉफ़ेई (कोसिडे: लेपिडोप्टेरा)",
+    "marathi": "कॉफी रेड बोरर: झ्यूझेरा कॉफी (कोसिडे: लेपिडोप्टेरा)",
+    "nepali": "कफी रेड बोर्नर: Zuezera कफेई (Cossida: लेपिडपेटेरा)",
+    "spanish": "Barrenador rojo del café: Zeuzzera Coffeae (Cossidae: Lepidoptera)"
+  },
+  {
+    "english": "Stem borer",
+    "hindi": "स्टेम बोरर",
+    "marathi": "स्टेम बोरर",
+    "nepali": "स्टेम बोरर",
+    "spanish": "Barrenador"
+  },
+  {
+    "english": "Fall armyworm",
+    "hindi": "आर्मीवॉर्म गिरना",
+    "marathi": "फॉल आर्मी किडे",
+    "nepali": "झर्ने फसवर्म",
+    "spanish": "Vombroso en el ejército de la caída"
+  },
+  {
+    "english": "Thrips",
+    "hindi": "एक प्रकार का कीड़ा",
+    "marathi": "थ्रीप्स",
+    "nepali": "ग्रस",
+    "spanish": "Trips"
+  },
+  {
+    "english": "Cassava Green Mite (Mononychellus tanajoa)\\n",
+    "hindi": "कसावा ग्रीन माइट (मोनोनीचेलस तनाजोआ) \\ n",
+    "marathi": "कासावा ग्रीन माइट (मोनोनीचेलस तानाजो) \\ n",
+    "nepali": "CASSA हरियो मोइट (Madiahellus Tanajoa) \\ n",
+    "spanish": "Cassava Green Mite (Mononychellus tanajoa) \\ n"
+  },
+  {
+    "english": "Whitefly (Aleurodicus dispersus)\\n",
+    "hindi": "व्हाइटफ्लाई (एलेरोडिकस डिस्पर्सस) \\ n",
+    "marathi": "व्हाइटफ्लाय (अलेरोडिकस डिस्परस) \\ n",
+    "nepali": "सेतोफ्लाइ (एलेडडिकस आउटपरस्टस) \\ n",
+    "spanish": "Whitefly (Aleurodicus dispersus) \\ n"
+  },
+  {
+    "english": "European Skipper",
+    "hindi": "यूरोपीय कप्तान",
+    "marathi": "युरोपियन कर्णधार",
+    "nepali": "युरोपेली कप्तान",
+    "spanish": "Patrón europeo"
+  },
+  {
+    "english": "Cereal rust mite adults",
+    "hindi": "अनाज जंग घुन वयस्क",
+    "marathi": "अन्नधान्य गंज माइट प्रौढ",
+    "nepali": "अनाज रस्ट MATE वयस्कहरू",
+    "spanish": "Cereal óxido ácaro adultos"
+  },
+  {
+    "english": "Wireworms",
+    "hindi": "वायरवॉर्म",
+    "marathi": "वायरवर्म्स",
+    "nepali": "तारवार्धकहरू",
+    "spanish": "Gusanos de alambre"
+  },
+  {
+    "english": "Grass hopper",
+    "hindi": "ग्रास हॉपर",
+    "marathi": "गवत हॉपर",
+    "nepali": "घाँस निशूर",
+    "spanish": "Tolva"
+  },
+  {
+    "english": "Onion Thrips",
+    "hindi": "प्याज थ्रिप्स",
+    "marathi": "कांदा थ्रिप्स",
+    "nepali": "प्याज थ्रिम्स",
+    "spanish": "Trips de cebolla"
+  },
+  {
+    "english": "Eriophyid mite",
+    "hindi": "घनत्व",
+    "marathi": "एरिओफाइड माइट",
+    "nepali": "Eriophiid मोइट",
+    "spanish": "Ácaro eriophyid"
+  },
+  {
+    "english": "Onion Maggot",
+    "hindi": "प्याज मैगोट",
+    "marathi": "कांदा मॅगगॉट",
+    "nepali": "प्याज म्यागगोट",
+    "spanish": "Cebolla de cebolla"
+  },
+  {
+    "english": "Earwig",
+    "hindi": "इयरविग",
+    "marathi": "इअरविग",
+    "nepali": "बिवविड",
+    "spanish": "Tijereta"
+  },
+  {
+    "english": "Internode Borer",
+    "hindi": "इंटेरोड बोरर",
+    "marathi": "इंटर्नोड बोरर",
+    "nepali": "EATEDDED BRER",
+    "spanish": "Perfilón"
+  },
+  {
+    "english": "Corm Weevil",
+    "hindi": "कोरम वेविल",
+    "marathi": "कॉर्म वेव्हिल",
+    "nepali": "Corme धीमान",
+    "spanish": "Cormo gorgojo"
+  },
+  {
+    "english": "Pseudostem Weevil",
+    "hindi": "छद्म वेविल",
+    "marathi": "स्यूडोस्टेम भुंगा",
+    "nepali": "Psedodistem Wevilil",
+    "spanish": "Pseudostem weevil"
+  },
+  {
+    "english": "Nematode",
+    "hindi": "निमेटोड",
+    "marathi": "नेमाटोड",
+    "nepali": "Nematide",
+    "spanish": "Nematodo"
+  },
+  {
+    "english": "Ear head bug",
+    "hindi": "ईयर हेड बग",
+    "marathi": "कान हेड बग",
+    "nepali": "कान टाउको बग",
+    "spanish": "Insecto de la cabeza del oído"
+  },
+  {
+    "english": "Leaf folder",
+    "hindi": "पत्ती फ़ोल्डर",
+    "marathi": "लीफ फोल्डर",
+    "nepali": "पात फोल्डर",
+    "spanish": "Carpeta de hoja"
+  },
+  {
+    "english": "Plant hopper",
+    "hindi": "प्लांट हॉपर",
+    "marathi": "प्लांट हॉपर",
+    "nepali": "टोकरी रोप्न",
+    "spanish": "Tolva"
+  },
+  {
+    "english": "Armyworm",
+    "hindi": "आर्मीवर्म",
+    "marathi": "आर्मी किडे",
+    "nepali": "सेनाको",
+    "spanish": "Gusano del ejército"
+  },
+  {
+    "english": "Olive fruit fly",
+    "hindi": "जैतून का फल",
+    "marathi": "ऑलिव्ह फळ माशी",
+    "nepali": "जैतुनको फल उड",
+    "spanish": "Mosca de la fruta de oliva"
+  },
+  {
+    "english": "Olive moth",
+    "hindi": "ओलिव मोथ",
+    "marathi": "ऑलिव्ह मॉथ",
+    "nepali": "जैतुन पतंग",
+    "spanish": "Polilla de oliva"
+  },
+  {
+    "english": "Black scale",
+    "hindi": "काला पैमाना",
+    "marathi": "ब्लॅक स्केल",
+    "nepali": "कालो स्केल",
+    "spanish": "Escala negro"
+  },
+  {
+    "english": "Bulb Mites",
+    "hindi": "बल्ब माइट्स",
+    "marathi": "बल्ब माइट्स",
+    "nepali": "बल्ब माइट्स",
+    "spanish": "Bulbo"
+  },
+  {
+    "english": "•Red spider mite",
+    "hindi": "• रेड स्पाइडर माइट",
+    "marathi": "• रेड स्पायडर माइट",
+    "nepali": "• रातो स्पाइडर म्याट",
+    "spanish": "• Araña Araña Roja"
+  },
+  {
+    "english": "Mealy bugs",
+    "hindi": "मैली बग्स",
+    "marathi": "मीली बग्स",
+    "nepali": "इलीली बगहरू",
+    "spanish": "Bichos de mially"
+  },
+  {
+    "english": "Tea mosquitoe bugs",
+    "hindi": "चाय मच्छर कीड़े",
+    "marathi": "चहा डास बग",
+    "nepali": "चिप लामखोंडो बगहरू",
+    "spanish": "Bugs de mosquitos de té"
+  },
+  {
+    "english": "Flatid Plant hoppers",
+    "hindi": "फ्लैटिड प्लांट हॉपर",
+    "marathi": "फ्लॅटिड प्लांट हॉपर्स",
+    "nepali": "फ्ल्याटड प्लान्ट मेसेकहरू",
+    "spanish": "Tolvas de plantas flatid"
+  },
+  {
+    "english": "Safflower gram pod borer/ capsule borer",
+    "hindi": "कुस्फ्लॉवर ग्राम पॉड बोरर/ कैप्सूल बोरर",
+    "marathi": "केशर ग्रॅम पॉड बोरर/ कॅप्सूल बोरर",
+    "nepali": "सलाफ्लार ग्राम पोड बोरर / क्याप्सुल बोरर",
+    "spanish": "ASFAFORADOR GRAM POD Borer/ Cápsula Borer"
+  },
+  {
+    "english": "Safflower caterpillar",
+    "hindi": "कुस्फ्लॉवर कैटरपिलर",
+    "marathi": "केशर सुरवंट",
+    "nepali": "सलाफ्लार क्याटरपिलर",
+    "spanish": "Caterpilar de cártamo"
+  },
+  {
+    "english": "safflower bud fly/capsule fly",
+    "hindi": "कुस्फलॉवर बड फ्लाई/कैप्सूल फ्लाई",
+    "marathi": "केशर बड फ्लाय/कॅप्सूल फ्लाय",
+    "nepali": "सलाफ्लाटर कली फ्ली / क्याप्सुल फ्लाई",
+    "spanish": "cártamo de azafata mosca/cápsula"
+  },
+  {
+    "english": "Cotton American boll worm",
+    "hindi": "सूती अमेरिकी बोल कीड़ा",
+    "marathi": "कापूस अमेरिकन बोल वर्म",
+    "nepali": "कपास अमेरिकी बीएल गार्ड",
+    "spanish": "Gusano americano del algodón"
+  },
+  {
+    "english": "Cotton Spotted boll worm\\n",
+    "hindi": "कॉटन स्पॉटेड बोल वर्म \\ n",
+    "marathi": "कापूस स्पॉटेड बॉल वर्म \\ n",
+    "nepali": "कपास स्पट गरिएको बीओएल कीरा \\ n",
+    "spanish": "Gusano algodonoso manchado \\ n"
+  },
+  {
+    "english": "Cotton Pink boll worm",
+    "hindi": "सूती गुलाबी बॉल कीड़ा",
+    "marathi": "सूती गुलाबी बोल वर्म",
+    "nepali": "कपास गुलाबी बीएल गेराम",
+    "spanish": "Gusano rosa rosa de algodón"
+  },
+  {
+    "english": "Cotton Jassid",
+    "hindi": "कपास जस्सिड",
+    "marathi": "कापूस जॅसिड",
+    "nepali": "कपास जुन",
+    "spanish": "Jassid de algodón"
+  },
+  {
+    "english": "Coffee berry borer",
+    "hindi": "कॉफी बेरी बोरर",
+    "marathi": "कॉफी बेरी बोरर",
+    "nepali": "कफी बेरी बोरर",
+    "spanish": "Perforadora de la baya del café"
+  },
+  {
+    "english": "Coffee White stem borer",
+    "hindi": "कॉफी सफेद स्टेम बोरर",
+    "marathi": "कॉफी व्हाइट स्टेम बोरर",
+    "nepali": "कफी सेतो स्टेम बोरर",
+    "spanish": "Barrenador de tallo blanco de café"
+  },
+  {
+    "english": "Coffee Shot hole borer\\n",
+    "hindi": "कॉफी शॉट होल बोरर \\ n",
+    "marathi": "कॉफी शॉट होल बोरर \\ n",
+    "nepali": "कफि शट होल बोरर \\ n",
+    "spanish": "Borer de agujero de tiro de café \\ n"
+  },
+  {
+    "english": "Coffee Red borer",
+    "hindi": "कॉफी रेड बोरर",
+    "marathi": "कॉफी रेड बोरर",
+    "nepali": "कफी रेड बोर्नर",
+    "spanish": "Barrenador rojo de café"
+  },
+  {
+    "english": "Tomato Gram pod borer\\n",
+    "hindi": "टमाटर ग्राम पॉड बोरर \\ n",
+    "marathi": "टोमॅटो ग्रॅम पॉड बोरर \\ n",
+    "nepali": "टमाटर ग्राम पोड बोरर \\ n",
+    "spanish": "Tomato Gram Pod Borer \\ n"
+  },
+  {
+    "english": "Tomato Leaf eating caterpillar\\n",
+    "hindi": "टमाटर का पत्ता कैटरपिलर खाने वाला \\ n",
+    "marathi": "टोमॅटो लीफ खाणे सुरवंट \\ n",
+    "nepali": "टमाटर पायज खाने क्याटरपिलर \\ n",
+    "spanish": "Tomate Leaf Come Caterpillar \\ n"
+  },
+  {
+    "english": "Tomato Whitefly\\n",
+    "hindi": "टमाटर व्हाइटफ्लाई \\ n",
+    "marathi": "टोमॅटो व्हाइटफ्लाय \\ n",
+    "nepali": "टमाटर सेतो सेतो \\ n",
+    "spanish": "Tomate Whitefly \\ n"
+  },
+  {
+    "english": "Tomato Serpentine leaf miner.\\n",
+    "hindi": "टमाटर सर्पेंटाइन लीफ माइनर। \\ n",
+    "marathi": "टोमॅटो सर्पाच्या पानांचे खाण. \\ N",
+    "nepali": "टमाटर सर्पेटिन पात खानी। \\ N",
+    "spanish": "Tomate serpentine Leaf Miner. \\ N"
+  },
+  {
+    "english": "Leaf webber or roller and capsule borer\\n",
+    "hindi": "लीफ वेबर या रोलर और कैप्सूल बोरर \\ n",
+    "marathi": "लीफ वेबर किंवा रोलर आणि कॅप्सूल बोरर \\ n",
+    "nepali": "पात वेबर वा रोलर र क्याप्सुल बोरर \\ n",
+    "spanish": "Leaf Webber o Borer de rodillo y cápsula \\ n"
+  },
+  {
+    "english": "Gall fly",
+    "hindi": "फली",
+    "marathi": "पित्त माशी",
+    "nepali": "Gall उडान",
+    "spanish": "Volante"
+  },
+  {
+    "english": "Sesame leafhopper",
+    "hindi": "तिल",
+    "marathi": "तीळ लीफॉपर",
+    "nepali": "Sesame Lafhhoppher",
+    "spanish": "Sésamo hoja de hoja"
+  },
+  {
+    "english": "Hawk moth",
+    "hindi": "हॉक कीट",
+    "marathi": "हॉक मॉथ",
+    "nepali": "हक पतंग",
+    "spanish": "polilla de halcón"
+  },
+  {
+    "english": "Alfalfa Looper",
+    "hindi": "अल्फाल्फा लूपर",
+    "marathi": "अल्फल्फा लूपर",
+    "nepali": "Alfalfa लुपर",
+    "spanish": "Looper de alfalfa"
+  },
+  {
+    "english": "Alfalfa Aphid",
+    "hindi": "अल्फाल्फा एफिड",
+    "marathi": "अल्फल्फा ph फिड",
+    "nepali": "Alfalfa aphid",
+    "spanish": "Áfido de alfalfa"
+  },
+  {
+    "english": "Cutworms",
+    "hindi": "कटवर्म",
+    "marathi": "कटवर्म्स",
+    "nepali": "कटौर",
+    "spanish": "Gusano"
+  },
+  {
+    "english": "Fruit RustThrips",
+    "hindi": "फलों के रस्ट्रिप्रिप्स",
+    "marathi": "फळ रस्ट्रिप्स",
+    "nepali": "फलहरू दफ डाइप्सट्स",
+    "spanish": "Oxthrips de fruta"
+  },
+  {
+    "english": "Slugs",
+    "hindi": "मल",
+    "marathi": "स्लग",
+    "nepali": "Slugs",
+    "spanish": "Babosas"
+  },
+  {
+    "english": "Cutworms",
+    "hindi": "कटवर्म",
+    "marathi": "कटवर्म्स",
+    "nepali": "कटौर",
+    "spanish": "Gusano"
+  },
+  {
+    "english": "Gram caterpillar",
+    "hindi": "ग्राम कैटरपिलर",
+    "marathi": "हरभरा सुरवंट",
+    "nepali": "ग्राम क्याटरपिलर",
+    "spanish": "Gram Caterpillar"
+  },
+  {
+    "english": "Fruit fly",
+    "hindi": "फल का कीड़ा",
+    "marathi": "फळ माशी",
+    "nepali": "फलहरू उड",
+    "spanish": "Mosca de la fruta"
+  },
+  {
+    "english": "Leaf miner",
+    "hindi": "पत्तीदार खान",
+    "marathi": "लीफ खाण कामगार",
+    "nepali": "पात खानी",
+    "spanish": "Minero de la hoja"
+  },
+  {
+    "english": "Citrus Psyllid",
+    "hindi": "सिट्रसिलिड",
+    "marathi": "लिंबूवर्गीय सायलिड",
+    "nepali": "सिट्रस साइलिड",
+    "spanish": "Cítrico psílido"
+  },
+  {
+    "english": "Scale Insects",
+    "hindi": "स्केल कीड़े",
+    "marathi": "स्केल कीटक",
+    "nepali": "मारी कीराहरू",
+    "spanish": "Insectos de escala"
+  },
+  {
+    "english": "Aphids & Mealy Bugs",
+    "hindi": "एफिड्स और मेली बग्स",
+    "marathi": "Ids फिडस् आणि मेली बग",
+    "nepali": "एफिड र मेली बगहरू",
+    "spanish": "Pulgones y bichos mealy"
+  },
+  {
+    "english": "Scale Insects:",
+    "hindi": "स्केल कीड़े:",
+    "marathi": "स्केल कीटक:",
+    "nepali": "मारी कीराहरू:",
+    "spanish": "Insectos de escala:"
+  },
+  {
+    "english": "Aphids\\n",
+    "hindi": "एफिड्स \\ n",
+    "marathi": "Ph फिडस् \\ n",
+    "nepali": "Aphids \\ n",
+    "spanish": "Pulgones \\ n"
+  },
+  {
+    "english": "Mexican bean beetle",
+    "hindi": "मैक्सिकन बीन बीटल",
+    "marathi": "मेक्सिकन बीन बीटल",
+    "nepali": "मेक्सिकन बेनी बीटल",
+    "spanish": "Escarabajo mexicano"
+  },
+  {
+    "english": "Leafminers",
+    "hindi": "पत्ती",
+    "marathi": "लीफमिनर्स",
+    "nepali": "पातलाइनरहरू",
+    "spanish": "Hojas de hojas"
+  },
+  {
+    "english": "Corn earworm \\n",
+    "hindi": "मकई इयरवॉर्म \\ n",
+    "marathi": "कॉर्न इअरवर्म \\ n",
+    "nepali": "मकै सुवेरी \\ n",
+    "spanish": "Ratón de orejas de maíz \\ n"
+  },
+  {
+    "english": "White scale",
+    "hindi": "सफेद पैमाना",
+    "marathi": "व्हाइट स्केल",
+    "nepali": "सेतो स्केल",
+    "spanish": "Escala blanca"
+  },
+  {
+    "english": "Shield scale\\n",
+    "hindi": "शील्ड स्केल \\ n",
+    "marathi": "शिल्ड स्केल \\ n",
+    "nepali": "शिल्ड स्केल \\ n",
+    "spanish": "Escala de escudo \\ n"
+  },
+  {
+    "english": "Leaf beetle\\n",
+    "hindi": "पत्ती बीटल \\ n",
+    "marathi": "लीफ बीटल \\ n",
+    "nepali": "पात बीटल \\ n",
+    "spanish": "Beetle de hoja \\ n"
+  },
+  {
+    "english": "Bean Aphids",
+    "hindi": "बीन एफिड्स",
+    "marathi": "बीन ph फिडस्",
+    "nepali": "बीन एफिड्स",
+    "spanish": "Pulgón de frijoles"
+  },
+  {
+    "english": "Blister beetle",
+    "hindi": "फफोली",
+    "marathi": "ब्लिस्टर बीटल",
+    "nepali": "Blisher बीटल",
+    "spanish": "Escarabajo"
+  },
+  {
+    "english": "Blue butterfly",
+    "hindi": "नीली तितली",
+    "marathi": "निळा फुलपाखरू",
+    "nepali": "निलो पुतली",
+    "spanish": "Mariposa azul"
+  },
+  {
+    "english": "Gram pod borer",
+    "hindi": "ग्राम पॉड बोरर",
+    "marathi": "ग्रॅम पॉड बोरर",
+    "nepali": "ग्राम पोड बोरर",
+    "spanish": "Grama de caña"
+  },
+  {
+    "english": "Earhead bug",
+    "hindi": "इयरहेड बग",
+    "marathi": "इअरहेड बग",
+    "nepali": "आराहेड बग",
+    "spanish": "Insecto"
+  },
+  {
+    "english": "Ear Head caterpillar",
+    "hindi": "ईयर हेड कैटरपिलर",
+    "marathi": "इअर हेड कॅटरपिलर",
+    "nepali": "कान टाउको क्याटरपिलर",
+    "spanish": "Oreja oruga oruga"
+  },
+  {
+    "english": "Plant lice (Aphids)",
+    "hindi": "संयंत्र जूँ (एफिड्स)",
+    "marathi": "उवा (ph फिडस्) लावा",
+    "nepali": "प्लान्ट एलिस (एफिड्स)",
+    "spanish": "Piojos de planta (pulgones)"
+  },
+  {
+    "english": "Capitulum borer",
+    "hindi": "कैपिटुलम बोरर",
+    "marathi": "कॅपिटुलम बोरर",
+    "nepali": "Capitululum बोरर",
+    "spanish": "Barrenador del capitulum"
+  },
+  {
+    "english": "Tobacco caterpillar",
+    "hindi": "तंबाकू कैटरपिलर",
+    "marathi": "तंबाखू सुरवंट",
+    "nepali": "सुर्ती क्याटरपिलर",
+    "spanish": "Oruga"
+  },
+  {
+    "english": "Leaf hopper",
+    "hindi": "पत्ती",
+    "marathi": "लीफ हॉपर",
+    "nepali": "पात बेपर",
+    "spanish": "Tolva"
+  },
+  {
+    "english": "Sunflower beetle",
+    "hindi": "सूरजमुखी बीटल",
+    "marathi": "सूर्यफूल बीटल",
+    "nepali": "सूर्यमुखी बीटल",
+    "spanish": "Escarabajo del girasol"
+  }
+]
+const {readFileSync} = require("fs")
+const xlsx = require("xlsx")
+const moment = require("moment")
+
+module.exports = {
+  up: async (queryInterface, Sequelize) => {
+    try {
+      console.log(jsonData, "jsonData")
+
+      let langaugeObjects = jsonData.map(el => {
+        el.createdAt= moment.utc().format("YYYY-MM-DD HH:mm:ss")
+        el.updatedAt= moment.utc().format("YYYY-MM-DD HH:mm:ss")
+
+        return el
+      })
+
+      await queryInterface.bulkInsert(
+        "global_translation_metadata",
+        langaugeObjects,
+        {},
+        {}
+      );
+    } catch (error) {
+      console.log(error)
+    }
+
+
+  },
+  down: async (queryInterface, Sequelize) => {
+
+  },
+};

@@ -1,0 +1,108 @@
+'use strict';
+const translations = [
+  {
+    english: 'Farm Address',
+    hindi: 'फार्म का पता',
+    marathi: 'शेतीचा पत्ता',
+    spanish: 'Dirección de la Granja',
+    indonesian: 'Alamat Pertanian',
+    portugese: 'Endereço da Fazenda',
+    nepali: 'खेतको ठेगाना',
+    french: 'Adresse de la Ferme',
+    arabic: 'عنوان المزرعة',
+    swahili: 'Anwani ya Shamba',
+    bengali: 'ফার্মের ঠিকানা',
+    oromo: "WALDHUFAA KA'UU",
+    somali: 'CINWAANKA DEGMADA',
+    vietnamese: 'Địa Chỉ Nông Trại',
+    amharic: 'የአቅራቢያ አድራሻ',
+    greek: 'Διεύθυνση Αγρού',
+    mandarin: '农场地址',
+    japanese: '農場の住所',
+    turkish: 'Çiftlik Adresi',
+    dutch: 'Boerderijadres',
+  },
+  {
+    english: 'Area of Interest',
+    hindi: 'रुचि क्षेत्र',
+    marathi: 'रुचीचे क्षेत्र',
+    spanish: 'Área de Interés',
+    indonesian: 'Area yang Menarik',
+    portugese: 'Área de Interesse',
+    nepali: 'रुचि क्षेत्र',
+    french: "Zone d'Intérêt",
+    arabic: 'منطقة الاهتمام',
+    swahili: 'Eneo la Kuvutia',
+    bengali: 'আগ্রহের এলাকা',
+    oromo: 'FIXXAANNOO',
+    somali: 'GOBOLKA KU SALEYSAN',
+    vietnamese: 'Khu Vực Quan Tâm',
+    amharic: 'ምርጫ ከመጠቀም',
+    greek: 'Περιοχή Ενδιαφέροντος',
+    mandarin: '兴趣区域',
+    japanese: '興味のある地域',
+    turkish: 'İlgili Alan',
+    dutch: 'Interessegebied',
+  },
+  {
+    english: 'Report Issue Date',
+    hindi: 'रिपोर्ट जारी करने की तारीख',
+    marathi: 'अहवाल प्रकट करण्याची तारीख',
+    spanish: 'Fecha de Emisión del Informe',
+    indonesian: 'Tanggal Penyampaian Laporan',
+    portugese: 'Data de Emissão do Relatório',
+    nepali: 'रिपोर्ट जारी मिति',
+    french: 'Date de Publication du Rapport',
+    arabic: 'تاريخ إصدار التقرير',
+    swahili: 'Tarehe ya Kutolewa Ripoti',
+    bengali: 'রিপোর্ট ইস্যুর তারিখ',
+    oromo: 'TARIKUUF DHALLAA',
+    somali: 'TARIXDA SOO SAARIDDA WARBIXINTA',
+    vietnamese: 'Ngày Phát Hành Báo Cáo',
+    amharic: 'የሪፖርት የተለያዩ ቀን',
+    greek: 'Ημερομηνία Έκδοσης Αναφοράς',
+    mandarin: '报告发布日期',
+    japanese: 'レポート発行日',
+    turkish: 'Rapor Yayımlama Tarihi',
+    dutch: 'Rapportdatum',
+  },
+  {
+    english: 'Satellite Report',
+    hindi: 'उपग्रह रिपोर्ट',
+    marathi: 'उपग्रह अहवाल',
+    spanish: 'Informe Satelital',
+    indonesian: 'Laporan Satelit',
+    portugese: 'Relatório de Satélite',
+    nepali: 'उपग्रह रिपोर्ट',
+    french: 'Rapport Satellite',
+    arabic: 'تقرير الأقمار الصناعية',
+    swahili: 'Ripoti ya Satelaiti',
+    bengali: 'উপগ্রহ রিপোর্ট',
+    oromo: 'DHALLOO HABAABUU',
+    somali: 'WARBIXIN KU SAABSAN DHALLOO',
+    vietnamese: 'Báo Cáo Vệ Tinh',
+    amharic: 'የሳተላይት ሪፖርት',
+    greek: 'Αναφορά Δορυφόρου',
+    mandarin: '卫星报告',
+    japanese: '衛星レポート',
+    turkish: 'Uydu Raporu',
+    dutch: 'Satellietrapport',
+  },
+];
+
+/** @type {import('sequelize-cli').Migration} */
+module.exports = {
+  async up(queryInterface, Sequelize) {
+    const englishTranslations = translations.map((data) => data.english);
+
+    await queryInterface.bulkDelete('global_translation_metadata', {
+      english: {
+        [Sequelize.Op.in]: englishTranslations,
+      },
+    });
+
+    await queryInterface.bulkInsert('global_translation_metadata', translations);
+  },
+
+  async down(queryInterface, Sequelize) {},
+};

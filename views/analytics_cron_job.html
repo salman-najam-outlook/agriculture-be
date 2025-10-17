@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333333;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            overflow: hidden;
+            padding: 20px;
+        }
+        h3 {
+            color: #2C3E50;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 12px;
+        }
+        th {
+            background-color: #2980B9;
+            color: white;
+        }
+        td {
+            background-color: #f9f9f9;
+        }
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #ffffff;
+            background-color: #2980B9;
+            text-align: center;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <h1> Analytics for the period from <%= new Date( farmersRegistered.min_value ).toLocaleDateString()%> to <%= new Date (farmersRegistered.max_value).toLocaleDateString() %>.</h1>
+
+    <h3>Client Onboarded</h3>
+    <table>
+        <tr>
+            <th>Metric</th>
+            <th>Value</th>
+        </tr>
+
+        <tr>
+            <td>Client Onboarded</td>
+            <td><%= clientOnboarded.total_rows %></td>
+        </tr>
+
+    </table>
+
+    <h3>Farmers Registered</h3>
+    <table>
+        <tr>
+            <th>Metric</th>
+            <th>Value</th>
+        </tr>
+        <tr>
+            <td>Farmers Registered </td>
+            <td><%= farmersRegistered.total_rows %></td>
+        </tr>
+    </table>
+
+    <h3>Farms Created</h3>
+    <table>
+        <tr>
+            <th>Metric</th>
+            <th>Value</th>
+        </tr>
+        <tr>
+            <td>Farms Created</td>
+            <td><%= farmsCreated.total_rows %></td>
+        </tr>
+    </table>
+
+    <h3>Geofences Created</h3>
+    <table>
+        <tr>
+            <th>Metric</th>
+            <th>Value</th>
+        </tr>
+        <tr>
+            <td>Geofence Created</td>
+            <td><%= geofenceCreated.total_rows %></td>
+        </tr>
+    </table>
+
+    <h3>Farmers Registered By Organization</h3>
+    <table>
+        <tr>
+            <th>Organization</th>
+            <th>Total</th>
+        </tr>
+        <% farmersRegisteredByOrg.forEach(function(farmer) { %>
+        <tr>
+            <td><%= farmer.name %></td>
+            <td><%= farmer.total %></td>
+        </tr>
+        <% }); %>
+    </table>
+
+    <h3>Farms Registered By Organization</h3>
+    <table>
+        <tr>
+            <th>Organization</th>
+            <th>Total</th>
+        </tr>
+        <% farmsByOrg.forEach(function(farmer) { %>
+        <tr>
+            <td><%= farmer.name %></td>
+            <td><%= farmer.total %></td>
+        </tr>
+        <% }); %>
+    </table>
+    
+    <h3>Geofences Registered By Organization</h3>
+    <table>
+        <tr>
+            <th>Organization</th>
+            <th>Total</th>
+        </tr>
+        <% geofenceByOrg.forEach(function(farmer) { %>
+        <tr>
+            <td><%= farmer.name %></td>
+            <td><%= farmer.total %></td>
+        </tr>
+        <% }); %>
+    </table>
+
+    <p>Best regards,<br>
+
+
+</div>
+
+</body>
+</html>
