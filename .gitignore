@@ -36,3 +36,6 @@ tsconfig.json
 .sequelizerc
 .env copy
 helpers/qr_code.js
+routes/authenticate/sso/index.js
+routes/admin/coffee/reports/index.js
+routes/admin/user/activation/index.js
