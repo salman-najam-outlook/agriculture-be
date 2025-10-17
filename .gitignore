@@ -26,8 +26,6 @@ google_sheets_credentials.json
 Dockerfile
 Dockerfile-ubuntu
 gulpfile.js
-index.html
-index.js
 jest.config.js
 logger_config.js
 README.md
@@ -37,3 +35,4 @@ tsconfig.json
 .dockerignore
 .sequelizerc
 .env copy
+helpers/qr_code.js

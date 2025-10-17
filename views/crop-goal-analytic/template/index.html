@@ -1,0 +1,86 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dimitra Report</title>
+    <!-- CSS only -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor"
+      crossorigin="anonymous"
+    />
+    <link
+      href="http://localhost:3000/css/pdfReport2.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+  </head>
+  <body>
+    <div>
+      <div
+        class="pdf-header"
+        style="
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        "
+      >
+        <div class="pdf-header-logo" style="width: 50%">
+          <img src="http://localhost:3000/image/Dimitra Powered by AI 2023.png" />
+        </div>
+        <div class="pdf-header-title" style="width: 50%"><%= data.title %></div>
+      </div>
+      <div class="pdf-sub-header">
+        <% for (const [index, [key, value]] of
+        Object.entries(Object.entries(data.subHeader))) { %> <% if (index == 0)
+        { %>
+        <div class="pdf-sub-header-left">
+          <div class="pdf-sub-header-top">
+            <%= key.split('_').map(item => item.charAt(0).toUpperCase() +
+            item.slice(1)).join(' ') %>
+          </div>
+          <div class="pdf-sub-header-bottom"><%= value %></div>
+        </div>
+        <% } else { %>
+        <div class="pdf-sub-header-right">
+          <div class="pdf-sub-header-top">
+            <%= key.split('_').map(item => item.charAt(0).toUpperCase() +
+            item.slice(1)).join(' ') %>
+          </div>
+          <div class="pdf-sub-header-bottom"><%= value %></div>
+        </div>
+        <% } %> <% } %>
+      </div>
+      <table class="table table-striped table-responsive">
+        <thead>
+          <tr>
+            <% for (const [key, value] of Object.entries(data.tableData[0])) {
+            %>
+            <th>
+              <% let tableTitle = key.split('_').map(item =>
+              item.charAt(0).toUpperCase() + item.slice(1)).join(' ');
+              if(tableTitle == "Final Value") tableTitle+="(Kgs)" %> <%=
+              tableTitle%>
+            </th>
+            <% } %>
+          </tr>
+        </thead>
+        <tbody>
+          <% for(let i = 0; i < data.tableData.length; i++) { %>
+          <tr>
+            <% for (const [key, value] of Object.entries(data.tableData[i])) {
+            %>
+            <td><%= value %></td>
+            <% } %>
+          </tr>
+          <% } %>
+        </tbody>
+      </table>
+      <div class="text-center" style="margin: 3% 0">
+        <strong style="color: rgb(62 62 62)">www.Dimitra.io</strong>
+      </div>
+    </div>
+  </body>
+</html>

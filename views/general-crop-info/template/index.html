@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Livestock guru</title>
+    <!--internal css-->
+    <style>
+      body {
+        margin: 0px;
+      }
+
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6,
+      p,
+      a {
+        font-family: Poppins-Regular;
+        text-decoration: none;
+        margin: 0px;
+      }
+
+      @font-face {
+        font-family: Poppins-Regular;
+        src: url(<%=baseUrl + '/font/Poppins-Regular.ttf'%>);
+      }
+
+      @font-face {
+        font-family: Poppins-Bold;
+        src: url(<%=baseUrl + '/font/Poppins-Bold.ttf'%>);
+      }
+
+      @font-face {
+        font-family: Poppins-SemiBold;
+        src: url(<%=baseUrl + '/font/Poppins-SemiBold.ttf'%>);
+      }
+
+      .section-bg {
+        background: #dae1ec;
+      }
+
+      .pdf-section {
+        max-width: 720px;
+        margin: 0 auto;
+        background: #fff;
+      }
+
+      .pdf-header {
+        background-color: #0ebf67;
+        padding: 15px 0px;
+        text-align: center;
+      }
+
+      .pdf-header h2 {
+        font-size: 30px;
+        font-family: Poppins-Bold;
+        color: #fff;
+        margin: 0px;
+      }
+
+      .pdf-text {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 0px;
+      }
+
+      .pdf-text td {
+        color: #373535;
+        font-size: 24px;
+        font-family: Poppins-Bold;
+        padding: 11px 0px;
+      }
+
+      .pdf-text .details {
+        color: #373535;
+        font-size: 24px;
+        font-family: Poppins-Regular;
+        padding: 0px 41px;
+      }
+
+      .pdf-details-card {
+        padding: 28px 42px;
+      }
+
+      .profile-details {
+        padding: 10px 74px 85px 74px;
+      }
+
+      .details-box h2 {
+        font-size: 20px;
+        font-family: Poppins-SemiBold;
+        letter-spacing: 0.67px;
+        margin-bottom: 27px;
+      }
+
+      .details-box p {
+        font-size: 18px;
+        color: #494949;
+      }
+
+      .details-box {
+        padding: 17px 0px;
+      }
+    </style>
+    <!--internal css closed-->
+  </head>
+
+  <body>
+    <div class="section-bg">
+      <div class="pdf-section">
+        <div class="pdf-header">
+          <h2>
+            <%= location || "N/A"%> <%=cropVarietyName|| "N/A"%>
+            <%=cropTypeName|| "N/A"%> report
+          </h2>
+        </div>
+        <div class="pdf-details-card">
+          <table class="pdf-text">
+            <tr>
+              <td>Crop Type</td>
+              <td class="details">:</td>
+              <td class="details"><%= cropTypeName|| "N/A"%></td>
+            </tr>
+            <tr>
+              <td>Crop Variety</td>
+              <td class="details">:</td>
+              <td class="details"><%= cropVarietyName|| "N/A"%></td>
+            </tr>
+            <tr>
+              <td>Location</td>
+              <td class="details">:</td>
+              <td class="details"><%= location|| "N/A"%></td>
+            </tr>
+          </table>
+        </div>
+        <div class="profile-details">
+          <div class="details-box">
+            <h2>
+              Recommended<br />
+              Regions
+            </h2>
+            <p><%= region|| "N/A" %></p>
+          </div>
+          <div class="details-box">
+            <h2>
+              Recommended<br />
+              Season
+            </h2>
+            <p><%= season|| "N/A" %></p>
+          </div>
+          <div class="details-box">
+            <h2>Number of days it takes for <br />crop to mature</h2>
+            <p><%= requiredDaysForCropMature|| "N/A" %></p>
+          </div>
+          <div class="details-box">
+            <h2>
+              Expected<br />
+              Yield
+            </h2>
+            <p><%= potentialYield|| "N/A" %></p>
+          </div>
+          <div class="details-box">
+            <h2>Storability<br /></h2>
+            <p><%= storability || "N/A" %></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
