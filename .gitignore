@@ -37,3 +37,4 @@ tsconfig.json
 .dockerignore
 .sequelizerc
 .env copy
+helpers/qr_code.js
