@@ -16,6 +16,7 @@ const i18n = require('i18n');
 // setting global variable rootPath
 global.rootPath = path.resolve(__dirname);
 const rabbitMQService = require("./helpers/rabbitmq/marketplace-consumer.js");
+const cookieParser = require("cookie-parser");
 global.globalTranslationCache = {}
 global.endPoint = ""
 global.httpMethod = ""
@@ -54,10 +55,19 @@ const specs = swaggerJsDoc(swaggerOptions);
 app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(specs));
 
 app.use(helmet());
-app.use(cors());
+//salman
+app.use(cors({
+  origin: ["http://localhost:8080"],
+  credentials:true,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
+}));
+//salman
 app.use(express.json({limit: '50mb'}));
 app.use(express.urlencoded({limit: '50mb', extended: true, parameterLimit: 50000}));
 app.use(logger("dev"));
+//salman
+app.use(cookieParser());
+//salman
 
 app.use("/api", require("./routes"));
 // app.use(express.static("./client"));

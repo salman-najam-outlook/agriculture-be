@@ -16,7 +16,11 @@ module.exports = async function auth(req, res, next) {
   endPoint = req.baseUrl
   httpMethod = req.method
   // Get token from header
-  const token = req.header("oauth-token");
+  //salman
+  const token = req.header("oauth-token") || req.cookies.token;
+  //const token = req.header("oauth-token");
+  //salman
+
   // Check if not token
   if (!token) {
     return res

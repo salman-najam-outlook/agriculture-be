@@ -50,6 +50,9 @@
     "bcrypt": "^5.0.1",
     "bull": "^4.8.1",
     "chartjs-node-canvas": "^5.0.0",
+    //salman
+    "cookie-parser": "^1.4.7",
+    //salman
     "cors": "^2.8.5",
     "country-state-picker": "^1.1.5",
     "crypto": "^1.0.1",

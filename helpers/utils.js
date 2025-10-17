@@ -53,5 +53,31 @@ const generateOrgCode = (name) => {
     .replace(/[^a-z0-9_]/g, ''); 
 }
 
+//salman
+const sendAuthCookies = (res, accessToken, refreshToken, options = {} ) => {
+  const isProd = process.env.NODE_ENV === "production";
 
-module.exports = { retriveAllFilesInDirectory, capitalizeFirstLetter, orgFilter,generateRandomString, generateRandomPassword, generateOrgCode };
+  const { 
+    accessTokenMaxAge,
+    refreshTokenMaxAge,
+    httpOnly,
+    sameSite
+      } = options;
+   
+    res.cookie("token",accessToken, {
+      httpOnly,
+      sameSite,
+      secure: isProd,
+      maxAge:accessTokenMaxAge,
+    });
+
+     res.cookie("refreshToken",refreshToken, {
+      httpOnly,
+      sameSite,
+      secure: isProd,
+      maxAge:refreshTokenMaxAge,
+    })
+};
+
+module.exports = { retriveAllFilesInDirectory, capitalizeFirstLetter, orgFilter,generateRandomString, generateRandomPassword, generateOrgCode, sendAuthCookies };
+//salman

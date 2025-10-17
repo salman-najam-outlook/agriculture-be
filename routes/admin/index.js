@@ -111,6 +111,9 @@ const moment = require('moment');
 const { v4: uuidv4 } = require("uuid");
 const _ = require("lodash");
 const { lte } = require("lodash");
+//salman
+const { sendAuthCookies } = require("../../helpers/utils");
+//salman
 const { membershipValidityUnits } = require(rootPath + "/helpers/consts");
 const { deleteFileS3 } = require(rootPath + '/helpers/aws_s3'); // s3 functions
 
@@ -2110,15 +2113,315 @@ router.post(
         process.env.ACCESS_TOKEN_SECRET,
         { expiresIn: process.env.ACCESS_TOKEN_EXPIRY }
       );
-      console.log("Token is signed for : ", process.env.ACCESS_TOKEN_EXPIRY);
+
+      //salman
       // generate refresh token if all goes well
       let refreshtoken = await jwt.sign(
         {
-          data: { userId: userData.id, token: accesstoken },
+          data: { userId: userData.id },
         },
         process.env.REFRESH_TOKEN_SECRET,
         { expiresIn: "365d" }
       );
+      //salman
+      // send response
+      delete userData.dataValues.password;
+
+      const organization = await db.Organization.findOne({ 
+        where: { id: userData.user_organization.id },
+        attributes: [ 'id','name', 'code', 'country', 'logo'],
+        raw: true
+      })
+
+      const organizationD = {
+        ...organization,
+        ...(userData?.subOrg?.id && {subOrganization:userData?.subOrg})
+      }
+      // =========  sync user to dds =============;
+      await syncUserData(userData.dataValues, organizationD);
+
+      const moduleAndPermissions = await db.AdminUsersRolesModulesPermissions.findAll({
+          attributes: ['role_id', 'module_id', 'permission_id', 'permitted'],
+          where: {
+            role_id: { [Op.in]: roleIds}
+          },
+      });
+
+      //salman
+      const options = { 
+        refreshTokenMaxAge: 365 * 24 * 60 * 60 * 1000,
+        accessTokenMaxAge: 7 * 24 * 60 * 60 * 1000,
+        sameSite:'strict',
+        httpOnly:true,
+      };
+
+      sendAuthCookies(res,accesstoken,refreshtoken,options);
+      //salman
+
+      res.json(
+        await successResp({
+          msg: success.LOGIN,
+          data: {
+            ...userData.dataValues,
+            sideBarMenu: permittedSidebarRes,
+            moduleAndPermissions:moduleAndPermissions
+          }
+        })
+      );
+   
+
+    } catch (err) {
+      if(process.env.NODE_ENV != "development"){
+          try {
+            await sendLoginError(JSON.stringify({error:"Something went wrong on our end. Please try again later.", "statusCode": 500}), req);
+          } catch (emailError) {
+              console.error('Failed to send error email:', emailError);
+          }
+      }
+      //await sendLoginError(JSON.stringify({error:"Unable to login. Internal server error. Please try again later."}), req);
+      logErrorOccurred(__filename, err);
+      let msg = {
+        success:false,
+        code:500,
+        message:'Something went wrong on our end. Please try again later.'
+      }
+      try {
+        msg  = await errorResp()
+      }catch(erro){
+        console.log("error throw")
+      }
+      return res.status(error.code.SERVER_ERROR).json(msg);
+    }
+  }
+);
+
+//salman
+router.get("/user-data",auth,
+  async (req, res) => {
+    try {
+       const { id } = req.user;
+      // get user data
+      let userData = await db.user.findOne({
+        attributes: [
+          "email",
+          "countryCode",
+          "mobile",
+          "firstName",
+          "middleName",
+          "lastName",
+          "password",
+          "verified",
+          "id",
+          "adminType",
+          "active",
+          'createdAt',
+          "eori_number",
+          "countryId",
+          "countryIsoCode",
+          "organization",
+          "subOrganizationId",
+          "registrationUserType",
+        ],
+        where: {id:id},
+        include: [
+          {
+            model: db.Organization,
+            as: "user_organization",
+            attributes: ["id", "name", "logo", "splashScreen", "country"],
+          },
+          {
+            model: db.Organization,
+            as: "subOrg",
+            attributes: ["id", "name", "logo", "code", "splashScreen", "country"],
+          },
+          {
+            model: db.Roles,
+            as: "user_role_assoc",
+            through: { model: db.AdminUserRoles, attributes: [] },
+          },
+        ],
+        order: [['createdAt', 'DESC']]
+      });
+
+      // check if user is verified or not
+      if (userData == null) {
+        return res.json(
+          await errorResp({
+            code: success.code.OK,
+            msg: error.USER_NOT_EXIST,
+          })
+        );
+      }
+
+      // check if user has active status or not
+      if (!userData.active) {
+        return res.json(
+          await errorResp({
+            code: success.code.OK,
+            msg: error.USER_NOT_ACTIVE,
+          })
+        );
+      }
+
+      // check if user has access to admin panel or not
+      const adminRoles = await db.Roles.findAll({
+        attributes: ["id"],
+        where: {
+          id: { [Op.not]: "end_user" },
+        },
+      });
+      const hasAdminRoles = userData.user_role_assoc.filter((item) =>
+        adminRoles.some((role) => role.id === item.id)
+      );
+      if (hasAdminRoles.length === 0) {
+        return res.json(
+          await errorResp({
+            code: success.code.OK,
+            msg: error.ADMIN_USER_NOT_EXIST,
+          })
+        );
+      }
+
+      // get other required details
+
+      let sidebarRes = await db.SidebarMenu.findAll({
+        attributes: [
+          'id',
+          'name',
+          'route_path_name',
+          'icon',
+          'order',
+          'active'
+        ],
+        where: {
+          active: 1,
+          parent_menu_id: null,
+          organization: userData.user_organization.id
+        },
+        raw: true
+      });
+      let subMenus = await db.SidebarMenu.findAll({
+        attributes: [
+          'id',
+          'name',
+          'route_path_name',
+          'parent_menu_id',
+          'icon',
+          'order',
+          ['name', 'label']
+        ],
+        where: {
+          active: 1,
+          parent_menu_id: {
+            [Op.not]: null
+          },
+          organization: userData.user_organization.id
+        },
+        raw: true
+      });
+
+      const removeSubmenu = ['pesticides_reports'];
+      if(userData.subOrganizationId) {
+        removeSubmenu.push("membership", "permissions", "role_requests","farm_activities_calendar")
+      }
+      let sidebarResFinal = sidebarRes.map(item => {
+        subMenus.forEach(subMenu => {
+          if (subMenu.parent_menu_id === item.id) {
+            if ('subMenu' in item) {
+              if(!removeSubmenu.includes(subMenu.id)) {
+                item.subMenu.push(subMenu)
+              }
+            } else {
+              item.subMenu = []
+              item.subMenu.push(subMenu)
+            }
+          }
+        })
+        return item
+      })
+
+        // Extract all roleIds
+        const roleIds = hasAdminRoles.map(role => role.id);
+
+        // Generate sidebar IDs for each role
+        let sidebarIds = [];
+        roleIds.forEach(roleId => {
+          sidebarIds = sidebarIds.concat(sidebarRes.map(s => roleId + '_' + s.id));
+          subMenus.forEach(s => sidebarIds.push(roleId + '_' + s.id));
+        });
+
+        // Fetch permissions for all roleIds and sidebarIds
+        let sidebarModuleRolePermissions = await db.AdminUsersRolesModulesPermissions.findAll({
+          where: {
+            module_id: sidebarIds
+          },
+          raw: true
+        });
+
+        let permittedModules = [];
+
+        // Filter permitted modules based on multiple roleIds
+        if (sidebarModuleRolePermissions && sidebarModuleRolePermissions.length > 0) {
+          permittedModules = sidebarModuleRolePermissions.filter(smr => {
+            if (smr.permission_id === "get" && smr.permitted === 1) {
+              return smr.module_id;
+            }
+          }).map(smr => smr.module_id);
+        }
+
+        // Filter permitted sidebar items
+        let permittedSidebarRes = sidebarResFinal.filter(item => {
+          if ('subMenu' in item) {
+            for (let i = item.subMenu.length - 1; i >= 0; i--) {
+              let permitted = roleIds.some(roleId => 
+                permittedModules.some(p => p === (roleId + '_' + item.subMenu[i].id))
+              );
+              if (!permitted) {
+                item.subMenu.splice(i, 1);
+              }
+            }
+            if (item.subMenu.length > 0) {
+              return true;
+            }
+            return false;
+          } else {
+            return roleIds.some(roleId => 
+              permittedModules.some(p => p === (roleId + '_' + item.id))
+            );
+          }
+        });
+      permittedSidebarRes.sort(compare)
+      
+      // Check if user is from Kenya/NACCU organization and update menu names accordingly
+      // Using the same logic as frontend isKenyaClient() function
+      const isKenyaOrg = userData.user_organization && 
+        (userData.user_organization.name === 'National Coffee Cooperative Union' || userData.user_organization.name === "test_org33412");
+      if (isKenyaOrg) {
+        // Update menu names for NACCU users - ONLY for buying_station_coffee (Coffee Overview)
+        // Keep original buying_station (Member Data) unchanged
+        permittedSidebarRes.forEach(item => {
+          if (item.subMenu && item.subMenu.length > 0) {
+            item.subMenu.forEach(subItem => {
+              // Only update buying_station_coffee menu item (under Coffee Overview)
+              // Keep original buying_station (Member Data) unchanged
+              if (subItem.id === 'buying_station_coffee') {
+                subItem.name = 'Affiliates';
+                subItem.sidebar_menu_name = 'Affiliates';
+              }
+            });
+          }
+        });
+      }
+      
+      if (req.headers.lang && req.headers.lang != 'en') {
+        permittedSidebarRes = req.translateFunction(
+          permittedSidebarRes,
+          globalTranslationCache,
+          { moduleName: 'sideBar', lvl1: true, lvl2: true, }
+        );
+      }
+
+    
       // send response
       delete userData.dataValues.password;
 
@@ -2148,10 +2451,8 @@ router.post(
           data: {
             ...userData.dataValues,
             sideBarMenu: permittedSidebarRes,
-            token: accesstoken,
-            refreshtoken,
             moduleAndPermissions:moduleAndPermissions
-          },
+          }
         })
       );
 
@@ -2179,6 +2480,7 @@ router.post(
     }
   }
 );
+//salman
 
 router.post('/captcha', async function (req, res) {
   // g-recaptcha-response is the key that browser will generate upon form submit.
@@ -2300,20 +2602,19 @@ router.post("/logout", auth, async (req, res) => {
  *                   code: 200
  *               example: { "success": true, "code": 200, "message": "Accesstoken genereated successfully.", "data": { "accesstoken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7InVzZXJJZCI6MTg0fSwiaWF0IjoxNjQ3Mjc5NjMzLCJleHAiOjE2NDcyODAyMzN9.91XXLgwNsLSagVsZPxroSsfoDI7Q7lfUVW9X-L-Yppk", "refreshtoken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7InVzZXJJZCI6MTg0LCJ0b2tlbiI6ImV5SmhiR2NpT2lKSVV6STFOaUlzSW5SNWNDSTZJa3BYVkNKOS5leUprWVhSaElqcDdJblZ6WlhKSlpDSTZNVGcwZlN3aWFXRjBJam94TmpRM01qYzVOak16TENKbGVIQWlPakUyTkRjeU9EQXlNek45LjkxWFhMZ3dOc0xTYWdWc1pQeHJvU3Nmb0RJN1E3bGZVVlc5WC1MLVlwcGsifSwiaWF0IjoxNjQ3Mjc5NjMzLCJleHAiOjE2Nzg4MTU2MzN9.XXqNENg1Eulce8Eofy-hBlR66pk52DBn4KMLiOx-wVI" } }   
  */
+//salman
 router.post("/access-token", async (req, res) => {
   try {
-    let { accesstoken, refreshtoken } = req.body;
-
+    const refreshToken = req.cookies.refreshToken;
+  
     // verify refresh token
     const { data } = await jwt.verify(
-      refreshtoken,
+      refreshToken,
       process.env.REFRESH_TOKEN_SECRET
     );
-    // check if accesstoken is the one who last login with that device
-    if (data.token != accesstoken) throw new Error("Invalid Token");
 
     // generate access token if all goes well
-    accesstoken = await jwt.sign(
+    const accesstoken = await jwt.sign(
       {
         data: { userId: data.userId },
       },
@@ -2322,22 +2623,28 @@ router.post("/access-token", async (req, res) => {
     );
 
     // generate refresh token if all goes well
-    refreshtoken = await jwt.sign(
+    const refreshtoken = await jwt.sign(
       {
-        data: { userId: data.userId, token: accesstoken },
+        data: { userId: data.userId },
       },
       process.env.REFRESH_TOKEN_SECRET,
       { expiresIn: "365d" }
     );
 
+     const options = { 
+        refreshTokenMaxAge: 365 * 24 * 60 * 60 * 1000,
+        accessTokenMaxAge: 7 * 24 * 60 * 60 * 1000,
+        sameSite:'strict',
+        httpOnly:true,
+      };
+
+    sendAuthCookies(res,accesstoken,refreshtoken,options);
+
     // send response
-    res.json(
+    return res.json(
       successRespSync({
         msg: success.ACCESSTOKEN_GENERATED,
-        data: {
-          accesstoken,
-          refreshtoken,
-        },
+       
       })
     );
   } catch (err) {
