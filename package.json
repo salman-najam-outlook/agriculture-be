@@ -48,11 +48,10 @@
     "aws-sdk": "^2.974.0",
     "axios": "^0.26.1",
     "bcrypt": "^5.0.1",
+    "better-sqlite3": "^12.4.1",
     "bull": "^4.8.1",
     "chartjs-node-canvas": "^5.0.0",
-    //salman
     "cookie-parser": "^1.4.7",
-    //salman
     "cors": "^2.8.5",
     "country-state-picker": "^1.1.5",
     "crypto": "^1.0.1",
@@ -112,6 +111,7 @@
     "swagger-ui-express": "^4.3.0",
     "topojson-client": "^3.1.0",
     "twilio": "^3.80.1",
+    "ua-parser-js": "^2.0.6",
     "unique-username-generator": "^1.3.0",
     "uuid": "^8.3.2",
     "winston": "^3.6.0",

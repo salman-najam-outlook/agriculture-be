@@ -29,6 +29,7 @@ const { syncMarketPlaceUserData } = require('../../helpers/marketplace_sync')
 const { setDefaultUnitSettingsForAppUsers } = require(rootPath + '/helpers/defaultUnitConfigCacaoUser')
 const { generatePassword } = require(rootPath + '/helpers/generatePassword')
 const {queueActivationKeyGenerationInternally} = require('../admin/user/activation/index')
+const { identifyAndRecordDevice } = require(rootPath + '/helpers/deviceIdentification')
 
 // Constants from registration logic
 const INDONESIA_DDS_ROLES = {
@@ -1961,6 +1962,19 @@ router.post(
             msg: error.INVALID_CREDENTIAL,
           })
         );
+      }
+
+      // Identify and record device login
+      try {
+        const deviceResult = await identifyAndRecordDevice(req, userData);
+        console.log('Device identification:', {
+          isNewDevice: deviceResult.isNewDevice,
+          deviceName: deviceResult.device.deviceName,
+          deviceId: deviceResult.device.deviceId
+        });
+      } catch (deviceErr) {
+        // Log error but don't fail login if device identification fails
+        console.error('Device identification error:', deviceErr.message);
       }
 
       // mark user login into DB
@@ -7711,6 +7725,98 @@ router.get('/user-permissions/:userId', auth, async (req, res) => {
       await errorResp({
         code: 500,
         msg: 'Internal server error'
+      })
+    );
+  }
+});
+
+/**
+ * @swagger
+ * /admin/devices:
+ *   get:
+ *     summary: Get all devices for the logged-in user
+ *     description: Retrieve all devices that have been used to login to this account
+ *     tags: [Admin]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Success
+ */
+router.get('/devices', auth, async (req, res) => {
+  try {
+    const { getUserDevices } = require(rootPath + '/helpers/deviceIdentification');
+    const userId = req.user.id;
+
+    const devices = await getUserDevices(userId);
+
+    res.json(
+      await successResp({
+        msg: 'Devices retrieved successfully',
+        data: { devices }
+      })
+    );
+  } catch (error) {
+    console.error('Error fetching devices:', error);
+    logErrorOccurred(__filename, error);
+    return res.status(500).json(
+      await errorResp({
+        code: 500,
+        msg: 'Failed to retrieve devices'
+      })
+    );
+  }
+});
+
+/**
+ * @swagger
+ * /admin/devices/{deviceId}:
+ *   delete:
+ *     summary: Remove a device from trusted devices
+ *     description: Remove a specific device from the user's list of trusted devices
+ *     tags: [Admin]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: deviceId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: Device ID to remove
+ *     responses:
+ *       200:
+ *         description: Device removed successfully
+ */
+router.delete('/devices/:deviceId', auth, async (req, res) => {
+  try {
+    const { removeUserDevice } = require(rootPath + '/helpers/deviceIdentification');
+    const userId = req.user.id;
+    const deviceId = req.params.deviceId;
+
+    const removed = await removeUserDevice(userId, deviceId);
+
+    if (removed) {
+      res.json(
+        await successResp({
+          msg: 'Device removed successfully'
+        })
+      );
+    } else {
+      res.json(
+        await errorResp({
+          code: 404,
+          msg: 'Device not found'
+        })
+      );
+    }
+  } catch (error) {
+    console.error('Error removing device:', error);
+    logErrorOccurred(__filename, error);
+    return res.status(500).json(
+      await errorResp({
+        code: 500,
+        msg: 'Failed to remove device'
       })
     );
   }

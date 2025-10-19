@@ -75,6 +75,11 @@ module.exports = (sequelize, DataTypes) => {
         sourceKey: 'id',
         as: 'regToken',
       });
+      this.hasMany(models.UserDevices, {
+        foreignKey: 'userId',
+        sourceKey: 'id',
+        as: 'devices',
+      });
       this.hasMany(models.activationKeys, {
         foreignKey: 'user_id',
         sourceKey: 'id',
