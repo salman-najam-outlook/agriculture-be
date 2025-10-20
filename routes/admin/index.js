@@ -2556,11 +2556,18 @@ router.post('/captcha', async function (req, res) {
  *               example: { "success": true, "code": 200, "message": "Logged out successfully.", "data": {} }  
  *
  */
-router.post("/logout", auth, async (req, res) => {
+ //salman
+router.post("/logout", async (req, res) => {
   try {
-    const { id } = req.user;
-    const userExist = await user.findByPk(id);
-    if (userExist == null) throw error.USER_NOT_EXIST; // if not exist throw error
+   
+    // const { id } = req.user;
+    // const userExist = await db.user.findByPk(id);
+    // if (userExist == null) throw error.USER_NOT_EXIST; // if not exist throw error
+
+    
+    res.clearCookie("token");
+    res.clearCookie("refreshToken");
+    //salman
 
     // await user.update({ isLogin: 0 }, { where: { id } }); // mark user logout into DB
     res.json(
