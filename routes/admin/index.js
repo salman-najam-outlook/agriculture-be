@@ -2210,7 +2210,7 @@ router.post(
 );
 
 //salman
-router.get("/user-data",auth,
+router.get("/user-data",auth,translation,
   async (req, res) => {
     try {
        const { id } = req.user;
@@ -2428,12 +2428,16 @@ router.get("/user-data",auth,
       }
       
       if (req.headers.lang && req.headers.lang != 'en') {
-        permittedSidebarRes = req.translateFunction(
-          permittedSidebarRes,
-          globalTranslationCache,
-          { moduleName: 'sideBar', lvl1: true, lvl2: true, }
+        try {
+            permittedSidebarRes = req.translateFunction(
+            permittedSidebarRes,
+            globalTranslationCache,
+            { moduleName: 'sideBar', lvl1: true, lvl2: true, }
         );
-      }
+        } catch (err) {
+          console.log("translation error",err);
+        }
+      };
 
     
       // send response
