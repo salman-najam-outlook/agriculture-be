@@ -147,7 +147,7 @@ router.get('/',
             const search = req.query.search || '';
 
             // Ensure limit is within reasonable bounds
-            const finalLimit = Math.min(Math.max(limit, 1), 100);
+            const finalLimit = Math.min(Math.max(limit, 1), 1000);
             const offset = (page - 1) * finalLimit;
 
             // Build query filter
