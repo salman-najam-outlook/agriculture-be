@@ -75,6 +75,16 @@ module.exports = (sequelize, DataTypes) => {
         sourceKey: 'id',
         as: 'regToken',
       });
+      this.hasMany(models.UserDevices, {
+        foreignKey: 'userId',
+        sourceKey: 'id',
+        as: 'devices',
+      });
+      this.hasMany(models.UserMfaOtps, {
+        foreignKey: 'user_id',
+        sourceKey: 'id',
+        as: 'mfaOtps',
+      });
       this.hasMany(models.activationKeys, {
         foreignKey: 'user_id',
         sourceKey: 'id',
@@ -273,7 +283,40 @@ module.exports = (sequelize, DataTypes) => {
       licenseNumber: DataTypes.STRING,
       companyId: DataTypes.STRING,
       recordId:DataTypes.STRING,
-      NoOfFarmsPlanningtoonboard: DataTypes.STRING
+      NoOfFarmsPlanningtoonboard: DataTypes.STRING,
+      is_mfa_enabled: {
+        type: DataTypes.TINYINT(1),
+        allowNull: false,
+        defaultValue: 0,
+        comment: 'Flag to enable/disable MFA for user',
+      },
+      mfa_method: {
+        type: DataTypes.ENUM('mobile', 'email'),
+        allowNull: false,
+        defaultValue: 'email',
+        comment: 'Method used for MFA authentication',
+      },
+      mfa_enrolled_at: {
+        type: DataTypes.DATE,
+        allowNull: true,
+        comment: 'Timestamp when MFA was first enrolled',
+      },
+      failed_mfa_attempts: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 0,
+        comment: 'Counter for failed MFA attempts',
+      },
+      last_failed_attempt_at: {
+        type: DataTypes.DATE,
+        allowNull: true,
+        comment: 'Timestamp of last failed MFA attempt',
+      },
+      mfa_locked_until: {
+        type: DataTypes.DATE,
+        allowNull: true,
+        comment: 'Timestamp until which MFA is locked due to multiple failed attempts',
+      }
     },
     {
       sequelize,

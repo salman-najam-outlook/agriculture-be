@@ -29,6 +29,8 @@ const { syncMarketPlaceUserData } = require('../../helpers/marketplace_sync')
 const { setDefaultUnitSettingsForAppUsers } = require(rootPath + '/helpers/defaultUnitConfigCacaoUser')
 const { generatePassword } = require(rootPath + '/helpers/generatePassword')
 const {queueActivationKeyGenerationInternally} = require('../admin/user/activation/index')
+const { identifyAndRecordDevice } = require(rootPath + '/helpers/deviceIdentification')
+const { isMfaRequired, generateAndSendMfaOtp } = require(rootPath + '/helpers/mfa')
 
 // Constants from registration logic
 const INDONESIA_DDS_ROLES = {
@@ -1887,6 +1889,9 @@ router.post(
           "organization",
           "subOrganizationId",
           "registrationUserType",
+          "is_mfa_enabled",
+          "mfa_method",
+          "mfa_locked_until",
         ],
         where: {
           [Op.or]: [{ email: credential }, { mobile: credential }],
@@ -1961,6 +1966,56 @@ router.post(
             msg: error.INVALID_CREDENTIAL,
           })
         );
+      }
+
+      // Check if MFA is required
+      if (isMfaRequired(userData)) {
+        try {
+          const mfaResult = await generateAndSendMfaOtp(userData);
+          
+          if (!mfaResult.success) {
+            return res.json(
+              await errorResp({
+                code: success.code.OK,
+                msg: mfaResult.message,
+              })
+            );
+          }
+          
+          // Return response indicating MFA verification is required
+          return res.json(
+            await successResp({
+              msg: 'MFA verification required. Please check your ' + mfaResult.method + ' for the OTP code.',
+              data: {
+                mfa_required: true,
+                user_id: userData.id,
+                mfa_method: mfaResult.method,
+                expires_at: mfaResult.expiresAt
+              }
+            })
+          );
+        } catch (mfaErr) {
+          console.error('MFA generation error:', mfaErr);
+          return res.json(
+            await errorResp({
+              code: success.code.OK,
+              msg: 'Failed to send MFA code. Please try again.',
+            })
+          );
+        }
+      }
+
+      // Identify and record device login
+      try {
+        const deviceResult = await identifyAndRecordDevice(req, userData);
+        console.log('Device identification:', {
+          isNewDevice: deviceResult.isNewDevice,
+          deviceName: deviceResult.device.deviceName,
+          deviceId: deviceResult.device.deviceId
+        });
+      } catch (deviceErr) {
+        // Log error but don't fail login if device identification fails
+        console.error('Device identification error:', deviceErr.message);
       }
 
       // mark user login into DB
@@ -2195,8 +2250,269 @@ router.post(
   }
 );
 
+/**
+ * @swagger
+ * /admin/verify-mfa:
+ *   post:
+ *     summary: API for verifying MFA OTP during login.
+ *     description: Verify the OTP sent via email or SMS for MFA authentication.
+ *     tags: [Admin]
+ *     requestBody:
+ *       description: Request body for MFA verification
+ *       required: true
+ *       content:
+ *         application/json:
+ *            schema:
+ *              type: object
+ *              required:
+ *                - user_id
+ *                - otp
+ *              properties:
+ *                user_id:
+ *                  type: integer
+ *                  description: User ID returned from login endpoint
+ *                otp:
+ *                  type: string
+ *                  description: 6-digit OTP code
+ *            example:
+ *              {"user_id": 123, "otp": "123456"}
+ *     responses:
+ *        '200':
+ *           description: Success
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 type: object
+ *                 properties:
+ *                   success:
+ *                     type: boolean
+ *                   code:
+ *                     type: integer
+ *                   message:
+ *                     type: string
+ *                   data:
+ *                     type: object
+ *                 example:
+ *                   success: true
+ *                   code: 200
+ *                   message: "Logged in successfully."
+ */
+router.post(
+  "/verify-mfa",
+  [
+    body("user_id").notEmpty().isInt().withMessage("User ID is required"),
+    body("otp").notEmpty().isLength({ min: 6, max: 6 }).withMessage("OTP must be 6 digits"),
+  ],
+  validationErrorHandler,
+  translation,
+  async (req, res) => {
+    try {
+      const { user_id, otp } = req.body;
+      
+      // Verify the OTP
+      const { verifyMfaOtp } = require(rootPath + '/helpers/mfa');
+      const verificationResult = await verifyMfaOtp(user_id, otp);
+      
+      if (!verificationResult.success) {
+        return res.json(
+          await errorResp({
+            code: success.code.OK,
+            msg: verificationResult.message,
+          })
+        );
+      }
+      
+      // OTP verified successfully, proceed with login
+      // Get full user data
+      let userData = await db.user.findOne({
+        attributes: [
+          "email",
+          "countryCode",
+          "mobile",
+          "firstName",
+          "middleName",
+          "lastName",
+          "password",
+          "verified",
+          "id",
+          "adminType",
+          "active",
+          'createdAt',
+          "eori_number",
+          "countryId",
+          "countryIsoCode",
+          "organization",
+          "subOrganizationId",
+          "registrationUserType",
+        ],
+        where: {
+          id: user_id,
+        },
+        include: [
+          {
+            model: db.Organization,
+            as: "user_organization",
+            attributes: ["id", "name", "logo", "splashScreen", "country"],
+          },
+          {
+            model: db.Organization,
+            as: "subOrg",
+            attributes: ["id", "name", "logo", "code", "splashScreen", "country"],
+          },
+          {
+            model: db.Roles,
+            as: "user_role_assoc",
+            through: { model: db.AdminUserRoles, attributes: [] },
+          },
+        ],
+        order: [['createdAt', 'DESC']]
+      });
+      
+      if (!userData) {
+        return res.json(
+          await errorResp({
+            code: success.code.OK,
+            msg: error.USER_NOT_EXIST,
+          })
+        );
+      }
+
+      // Identify and record device login
+      try {
+        const deviceResult = await identifyAndRecordDevice(req, userData);
+        console.log('Device identification:', {
+          isNewDevice: deviceResult.isNewDevice,
+          deviceName: deviceResult.device.deviceName,
+          deviceId: deviceResult.device.deviceId
+        });
+      } catch (deviceErr) {
+        // Log error but don't fail login if device identification fails
+        console.error('Device identification error:', deviceErr.message);
+      }
+
+      // Get sidebar menu and permissions (same as regular login)
+      let sidebarRes = await db.SidebarMenu.findAll({
+        attributes: [
+          'id',
+          'name',
+          'route_path_name',
+          'icon',
+          'order',
+          'active'
+        ],
+        where: {
+          active: 1,
+          parent_menu_id: null,
+          organization: userData.user_organization.id
+        },
+        raw: true
+      });
+      
+      let subMenus = await db.SidebarMenu.findAll({
+        attributes: [
+          'id',
+          'name',
+          'route_path_name',
+          'parent_menu_id',
+          'icon',
+          'order',
+          ['name', 'label']
+        ],
+        where: {
+          active: 1,
+          [Op.not]: { parent_menu_id: null },
+          organization: userData.user_organization.id
+        },
+        raw: true
+      });
+
+      let permittedSidebarRes = [];
+      sidebarRes.forEach(el => {
+        const childMenuArr = subMenus.filter(item => item.parent_menu_id == el.id);
+        el.sidebar_submenu_obj = childMenuArr.length > 0 ? childMenuArr : null;
+        permittedSidebarRes.push(el);
+      });
+
+      // Generate tokens
+      let accesstoken = await jwt.sign(
+        {
+          data: { userId: userData.id },
+        },
+        process.env.ACCESS_TOKEN_SECRET,
+        { expiresIn: process.env.ACCESS_TOKEN_EXPIRY }
+      );
+
+      let refreshtoken = await jwt.sign(
+        {
+          data: { userId: userData.id },
+        },
+        process.env.REFRESH_TOKEN_SECRET,
+        { expiresIn: "365d" }
+      );
+
+      // Get role IDs
+      let roleIds = userData.user_role_assoc.map(role => role.id);
+      
+      // Sync user data
+      const organizationD = {
+        ...(userData?.subOrg?.id && {subOrganization: userData?.subOrg})
+      };
+      await syncUserData(userData.dataValues, organizationD);
+
+      const moduleAndPermissions = await db.AdminUsersRolesModulesPermissions.findAll({
+        attributes: ['role_id', 'module_id', 'permission_id', 'permitted'],
+        where: {
+          role_id: { [Op.in]: roleIds}
+        },
+      });
+
+      // Set auth cookies
+      const options = { 
+        refreshTokenMaxAge: 365 * 24 * 60 * 60 * 1000,
+        accessTokenMaxAge: 7 * 24 * 60 * 60 * 1000,
+        sameSite: 'strict',
+        httpOnly: true,
+      };
+
+      sendAuthCookies(res, accesstoken, refreshtoken, options);
+
+      res.json(
+        await successResp({
+          msg: success.LOGIN,
+          data: {
+            ...userData.dataValues,
+            sideBarMenu: permittedSidebarRes,
+            moduleAndPermissions: moduleAndPermissions
+          }
+        })
+      );
+
+    } catch (err) {
+      if(process.env.NODE_ENV != "development"){
+        try {
+          await sendLoginError(JSON.stringify({error:"Something went wrong on our end. Please try again later.", "statusCode": 500}), req);
+        } catch (emailError) {
+          console.error('Failed to send error email:', emailError);
+        }
+      }
+      logErrorOccurred(__filename, err);
+      let msg = {
+        success: false,
+        code: 500,
+        message: 'Something went wrong on our end. Please try again later.'
+      }
+      try {
+        msg = await errorResp()
+      } catch(erro) {
+        console.log("error throw")
+      }
+      return res.status(error.code.SERVER_ERROR).json(msg);
+    }
+  }
+);
+
 //salman
-router.get("/user-data",auth,
+router.get("/user-data",auth,translation,
   async (req, res) => {
     try {
        const { id } = req.user;
@@ -2414,12 +2730,16 @@ router.get("/user-data",auth,
       }
       
       if (req.headers.lang && req.headers.lang != 'en') {
-        permittedSidebarRes = req.translateFunction(
-          permittedSidebarRes,
-          globalTranslationCache,
-          { moduleName: 'sideBar', lvl1: true, lvl2: true, }
+        try {
+            permittedSidebarRes = req.translateFunction(
+            permittedSidebarRes,
+            globalTranslationCache,
+            { moduleName: 'sideBar', lvl1: true, lvl2: true, }
         );
-      }
+        } catch (err) {
+          console.log("translation error",err);
+        }
+      };
 
     
       // send response
@@ -2542,11 +2862,18 @@ router.post('/captcha', async function (req, res) {
  *               example: { "success": true, "code": 200, "message": "Logged out successfully.", "data": {} }  
  *
  */
-router.post("/logout", auth, async (req, res) => {
+ //salman
+router.post("/logout", async (req, res) => {
   try {
-    const { id } = req.user;
-    const userExist = await user.findByPk(id);
-    if (userExist == null) throw error.USER_NOT_EXIST; // if not exist throw error
+   
+    // const { id } = req.user;
+    // const userExist = await db.user.findByPk(id);
+    // if (userExist == null) throw error.USER_NOT_EXIST; // if not exist throw error
+
+    
+    res.clearCookie("token");
+    res.clearCookie("refreshToken");
+    //salman
 
     // await user.update({ isLogin: 0 }, { where: { id } }); // mark user logout into DB
     res.json(
@@ -3280,6 +3607,8 @@ router.get(
             'userTribe',
             'partnerTribe',
             'website',
+            'is_mfa_enabled',
+            'mfa_method',
             'createdAt'
           ],
           include: [
@@ -4418,8 +4747,15 @@ router.put(
  *                  type: string
  *                active:
  *                  type: integer
+ *                is_mfa_enabled:
+ *                  type: boolean
+ *                  description: Enable or disable MFA for the user
+ *                mfa_method:
+ *                  type: string
+ *                  enum: [email, mobile]
+ *                  description: Method for MFA authentication
  *            example:
- *              { "firstName": "hemant", "lastName": "rathore", "email": "hemant@dimitra.io", "mobile": "7830619119", "password": "test123", "active": 1 }
+ *              { "firstName": "hemant", "lastName": "rathore", "email": "hemant@dimitra.io", "mobile": "7830619119", "password": "test123", "active": 1, "is_mfa_enabled": true, "mfa_method": "email" }
  *     responses:
  *        '200':
  *           description: Success
@@ -4441,10 +4777,20 @@ router.put(
 
 router.put("/updateUser/:userId", auth, validationErrorHandler, async (req, res) => {
   try {
-    const { userId, firstName, middleName, lastName, email, password, role_id, department_id, mobile, countryCode, country, state, city, active } = req.body
+    const { userId, firstName, middleName, lastName, email, password, role_id, department_id, mobile, countryCode, country, state, city, active, is_mfa_enabled, mfa_method } = req.body
     const adminType = req.user.adminType
 
-    
+    const existingUserRes = await db.user.findOne({
+      where: { id: Number(userId) },
+    });
+    if(!existingUserRes) {
+      return res.json(
+        await errorResp({
+          code: success.code.OK,
+          msg: error.USER_NOT_EXIST,
+        })
+      );
+    }
     // toggle active status of user
     let userSet = {
       firstName,
@@ -4465,6 +4811,32 @@ router.put("/updateUser/:userId", auth, validationErrorHandler, async (req, res)
         
     if(password) {
       userSet.password = await createPassword(password);
+    }
+
+    // Handle MFA configuration if provided
+    if (is_mfa_enabled !== undefined) {
+      userSet.is_mfa_enabled = is_mfa_enabled ? 1 : 0;
+      
+      // If enabling MFA for the first time, set enrollment date
+      if (is_mfa_enabled) {
+        const currentUser = await db.user.findOne({
+          where: { id: userId },
+          attributes: ['is_mfa_enabled', 'mfa_enrolled_at']
+        });
+        
+        if (currentUser && !currentUser.is_mfa_enabled && !currentUser.mfa_enrolled_at) {
+          userSet.mfa_enrolled_at = new Date();
+        }
+      } else {
+        // If disabling MFA, reset related fields
+        userSet.failed_mfa_attempts = 0;
+        userSet.last_failed_attempt_at = null;
+        userSet.mfa_locked_until = null;
+      }
+    }
+    
+    if (mfa_method !== undefined && ['email', 'mobile'].includes(mfa_method)) {
+      userSet.mfa_method = mfa_method;
     }
 
     let roleSet = { id: `${userId}_${role_id}`, role_id, user_id: userId }
@@ -5956,8 +6328,15 @@ router.put('/global-setting', auth, async function (req, res) {
  *                  type: integer
  *                membershipExtensionReason:
  *                  type: string
+ *                is_mfa_enabled:
+ *                  type: boolean
+ *                  description: Enable or disable MFA for the user
+ *                mfa_method:
+ *                  type: string
+ *                  enum: [email, mobile]
+ *                  description: Method for MFA authentication
  *            example:
- *              { "firstName": "hemant", "lastName": "rathore", "email": "hemant@dimitra.io", "countryCode": "91", "mobile": "7830619119", "country": "india", "state": "uk", "city": "ddn", "membershipTypeId": 7, "membershipExtendedDays": 2, "membershipExtensionReason": "some reason", "userTribe": "tribe name", "website": "website string", "address": "address string" }
+ *              { "firstName": "hemant", "lastName": "rathore", "email": "hemant@dimitra.io", "countryCode": "91", "mobile": "7830619119", "country": "india", "state": "uk", "city": "ddn", "membershipTypeId": 7, "membershipExtendedDays": 2, "membershipExtensionReason": "some reason", "userTribe": "tribe name", "website": "website string", "address": "address string", "is_mfa_enabled": true, "mfa_method": "email" }
  *     responses:
  *        '200':
  *           content:
@@ -7711,6 +8090,98 @@ router.get('/user-permissions/:userId', auth, async (req, res) => {
       await errorResp({
         code: 500,
         msg: 'Internal server error'
+      })
+    );
+  }
+});
+
+/**
+ * @swagger
+ * /admin/devices:
+ *   get:
+ *     summary: Get all devices for the logged-in user
+ *     description: Retrieve all devices that have been used to login to this account
+ *     tags: [Admin]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Success
+ */
+router.get('/devices', auth, async (req, res) => {
+  try {
+    const { getUserDevices } = require(rootPath + '/helpers/deviceIdentification');
+    const userId = req.user.id;
+
+    const devices = await getUserDevices(userId);
+
+    res.json(
+      await successResp({
+        msg: 'Devices retrieved successfully',
+        data: { devices }
+      })
+    );
+  } catch (error) {
+    console.error('Error fetching devices:', error);
+    logErrorOccurred(__filename, error);
+    return res.status(500).json(
+      await errorResp({
+        code: 500,
+        msg: 'Failed to retrieve devices'
+      })
+    );
+  }
+});
+
+/**
+ * @swagger
+ * /admin/devices/{deviceId}:
+ *   delete:
+ *     summary: Remove a device from trusted devices
+ *     description: Remove a specific device from the user's list of trusted devices
+ *     tags: [Admin]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: deviceId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: Device ID to remove
+ *     responses:
+ *       200:
+ *         description: Device removed successfully
+ */
+router.delete('/devices/:deviceId', auth, async (req, res) => {
+  try {
+    const { removeUserDevice } = require(rootPath + '/helpers/deviceIdentification');
+    const userId = req.user.id;
+    const deviceId = req.params.deviceId;
+
+    const removed = await removeUserDevice(userId, deviceId);
+
+    if (removed) {
+      res.json(
+        await successResp({
+          msg: 'Device removed successfully'
+        })
+      );
+    } else {
+      res.json(
+        await errorResp({
+          code: 404,
+          msg: 'Device not found'
+        })
+      );
+    }
+  } catch (error) {
+    console.error('Error removing device:', error);
+    logErrorOccurred(__filename, error);
+    return res.status(500).json(
+      await errorResp({
+        code: 500,
+        msg: 'Failed to remove device'
       })
     );
   }
